@@ -809,7 +809,7 @@ endif
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/zope.interface-4.0.1-py$(PYTHON_VERSION).egg-info
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/Twisted-12.1.0-py$(PYTHON_VERSION).egg-info
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/twisted/{test,conch,mail,manhole,names,news,trial,words,application,enterprise,flow,lore,pair,runner,scripts,tap,topfiles}
-	rm -rf $(prefix)/release$(PYTHON_DIR)/{bsddb,compiler,ctypes,curses,distutils,lib-old,lib-tk,plat-linux3,test}
+	rm -rf $(prefix)/release$(PYTHON_DIR)/{bsddb,compiler,curses,distutils,lib-old,lib-tk,plat-linux3,test}
 
 #
 # Dont remove pyo files, remove pyc instead
