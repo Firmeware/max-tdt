@@ -96,6 +96,9 @@ PACKAGES="\
 	${UBUNTU:+help2man} \
 	${UBUNTU:+cmake} \
 	${UBUNTU:+ruby} \
+	${UBUNTU:+liblzo2-dev} \
+	${UBUNTU:+libsdl-image1.2} \
+	${UBUNTU:+libsdl-image1.2-dev} \
 ";
 
 if [ `which arch > /dev/null 2>&1 && arch || uname -m` == x86_64 ]; then
@@ -115,9 +118,9 @@ if [ "$UBUNTU" == 1 ]; then
 	DEBIAN_VERSION=`cat /etc/debian_version`
 	if [ "$DEBIAN_VERSION" == "wheezy/sid" ]; then
 		if [ `which arch > /dev/null 2>&1 && arch || uname -m` == i686 ]; then
-			ln -s /usr/include/i386-linux-gnu/bits /usr/include/bits
-			ln -s /usr/include/i386-linux-gnu/gnu /usr/include/gnu
-			ln -s /usr/include/i386-linux-gnu/sys /usr/include/sys
+			ln -s /usr/include/i386-linux-gnu/bits /usr/include
+			ln -s /usr/include/i386-linux-gnu/gnu /usr/include
+			ln -s /usr/include/i386-linux-gnu/sys /usr/include
 		fi
 	fi
 fi
