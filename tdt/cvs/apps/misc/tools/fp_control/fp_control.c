@@ -555,6 +555,16 @@ void processCommand (Context_t * context, int argc, char* argv[])
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int getKathreinUfs910BoxType() {
+	char vType;
+	int vFdBox = open("/proc/boxtype", O_RDONLY);
+
+	read (vFdBox, &vType, 1);
+
+	close(vFdBox);
+
+	return vType=='0'?0:vType=='1'||vType=='3'?1:-1;
+}
 
 int getModel()
 {
