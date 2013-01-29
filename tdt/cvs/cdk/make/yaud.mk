@@ -57,6 +57,7 @@ net-utils: \
 	%portmap \
 	%$(NFSSERVER) \
 	%vsftpd \
+	%ethtool \
 	%opkg \
 	%$(CIFS)
 
