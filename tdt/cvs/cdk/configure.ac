@@ -30,10 +30,10 @@ AM_MAINTAINER_MODE
 
 AC_PROG_CC
 
-AC_ARG_ENABLE(gcc472,
-	AS_HELP_STRING(--enable-gcc472, compile image stm24 using gcc 4.7.2),
-	,[enable_gcc472=no])
-AM_CONDITIONAL(GCC_472,test "$enable_gcc472" = "yes")
+AC_ARG_ENABLE(gcc47,
+	AS_HELP_STRING(--enable-gcc47, compile image stm24 using gcc 4.7),
+	,[enable_gcc47=no])
+AM_CONDITIONAL(GCC47,test "$enable_gcc47" = "yes")
 
 AC_ARG_ENABLE(lirc,
 	AS_HELP_STRING(--enable-lirc, include lirc in yadds and images),
@@ -193,9 +193,17 @@ AC_SUBST(EXTERNALLCD)
 
 AC_ARG_ENABLE(eplayer3,
 	AS_HELP_STRING(--enable-eplayer3,    enable eplayer3 support),
-	,[enable_eplayer3=no])
+	[case "${enableval}" in
+		yes) EPLAYER3=eplayer3 ;;
+	esac],[enable_eplayer3=no])
 AM_CONDITIONAL(ENABLE_EPLAYER3,test "$enable_eplayer3" = "yes")
 AC_SUBST(EPLAYER3)
+
+AC_ARG_ENABLE(buildinplayer,
+	AS_HELP_STRING(--enable-buildinplayer,    enable build-in player support),
+	,[enable_buildinplayer=no])
+AM_CONDITIONAL(ENABLE_BUILDINPLAYER,test "$enable_buildinplayer" = "yes")
+AC_SUBST(BUILDINPLAYER)
 
 AC_ARG_ENABLE(fortis_hdbox,
 	AS_HELP_STRING(--enable-fortis_hdbox, enable Fortis/hdbox FS-9200HD PVR stuff),
@@ -452,6 +460,10 @@ AC_ARG_WITH(customizationsdir,
 	[  --with-customizationsdir=DIR    optional directory containing customization scripts [[[CVS]]]],
 	[customizationsdir="$with_customizationsdir"],[customizationsdir="`pwd`"])
 
+AC_ARG_WITH(flashscriptdir,
+	[  --with-flashscriptdir=DIR    optional directory containing flash scripts [[[CVS]]]],
+	[flashscriptdir="$with_flashscriptdir"],[flashscriptdir=])
+
 AC_ARG_WITH(updatehttpprefix,
 	[  --with-updatehttpprefix=URL  optional URL containing the URL of a directory with update images [[NONE]]],
 	[updatehttpprefix="$with_updatehttpprefix"],[updatehttpprefix=])
@@ -463,6 +475,7 @@ AC_SUBST(buildprefix)
 AC_SUBST(bootprefix)
 AC_SUBST(serversupport)
 AC_SUBST(customizationsdir)
+AC_SUBST(flashscriptdir)
 AC_SUBST(updatehttpprefix)
 AM_CONDITIONAL(DISABLE_UPDATE_HTTP,test "$updatehttpprefix" = "disable")
 
@@ -755,6 +768,9 @@ AC_SUBST(MEDIAFW_DEP)
 if test "$enable_mediafwgstreamer" == "yes"; then
 	MEDIAFW="gstreamer"
 	MEDIAFW_DEP="gst_plugins_dvbmediasink"
+elif test "$enable_buildinplayer" == "yes"; then
+	MEDIAFW="build-in player"
+	MEDIAFW_DEP="ffmpeg"
 else
 	MEDIAFW="eplayer3"
 	MEDIAFW_DEP="ffmpeg"
@@ -1116,7 +1132,7 @@ fi
 
 TUXBOX_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && KERNELVERSION=$(KERNELVERSION) && BOXTYPE=$(BOXTYPE) && $(customizationsdir)/$(notdir $@)-local.sh $(buildprefix) || true]'
 AC_SUBST(TUXBOX_CUSTOMIZE)
-TUXBOX_YAUD_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && KERNELVERSION=$(KERNELVERSION) && BOXTYPE=$(BOXTYPE) && $(customizationsdir)/$(notdir $@)-local.sh $(prefix)/$*cdkroot $(buildprefix) || true]'
+TUXBOX_YAUD_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && KERNELVERSION=$(KERNELVERSION) && BOXTYPE=$(BOXTYPE) && $(customizationsdir)/$(notdir $@)-local.sh $(prefix) $(prefix)/$*cdkroot $(buildprefix) $(appsdir) $(flashscriptdir) $(BOXTYPE) || true]'
 AC_SUBST(TUXBOX_YAUD_CUSTOMIZE)
 TUXBOX_TOUCH='[@[ "x$*" = "x" ] && touch $@ || true]'
 AC_SUBST(TUXBOX_TOUCH)

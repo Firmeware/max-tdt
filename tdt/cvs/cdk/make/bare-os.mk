@@ -28,7 +28,7 @@ $(DEPDIR)/%filesystem: bootstrap-cross
 #
 GLIBC := glibc
 GLIBC_DEV := glibc-dev
-GLIBC_VERSION := 2.10.2-37
+GLIBC_VERSION := 2.10.2-38
 GLIBC_RAWVERSION := $(firstword $(subst -, ,$(GLIBC_VERSION)))
 GLIBC_SPEC := stm-target-$(GLIBC).spec
 GLIBC_SPEC_PATCH :=
@@ -65,7 +65,7 @@ $(DEPDIR)/%$(GLIBC_DEV): $(DEPDIR)/%$(GLIBC) $(GLIBC_DEV_RPM)
 #
 BINUTILS := binutils
 BINUTILS_DEV := binutils-dev
-BINUTILS_VERSION = 2.22-66
+BINUTILS_VERSION = 2.22-68
 BINUTILS_SPEC := stm-target-$(BINUTILS).spec
 BINUTILS_SPEC_PATCH := $(BINUTILS_SPEC).$(BINUTILS_VERSION).diff
 BINUTILS_PATCHES :=
@@ -250,7 +250,11 @@ LIBSTDC := libstdc++
 LIBSTDC_DEV := libstdc++-dev
 LIBGCC := libgcc
 GCC := gcc
-GCC_VERSION := $(if $(GCC_472),4.7.2-118,4.6.3-115)
+if GCC47
+GCC_VERSION := 4.7.2-119
+else
+GCC_VERSION := 4.6.3-115
+endif
 GCC_SPEC := stm-target-$(GCC).spec
 GCC_SPEC_PATCH := $(GCC_SPEC).$(GCC_VERSION).diff
 GCC_PATCHES := stm-target-$(GCC).$(GCC_VERSION).diff
