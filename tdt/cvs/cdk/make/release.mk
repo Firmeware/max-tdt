@@ -980,6 +980,13 @@ endif
 	fi
 
 #
+# minidlna
+#
+	if [ -e $(targetprefix)/usr/sbin/minidlna ]; then \
+		cp -f $(targetprefix)/usr/sbin/minidlna $(prefix)/release_neutrino/usr/sbin/; \
+	fi
+
+#
 # The main target depends on the model.
 # IMPORTANT: it is assumed that only one variable is set. Otherwise the target name won't be resolved.
 #
