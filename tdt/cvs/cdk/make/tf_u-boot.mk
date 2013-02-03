@@ -37,7 +37,6 @@ $(DEPDIR)/u-boot-utils.do_compile: bootstrap $(DEPDIR)/u-boot-utils.do_prepare
 		$(MAKE)
 	touch $@
 
-$(DEPDIR)/min-u-boot-utils $(DEPDIR)/std-u-boot-utils $(DEPDIR)/max-u-boot-utils \
 $(DEPDIR)/u-boot-utils: \
 $(DEPDIR)/%u-boot-utils: $(DEPDIR)/u-boot-utils.do_compile $(TFINSTALLER_DIR)/u-boot.ftfd
 #	$(INSTALL) -d $(prefix)/$*cdkroot/{etc,usr/sbin} && \

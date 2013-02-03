@@ -1288,7 +1288,6 @@ $(DEPDIR)/libogg.do_compile: $(DEPDIR)/libogg.do_prepare
 	$(MAKE)
 	touch $@
 
-$(DEPDIR)/min-libogg $(DEPDIR)/std-libogg $(DEPDIR)/max-libogg \
 $(DEPDIR)/libogg: \
 $(DEPDIR)/%libogg: $(DEPDIR)/libogg.do_compile
 	cd @DIR_libogg@ && \

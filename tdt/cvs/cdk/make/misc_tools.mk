@@ -1,6 +1,9 @@
 #
 # misc/tools
 #
+misc-tools-clean:
+	-$(MAKE) -C $(appsdir)/misc/tools distclean
+
 $(appsdir)/misc/tools/config.status: bootstrap driver libstdc++-dev libdvdnav libdvdcss bzip2 libpng libjpeg ffmpeg
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/misc/tools && \
@@ -36,6 +39,3 @@ $(DEPDIR)/%misc-tools: $(appsdir)/misc/tools/config.status
 	$(if $(IPBOX55), -DPLATFORM_IPBOX55) \
 	$(if $(PLAYER191), -DPLAYER191)"
 	[ "x$*" = "x" ] && touch $@ || true
-
-misc-tools-clean:
-	-$(MAKE) -C $(appsdir)/misc/tools distclean
