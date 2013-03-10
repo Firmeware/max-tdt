@@ -700,7 +700,7 @@ endif !STM24
 #
 # jfsutils
 #
-$(DEPDIR)/jfsutils.do_prepare: bootstrap @DEPENDS_jfsutils@
+$(DEPDIR)/jfsutils.do_prepare: bootstrap e2fsprogs @DEPENDS_jfsutils@
 	@PREPARE_jfsutils@
 	touch $@
 
@@ -708,10 +708,12 @@ $(DEPDIR)/jfsutils.do_compile: $(DEPDIR)/jfsutils.do_prepare
 	cd @DIR_jfsutils@ && \
 		$(BUILDENV) \
 		./configure \
-			--host=gcc \
+			--build=$(build) \
+			--host=$(target) \
 			--target=$(target) \
+			--disable-dependency-tracking \
 			--prefix= && \
-		$(MAKE) CC="$(target)-gcc"
+		$(MAKE)
 	touch $@
 
 $(DEPDIR)/jfsutils: \
@@ -833,6 +835,7 @@ $(DEPDIR)/imagemagick.do_compile: $(DEPDIR)/imagemagick.do_prepare
 	CFLAGS="-O1" \
 	PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--without-dps \

@@ -1,4 +1,29 @@
 #
+# libao
+#
+$(DEPDIR)/libao.do_prepare: bootstrap @DEPENDS_libao@
+	@PREPARE_libao@
+	touch $@
+
+$(DEPDIR)/libao.do_compile: $(DEPDIR)/libao.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_libao@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr && \
+		$(MAKE) all
+	touch $@
+
+$(DEPDIR)/libao: \
+$(DEPDIR)/%libao: $(DEPDIR)/libao.do_compile
+	cd @DIR_libao@ && \
+		@INSTALL_libao@
+	@DISTCLEANUP_libao@
+	[ "x$*" = "x" ] && touch $@ || true
+
+#
 # libboost
 #
 $(DEPDIR)/libboost: bootstrap @DEPENDS_libboost@
@@ -74,7 +99,7 @@ $(DEPDIR)/libfreetype.do_compile: $(DEPDIR)/libfreetype.do_prepare
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr && \
+			--prefix=$(targetprefix)/usr && \
 		$(MAKE) all
 	touch $@
 
@@ -142,7 +167,7 @@ $(DEPDIR)/libjpeg.do_compile: $(DEPDIR)/libjpeg.do_prepare
 			--host=$(target) \
 			--enable-shared \
 			--enable-static \
-			--prefix=/usr && \
+			--prefix=$(targetprefix)/usr && \
 		$(MAKE) all
 	touch $@
 
@@ -168,7 +193,7 @@ $(DEPDIR)/libpng12.do_compile: $(DEPDIR)/libpng12.do_prepare
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr && \
+			--prefix=$(targetprefix)/usr && \
 		export ECHO="echo" && \
 		echo "Echo cmd =" $(ECHO) && \
 		$(MAKE) all
@@ -199,7 +224,7 @@ $(DEPDIR)/libpng.do_compile: $(DEPDIR)/libpng.do_prepare
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr && \
+			--prefix=$(targetprefix)/usr && \
 		export ECHO="echo" && \
 		echo "Echo cmd =" $(ECHO) && \
 		$(MAKE) all
@@ -579,7 +604,7 @@ $(DEPDIR)/%lcms: $(DEPDIR)/lcms.do_compile
 #
 # directfb
 #
-$(DEPDIR)/directfb.do_prepare: bootstrap freetype @DEPENDS_directfb@
+$(DEPDIR)/directfb.do_prepare: bootstrap libfreetype @DEPENDS_directfb@
 	@PREPARE_directfb@
 	touch $@
 
@@ -659,6 +684,7 @@ $(DEPDIR)/libstgles.do_compile: $(DEPDIR)/libstgles.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE)
@@ -877,7 +903,8 @@ $(DEPDIR)/%libdvdread: $(DEPDIR)/libdvdread.do_compile
 #
 FFMPEG_CUSTOM_NEU:= \
 		--disable-vfp \
-		--disable-runtime-cpudetect
+		--disable-runtime-cpudetect \
+		--disable-bsfs
 
 FFMPEG_CUSTOM_OLD:= \
 		--disable-armvfp \
@@ -969,8 +996,6 @@ $(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
 		--enable-muxer=mpeg2video \
 		--enable-parser=mjpeg \
 		--enable-demuxer=mjpeg \
-		--enable-decoder=dvbsub \
-		--enable-decoder=iff_byterun1 \
 		--enable-small \
 		--enable-pthreads \
 		--enable-bzlib \
@@ -1003,6 +1028,7 @@ $(DEPDIR)/libass.do_compile: $(DEPDIR)/libass.do_prepare
 	cd @DIR_libass@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--disable-fontconfig \
 		--disable-enca \
@@ -1031,6 +1057,7 @@ $(DEPDIR)/webkitdfb.do_compile: $(DEPDIR)/webkitdfb.do_prepare
 	./autogen.sh \
 		--with-target=directfb \
 		--without-gtkplus \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--with-cairo-directfb \
@@ -1084,6 +1111,7 @@ $(DEPDIR)/icu4c.do_compile: $(DEPDIR)/icu4c.do_prepare
 	$(BUILDENV) \
 	./configure \
 		--with-cross-build=$(buildprefix)/@DIR_icu4c@/host \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-extras \
@@ -1147,6 +1175,7 @@ $(DEPDIR)/lite.do_compile: $(DEPDIR)/lite.do_prepare
 	autoreconf --verbose --force --install -I$(hostprefix)/share/aclocal && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-debug
@@ -1173,6 +1202,7 @@ $(DEPDIR)/sqlite.do_compile: $(DEPDIR)/sqlite.do_prepare
 	autoreconf --verbose --force --install -I$(hostprefix)/share/aclocal && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-tcl \
@@ -1199,6 +1229,7 @@ $(DEPDIR)/libsoup.do_compile: $(DEPDIR)/libsoup.do_prepare
 	cd @DIR_libsoup@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-more-warnings \
@@ -1225,6 +1256,7 @@ $(DEPDIR)/pixman.do_compile: $(DEPDIR)/pixman.do_prepare
 	cd @DIR_pixman@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE)
@@ -1249,6 +1281,7 @@ $(DEPDIR)/cairo.do_compile: $(DEPDIR)/cairo.do_prepare
 	cd @DIR_cairo@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-gtk-doc \
@@ -1283,6 +1316,7 @@ $(DEPDIR)/libogg.do_compile: $(DEPDIR)/libogg.do_prepare
 	cd @DIR_libogg@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE)
@@ -1307,6 +1341,7 @@ $(DEPDIR)/libflac.do_compile: $(DEPDIR)/libflac.do_prepare
 	cd @DIR_libflac@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-ogg \
@@ -1543,7 +1578,7 @@ $(DEPDIR)/%twistedweb2: $(DEPDIR)/twistedweb2.do_compile
 #
 # pilimaging
 #
-$(DEPDIR)/pilimaging.do_prepare: bootstrap python @DEPENDS_pilimaging@
+$(DEPDIR)/pilimaging.do_prepare: bootstrap libjpeg libfreetype python @DEPENDS_pilimaging@
 	@PREPARE_pilimaging@
 	touch $@
 
@@ -1774,6 +1809,7 @@ $(DEPDIR)/gstreamer.do_compile: $(DEPDIR)/gstreamer.do_prepare
 	autoreconf --verbose --force --install -I$(hostprefix)/share/aclocal && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-dependency-tracking \
@@ -1805,6 +1841,7 @@ $(DEPDIR)/gst_plugins_base.do_compile: $(DEPDIR)/gst_plugins_base.do_prepare
 	autoreconf --verbose --force --install -I$(hostprefix)/share/aclocal && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-theora \
@@ -1840,6 +1877,7 @@ $(DEPDIR)/gst_plugins_good.do_compile: $(DEPDIR)/gst_plugins_good.do_prepare
 	cd @DIR_gst_plugins_good@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-esd \
@@ -1870,6 +1908,7 @@ $(DEPDIR)/gst_plugins_bad.do_compile: $(DEPDIR)/gst_plugins_bad.do_prepare
 	cd @DIR_gst_plugins_bad@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-sdl \
@@ -1911,6 +1950,7 @@ $(DEPDIR)/gst_plugins_ugly.do_compile: $(DEPDIR)/gst_plugins_ugly.do_prepare
 	cd @DIR_gst_plugins_ugly@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-mpeg2dec && \
@@ -1936,6 +1976,7 @@ $(DEPDIR)/gst_ffmpeg.do_compile: $(DEPDIR)/gst_ffmpeg.do_prepare
 	cd @DIR_gst_ffmpeg@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		\
@@ -1997,6 +2038,7 @@ $(DEPDIR)/gst_plugins_fluendo_mpegdemux.do_compile: $(DEPDIR)/gst_plugins_fluend
 	cd @DIR_gst_plugins_fluendo_mpegdemux@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--with-check=no && \
@@ -2027,6 +2069,7 @@ $(DEPDIR)/gst_plugin_subsink.do_compile: $(DEPDIR)/gst_plugin_subsink.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE)
@@ -2056,6 +2099,7 @@ $(DEPDIR)/gst_plugins_dvbmediasink.do_compile: $(DEPDIR)/gst_plugins_dvbmediasin
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE)
@@ -2079,6 +2123,7 @@ $(DEPDIR)/libdca.do_compile: $(DEPDIR)/libdca.do_prepare
 	cd @DIR_libdca@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 		$(MAKE) all
@@ -2102,6 +2147,7 @@ $(DEPDIR)/liborc.do_compile: $(DEPDIR)/liborc.do_prepare
 	cd @DIR_liborc@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 		$(MAKE) all
@@ -2128,6 +2174,7 @@ $(DEPDIR)/libusb.do_compile: $(DEPDIR)/libusb.do_prepare
 	cd @DIR_libusb@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 		$(MAKE) all
@@ -2336,6 +2383,7 @@ $(DEPDIR)/evebrowser.do_compile: $(DEPDIR)/evebrowser.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2426,6 +2474,7 @@ $(DEPDIR)/libalsa.do_compile: $(DEPDIR)/libalsa.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--with-debug=no \
@@ -2518,8 +2567,9 @@ $(DEPDIR)/libdvbsipp.do_compile: $(DEPDIR)/libdvbsipp.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
-		--prefix=/usr && \
+		--prefix=$(targetprefix)/usr && \
 	$(MAKE) all
 	touch $@
 
@@ -2547,6 +2597,7 @@ $(DEPDIR)/tuxtxtlib.do_compile: $(DEPDIR)/tuxtxtlib.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--with-boxtype=generic \
@@ -2580,6 +2631,7 @@ $(DEPDIR)/tuxtxt32bpp.do_compile: $(DEPDIR)/tuxtxt32bpp.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--with-boxtype=generic \
@@ -2613,6 +2665,7 @@ $(DEPDIR)/libdreamdvd.do_compile: $(DEPDIR)/libdreamdvd.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2645,6 +2698,7 @@ $(DEPDIR)/libdreamdvd2.do_compile: $(DEPDIR)/libdreamdvd2.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2669,7 +2723,9 @@ $(DEPDIR)/libmpeg2.do_compile: $(DEPDIR)/libmpeg2.do_prepare
 	cd @DIR_libmpeg2@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
+		--disable-sdl \
 		--prefix=/usr && \
 	$(MAKE) all
 	touch $@
@@ -2693,6 +2749,7 @@ $(DEPDIR)/libsamplerate.do_compile: $(DEPDIR)/libsamplerate.do_prepare
 	cd @DIR_libsamplerate@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2717,6 +2774,7 @@ $(DEPDIR)/libvorbis.do_compile: $(DEPDIR)/libvorbis.do_prepare
 	cd @DIR_libvorbis@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2741,6 +2799,7 @@ $(DEPDIR)/libmodplug.do_compile: $(DEPDIR)/libmodplug.do_prepare
 	cd @DIR_libmodplug@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2765,6 +2824,7 @@ $(DEPDIR)/tiff.do_compile: $(DEPDIR)/tiff.do_prepare
 	cd @DIR_tiff@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2789,6 +2849,7 @@ $(DEPDIR)/lzo.do_compile: $(DEPDIR)/lzo.do_prepare
 	cd @DIR_lzo@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2867,6 +2928,7 @@ $(DEPDIR)/libcdio.do_compile: $(DEPDIR)/libcdio.do_prepare
 	cd @DIR_libcdio@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2891,6 +2953,7 @@ $(DEPDIR)/jasper.do_compile: $(DEPDIR)/jasper.do_prepare
 	cd @DIR_jasper@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2915,6 +2978,7 @@ $(DEPDIR)/mysql.do_compile: $(DEPDIR)/mysql.do_prepare
 	cd @DIR_mysql@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--with-atomic-ops=up --with-embedded-server --prefix=/usr --sysconfdir=/etc/mysql --localstatedir=/var/mysql --disable-dependency-tracking --without-raid --without-debug --with-low-memory --without-query-cache --without-man --without-docs --without-innodb && \
 	$(MAKE) all
@@ -2939,6 +3003,7 @@ $(DEPDIR)/libmicrohttpd.do_compile: $(DEPDIR)/libmicrohttpd.do_prepare
 	cd @DIR_libmicrohttpd@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -2963,6 +3028,7 @@ $(DEPDIR)/libexif.do_compile: $(DEPDIR)/libexif.do_prepare
 	cd @DIR_libexif@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE)
@@ -3011,6 +3077,7 @@ $(DEPDIR)/vlc.do_compile: $(DEPDIR)/vlc.do_prepare
 	cd @DIR_vlc@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--disable-fontconfig \
 		--prefix=/usr \
@@ -3050,6 +3117,7 @@ $(DEPDIR)/djmount.do_compile: $(DEPDIR)/djmount.do_prepare
 	cd @DIR_djmount@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -3073,6 +3141,7 @@ $(DEPDIR)/libupnp.do_compile: $(DEPDIR)/libupnp.do_prepare
 	cd @DIR_libupnp@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all
@@ -3099,6 +3168,7 @@ $(DEPDIR)/rarfs.do_compile: $(DEPDIR)/rarfs.do_prepare
 	$(BUILDENV) \
 	CFLAGS="$(TARGET_CFLAGS) -D_FILE_OFFSET_BITS=64" \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--disable-option-checking \
 		--includedir=/usr/include/fuse \
@@ -3125,6 +3195,7 @@ $(DEPDIR)/sshfs.do_compile: $(DEPDIR)/sshfs.do_prepare
 	cd @DIR_sshfs@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr
 	touch $@
@@ -3148,6 +3219,7 @@ $(DEPDIR)/gmediarender.do_compile: $(DEPDIR)/gmediarender.do_prepare
 	cd @DIR_gmediarender@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr \
 		--with-libupnp=$(targetprefix)/usr && \
@@ -3173,6 +3245,7 @@ $(DEPDIR)/mediatomb.do_compile: $(DEPDIR)/mediatomb.do_prepare
 	cd @DIR_mediatomb@ && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--disable-ffmpegthumbnailer \
 		--disable-libmagic \
@@ -3225,6 +3298,7 @@ $(DEPDIR)/libnfs.do_prepare: bootstrap @DEPENDS_libnfs@
 	touch $@
 
 $(DEPDIR)/libnfs.do_compile: $(DEPDIR)/libnfs.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_libnfs@ && \
 	aclocal -I $(hostprefix)/share/aclocal && \
 	autoheader && \
@@ -3233,6 +3307,7 @@ $(DEPDIR)/libnfs.do_compile: $(DEPDIR)/libnfs.do_prepare
 	libtoolize --force && \
 	$(BUILDENV) \
 	./configure \
+		--build=$(build) \
 		--host=$(target) \
 		--prefix=/usr && \
 	$(MAKE) all

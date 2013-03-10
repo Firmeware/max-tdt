@@ -8,12 +8,6 @@
 # Most distributions contain the required packages or
 # get the sources from http://samba.org/ftp/ccache
 
-if GCC47
-VERSION_GCC = 4.7.2
-else
-VERSION_GCC = 4.6.3
-endif
-
 if ENABLE_CCACHE
 # tuxbox-cdk ccache install path
 CCACHE_TUXBOX_BIN = $(ccachedir)/ccache
@@ -23,12 +17,13 @@ CCACHE_BINDIR = $(hostprefix)/ccache-bin
 
 # generate links
 CCACHE_LINKS = \
-	ln -sfv $(ccachedir)/ccache $(CCACHE_BINDIR)/gcc; \
+	ln -sfv $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/gcc;\
 	ln -sfv $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/g++; \
 	ln -sfv $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-gcc; \
 	ln -sfv $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-g++; \
-	ln -sfv $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-cpp; \
-	ln -sfv $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-gcc-$(VERSION_GCC)
+	ln -sfv $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-cpp;\
+	ln -sfv $(CCACHE_TUXBOX_BIN) $(hostprefix)/bin/$(target)-gcc; \
+	ln -sfv $(CCACHE_TUXBOX_BIN) $(hostprefix)/bin/$(target)-g++
 
 # ccache test will show you ccache statistics
 CCACHE_TEST = $(CCACHE_TUXBOX_BIN) -s
@@ -65,7 +60,7 @@ $(DEPDIR)/ccache.do_compile: $(DEPDIR)/ccache.do_prepare
 			--build=$(build) \
 			--host=$(build) \
 			--prefix= && \
-			$(MAKE) && \
+			$(MAKE) all && \
 			$(MAKE) install DESTDIR=$(hostprefix)
 	touch $@
 

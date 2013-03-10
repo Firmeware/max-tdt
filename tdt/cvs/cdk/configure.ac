@@ -429,11 +429,6 @@ AC_ARG_ENABLE(ipbox55,
 AM_CONDITIONAL(ENABLE_IPBOX55,test "$enable_ipbox55" = "yes")
 AC_SUBST(IPBOX55)
 
-AC_SUBST(CFLAGS)
-AC_SUBST(TARGET_CFLAGS)
-AC_SUBST(TARGET_CXXFLAGS)
-AC_SUBST(TARGET_LDFLAGS)
-
 AC_PREFIX_DEFAULT(/ufs910)
 
 if test "$prefix" = "NONE"; then
@@ -489,8 +484,8 @@ if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -g3 -gdwarf-2"
 		TARGET_LDFLAGS=""
 	else
-		TARGET_CFLAGS="$TARGET_CFLAGS -Os -I$targetprefix/usr/include"
-		TARGET_LDFLAGS="-Wl,-rpath -Wl,/usr/lib -Wl,-rpath-link -Wl,$targetprefix/usr/lib -L$targetprefix/lib -L$targetprefix/usr/lib"
+		TARGET_CFLAGS="$TARGET_CFLAGS -Os"
+		TARGET_LDFLAGS=" -Wl,-O1"
 	fi
 	if test "$TOOLCHAIN_PATH" != "notset"; then
 		TARGET_LDFLAGS="$TARGET_LDFLAGS -L\$(targetprefix)/usr/lib -L\$(targetprefix)/lib"
@@ -498,6 +493,11 @@ if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	fi
 	TARGET_CXXFLAGS="$TARGET_CFLAGS"
 fi
+
+AC_SUBST(CFLAGS)
+AC_SUBST(TARGET_CFLAGS)
+AC_SUBST(TARGET_CXXFLAGS)
+AC_SUBST(TARGET_LDFLAGS)
 
 AC_ARG_WITH(checkImage,
 	[  --with-checkImage=[[none,rename,warn]] How/if to invoke checkImage [[none]]],
@@ -794,6 +794,7 @@ TUXBOX_RULES_MAKE(squashfs)
 TUXBOX_RULES_MAKE(ccache)
 TUXBOX_RULES_MAKE(cramfs)
 TUXBOX_RULES_MAKE(libtool)
+TUXBOX_RULES_MAKE(pkg_config)
 
 #
 # root
@@ -852,6 +853,7 @@ TUXBOX_RULES_MAKE(imagemagick)
 #
 # contrib libs
 #
+TUXBOX_RULES_MAKE(libao)
 TUXBOX_RULES_MAKE(libopenthreads)
 TUXBOX_RULES_MAKE(libboost)
 TUXBOX_RULES_MAKE(libz)
@@ -1056,6 +1058,11 @@ AC_SUBST(DRPM)
 AC_SUBST(DRPMBUILD)
 
 #
+# mkdir archivedir
+#
+test -d $archivedir || mkdir $archivedir
+
+#
 # internal
 #
 AC_SUBST_FILE(ARCHIVE)
@@ -1068,7 +1075,6 @@ ${srcdir}/rules-archive.pl ${srcdir}/rules-archive > Makefile-archive
 #
 # summary
 #
-
 AC_MSG_RESULT([
 summary:
 ----------------------------------------

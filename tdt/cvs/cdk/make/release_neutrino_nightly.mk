@@ -40,10 +40,7 @@ release_neutrino_cube_common:
 	cp $(targetprefix)/bin/eeprom $(prefix)/release_neutrino/bin
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/ipbox/micom.ko $(prefix)/release_neutrino/lib/modules/
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx21143}.fw
-	rm -f $(prefix)/release_neutrino/bin/tffpctl
 	rm -f $(prefix)/release_neutrino/bin/vfdctl
-	rm -f $(prefix)/release_neutrino/bin/evremote
-	rm -f $(prefix)/release_neutrino/bin/tfd2mtd
 
 #
 # release_cube_common_tunner
@@ -107,11 +104,9 @@ release_neutrino_common_ipbox:
 	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release_neutrino/boot/video.elf
 	cp -dp $(buildprefix)/root/etc/lircd_ipbox.conf $(prefix)/release_neutrino/etc/lircd.conf
 	cp -p $(buildprefix)/root/release/lircd_ipbox $(prefix)/release_neutrino/usr/bin/lircd
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
 	rm -f $(prefix)/release_neutrino/lib/firmware/*
 	rm -f $(prefix)/release_neutrino/lib/modules/boxtype.ko
 	rm -f $(prefix)/release_neutrino/lib/modules/bpamem.ko
-	rm -f $(prefix)/release_neutrino/lib/modules/lzo*.ko
 	rm -f $(prefix)/release_neutrino/lib/modules/ramzswap.ko
 	rm -f $(prefix)/release_neutrino/lib/modules/simu_button.ko
 	rm -f $(prefix)/release_neutrino/lib/modules/stmvbi.ko
@@ -158,10 +153,12 @@ release_neutrino_ufs910: release_neutrino_common_utils
 	cp $(targetprefix)/boot/video_7100.elf $(prefix)/release_neutrino/boot/video.elf
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,stv6306}.fw
 	mv $(prefix)/release_neutrino/lib/firmware/dvb-fe-cx21143.fw $(prefix)/release_neutrino/lib/firmware/dvb-fe-cx24116.fw
+	rm $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw
+	rm $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw
 	cp -dp $(targetprefix)/etc/lircd.conf $(prefix)/release_neutrino/etc/
 	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
 	rm -f $(prefix)/release_neutrino/bin/vdstandby
+	rm -f $(prefix)/release_neutrino/bin/eeprom
 
 #
 # release_ufs912
@@ -178,8 +175,8 @@ release_neutrino_ufs912: release_neutrino_common_utils
 	mv $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw $(prefix)/release_neutrino/lib/firmware/component.fw
 	rm $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,cx21143,stv6306}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
 	rm -f $(prefix)/release_neutrino/bin/gotosleep
+	rm -f $(prefix)/release_neutrino/bin/eeprom
 
 #
 # release_ufs913
@@ -196,8 +193,8 @@ release_neutrino_ufs913: release_neutrino_common_utils
 	mv $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw $(prefix)/release_neutrino/lib/firmware/component.fw
 	rm $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,cx24116,cx21143,stv6306}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
 	rm -f $(prefix)/release_neutrino/bin/gotosleep
+	rm -f $(prefix)/release_neutrino/bin/eeprom
 
 #
 # release_ufs922
@@ -212,8 +209,8 @@ release_neutrino_ufs922: release_neutrino_common_utils
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/ufs922_fan/fan_ctrl.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release_neutrino/boot/video.elf
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl6222,cx24116}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
 	rm -f $(prefix)/release_neutrino/bin/gotosleep
+	rm -f $(prefix)/release_neutrino/bin/eeprom
 
 #
 # release_spark
@@ -232,12 +229,11 @@ release_neutrino_spark: release_neutrino_common_utils
 	mv $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw $(prefix)/release_neutrino/lib/firmware/component.fw
 	rm $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,cx21143,stv6306}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
 	rm -f $(prefix)/release_neutrino/bin/gotosleep
 	rm -f $(prefix)/release_neutrino/bin/vdstandby
+	rm -f $(prefix)/release_neutrino/bin/eeprom
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release_neutrino/etc/lircd.conf
 	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
 	cp -f $(buildprefix)/root/sbin/flash_* $(prefix)/release_neutrino/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release_neutrino/sbin
 
@@ -257,12 +253,11 @@ release_neutrino_spark7162: release_neutrino_common_utils
 	mv $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw $(prefix)/release_neutrino/lib/firmware/component.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,cx21143,stv6306}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
 	rm -f $(prefix)/release_neutrino/bin/gotosleep
 	rm -f $(prefix)/release_neutrino/bin/vdstandby
+	rm -f $(prefix)/release_neutrino/bin/eeprom
 	cp -dp $(buildprefix)/root/etc/lircd_spark7162.conf $(prefix)/release_neutrino/etc/lircd.conf
 	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
 	cp -f $(buildprefix)/root/sbin/flashcp $(prefix)/release_neutrino/sbin
 	cp -f $(buildprefix)/root/sbin/flash_* $(prefix)/release_neutrino/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release_neutrino/sbin
@@ -281,7 +276,7 @@ release_neutrino_fortis_hdbox: release_neutrino_common_utils
 	rm -f $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,cx21143,stv6306}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
+	rm -f $(prefix)/release_neutrino/bin/eeprom
 
 #
 # release_atevio7500
@@ -300,8 +295,9 @@ release_neutrino_atevio7500: release_neutrino_common_utils
 	cp $(targetprefix)/lib/firmware/dvb-fe-avl2108.fw $(prefix)/release_neutrino/lib/firmware/
 	cp $(targetprefix)/lib/firmware/dvb-fe-stv6306.fw $(prefix)/release_neutrino/lib/firmware/
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl6222,cx24116,cx21143}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
 	rm -f $(prefix)/release_neutrino/lib/modules/boxtype.ko
+	rm -f $(prefix)/release_neutrino/lib/modules/mpeg2hw.ko
+	rm -f $(prefix)/release_neutrino/bin/eeprom
 
 #
 # release_octagon1008
@@ -319,7 +315,7 @@ release_neutrino_octagon1008: release_neutrino_common_utils
 	rm -f $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl6222,cx24116,cx21143}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
+	rm -f $(prefix)/release_neutrino/bin/eeprom
 
 #
 # release_hs7810a
@@ -337,8 +333,6 @@ release_neutrino_hs7810a: release_neutrino_common_utils
 	mv $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw $(prefix)/release_neutrino/lib/firmware/component.fw
 	rm $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,cx21143,stv6306}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
-	rm -f $(prefix)/release_neutrino/bin/gotosleep
 
 #
 # release_hs7110
@@ -356,8 +350,6 @@ release_neutrino_hs7110: release_neutrino_common_utils
 	mv $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw $(prefix)/release_neutrino/lib/firmware/component.fw
 	rm $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,cx21143,stv6306}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
-	rm -f $(prefix)/release_neutrino/bin/gotosleep
 
 #
 # release_whitebox
@@ -375,8 +367,6 @@ release_neutrino_whitebox: release_neutrino_common_utils
 	mv $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw $(prefix)/release_neutrino/lib/firmware/component.fw
 	rm $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,cx21143,stv6306}.fw
-	rm -f $(prefix)/release_neutrino/bin/evremote
-	rm -f $(prefix)/release_neutrino/bin/gotosleep
 
 #
 # release_hl101
@@ -394,9 +384,6 @@ release_neutrino_hl101: release_neutrino_common_utils
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl6222,cx24116,cx21143}.fw
 	cp -dp $(buildprefix)/root/etc/lircd_hl101.conf $(prefix)/release_neutrino/etc/lircd.conf
 	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
-	rm -f $(prefix)/release_neutrino/bin/evremote
-	rm -f $(prefix)/release_neutrino/bin/gotosleep
 
 #
 # release_adb_box
@@ -418,9 +405,6 @@ release_neutrino_adb_box: release_neutrino_common_utils
 	cp -f $(buildprefix)/root/release/fstab_adb_box $(prefix)/release_neutrino/etc/fstab
 	cp -dp $(buildprefix)/root/etc/lircd_adb_box.conf $(prefix)/release_neutrino/etc/lircd.conf
 	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/lircd
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
-	rm -f $(prefix)/release_neutrino/bin/evremote
-	rm -f $(prefix)/release_neutrino/bin/gotosleep
 
 #
 # release_vip1_v2
@@ -439,9 +423,6 @@ release_neutrino_vip1_v2: release_neutrino_common_utils
 	cp $(targetprefix)/bin/stslave $(prefix)/release_neutrino/bin
 	cp -dp $(targetprefix)/etc/lircd.conf $(prefix)/release_neutrino/etc/
 	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
-	rm -f $(prefix)/release_neutrino/bin/evremote
-	rm -f $(prefix)/release_neutrino/bin/gotosleep
 
 #
 # release_vip2_v1
@@ -461,7 +442,6 @@ release_neutrino_hs5101: release_neutrino_common_utils
 	cp $(targetprefix)/boot/video_7100.elf $(prefix)/release_neutrino/boot/video.elf
 	cp -dp $(targetprefix)/etc/lircd.conf $(prefix)/release_neutrino/etc/
 	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-{avl2108,avl6222,cx21143,stv6306}.fw
 	rm -f $(prefix)/release_neutrino/bin/vdstandby
 
@@ -478,8 +458,6 @@ release_neutrino_tf7700: release_neutrino_common_utils
 	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release_neutrino/boot/video.elf
 	cp -f $(buildprefix)/root/release/fstab_tf7700 $(prefix)/release_neutrino/etc/fstab
 	cp -f $(targetprefix)/sbin/shutdown $(prefix)/release_neutrino/sbin/
-	rm -f $(prefix)/release_neutrino/bin/gotosleep
-
 
 #
 # release_base
@@ -488,7 +466,7 @@ release_neutrino_tf7700: release_neutrino_common_utils
 release_neutrino_base:
 	rm -rf $(prefix)/release_neutrino || true
 	$(INSTALL_DIR) $(prefix)/release_neutrino && \
-	$(INSTALL_DIR) $(prefix)/release_neutrino/{bin,boot,dev,dev.static,etc,hdd,lib,media,mnt,proc,ram,root,sbin,sys,tmp,usr,var} && \
+	$(INSTALL_DIR) $(prefix)/release_neutrino/{bin,boot,dev,dev.static,etc,hdd,lib,media,mnt,proc,ram,root,sbin,swap,sys,tmp,usr,var} && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/etc/{fonts,init.d,network} && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/etc/network/{if-down.d,if-post-down.d,if-pre-up.d,if-up.d} && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/lib/modules && \
@@ -499,16 +477,18 @@ release_neutrino_base:
 	$(INSTALL_DIR) $(prefix)/release_neutrino/usr/{bin,lib,share} && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/usr/share/{fonts,tuxbox,udhcpc,zoneinfo} && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/usr/share/tuxbox/neutrino && \
+	$(INSTALL_DIR) $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/logo && \
+	ln -sf /usr/share/tuxbox/neutrino/icons/logo $(prefix)/release_neutrino/logos && \
+	ln -sf /usr/share $(prefix)/release_neutrino/share && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/var/{bin,boot,etc,httpd,lib,plugins,tuxbox,update} && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/var/tuxbox/config && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/var/tuxbox/config/{locale,zapit} && \
-	$(INSTALL_DIR) $(prefix)/release_neutrino/var/httpd/logos && \
+	ln -sf /usr/share/tuxbox/neutrino/icons/logo $(prefix)/release_neutrino/var/httpd/logos && \
 	export CROSS_COMPILE=$(target)- && \
 		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release_neutrino && \
 	touch $(prefix)/release_neutrino/var/etc/.firstboot && \
 	cp -a $(targetprefix)/bin/* $(prefix)/release_neutrino/bin/ && \
 	ln -sf /bin/showiframe $(prefix)/release_neutrino/usr/bin/showiframe && \
-	cp -dp $(targetprefix)/usr/bin/sdparm $(prefix)/release_neutrino/sbin/ && \
 	cp -dp $(targetprefix)/sbin/init $(prefix)/release_neutrino/sbin/ && \
 	cp -dp $(targetprefix)/sbin/killall5 $(prefix)/release_neutrino/sbin/ && \
 	cp -dp $(targetprefix)/sbin/portmap $(prefix)/release_neutrino/sbin/ && \
@@ -523,11 +503,6 @@ release_neutrino_base:
 	ln -sf /sbin/e2fsck $(prefix)/release_neutrino/sbin/fsck.ext3 && \
 	ln -sf /sbin/e2fsck $(prefix)/release_neutrino/sbin/fsck.ext4 && \
 	ln -sf /sbin/e2fsck $(prefix)/release_neutrino/sbin/fsck.ext4dev && \
-	cp -dp $(targetprefix)/sbin/jfs_fsck $(prefix)/release_neutrino/sbin/ && \
-	ln -sf /sbin/jfs_fsck $(prefix)/release_neutrino/sbin/fsck.jfs && \
-	cp -dp $(targetprefix)/sbin/jfs_mkfs $(prefix)/release_neutrino/sbin/ && \
-	ln -sf /sbin/jfs_mkfs $(prefix)/release_neutrino/sbin/mkfs.jfs && \
-	cp -dp $(targetprefix)/sbin/jfs_tune $(prefix)/release_neutrino/sbin/ && \
 	cp -dp $(targetprefix)/sbin/fsck.nfs $(prefix)/release_neutrino/sbin/ && \
 	cp -dp $(targetprefix)/sbin/sfdisk $(prefix)/release_neutrino/sbin/ && \
 	cp -dp $(targetprefix)/sbin/tune2fs $(prefix)/release_neutrino/sbin/ && \
@@ -544,7 +519,6 @@ release_neutrino_base:
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release_neutrino/etc/ && \
 	cp $(buildprefix)/root/etc/inetd.conf $(prefix)/release_neutrino/etc/ && \
-	cp -dp $(targetprefix)/etc/inittab $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/passwd $(prefix)/release_neutrino/etc/ && \
@@ -555,8 +529,8 @@ release_neutrino_base:
 	cp -dp $(targetprefix)/etc/shells $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/shells.conf $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release_neutrino/etc/ && \
-	cp -dp $(targetprefix)/var/etc/.version $(prefix)/release_neutrino/var/etc/ && \
-	ln -sf /var/etc/.version $(prefix)/release_neutrino/.version && \
+	cp -dp $(targetprefix)/var/etc/.version $(prefix)/release_neutrino/ && \
+	ln -sf /.version $(prefix)/release_neutrino/var/etc/.version && \
 	cp -dp $(targetprefix)/etc/timezone.xml $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/vdstandby.cfg $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/network/interfaces $(prefix)/release_neutrino/etc/network/ && \
@@ -570,7 +544,6 @@ release_neutrino_base:
 	cp $(buildprefix)/root/release/rcS_stm23_neutrino$(if $(TF7700),_$(TF7700))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(HS7810A),_$(HS7810A))$(if $(HS7110),_$(HS7110))$(if $(WHITEBOX),_$(WHITEBOX))$(if $(HL101),_$(HL101))$(if $(VIP1_V2),_$(VIP1_V2))$(if $(VIP2_V1),_$(VIP2_V1))$(if $(ADB_BOX),_$(ADB_BOX))$(if $(UFS910),_$(UFS910))$(if $(UFS912),_$(UFS912))$(if $(UFS913),_$(UFS913))$(if $(UFS922),_$(UFS922))$(if $(CUBEREVO),_$(CUBEREVO))$(if $(CUBEREVO_MINI),_$(CUBEREVO_MINI))$(if $(CUBEREVO_MINI2),_$(CUBEREVO_MINI2))$(if $(CUBEREVO_MINI_FTA),_$(CUBEREVO_MINI_FTA))$(if $(CUBEREVO_250HD),_$(CUBEREVO_250HD))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(CUBEREVO_9500HD),_$(CUBEREVO_9500HD))$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162)) $(prefix)/release_neutrino/etc/init.d/rcS
 	chmod 755 $(prefix)/release_neutrino/etc/init.d/rcS && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release_neutrino/etc/init.d/ && \
-	cp $(buildprefix)/root/release/mme_check $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/mountall $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/hostname $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/vsftpd $(prefix)/release_neutrino/etc/init.d/ && \
@@ -578,19 +551,31 @@ release_neutrino_base:
 	cp $(buildprefix)/root/release/bootclean.sh $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/network $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/networking $(prefix)/release_neutrino/etc/init.d/ && \
-	cp $(buildprefix)/root/bootscreen/bootlogo.mvi $(prefix)/release_neutrino/boot/ && \
+	cp $(buildprefix)/root/bootscreen/bootlogo.mvi $(prefix)/release_neutrino/var/boot/ && \
 	cp $(buildprefix)/root/bin/autologin $(prefix)/release_neutrino/bin/ && \
 	cp -p $(targetprefix)/usr/bin/killall $(prefix)/release_neutrino/usr/bin/ && \
 	cp -dp $(targetprefix)/bin/hotplug $(prefix)/release_neutrino/sbin/ && \
 	cp -dp $(targetprefix)/sbin/blkid $(prefix)/release_neutrino/sbin/ && \
 	cp $(buildprefix)/root/release/getfb.awk $(prefix)/release_neutrino/etc/init.d/ && \
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release_neutrino/sbin/ && \
+	ln -sf ../../bin/busybox $(prefix)/release_neutrino/usr/bin/ether-wake && \
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release_neutrino/sbin/
+if !ENABLE_UFS910
+if !ENABLE_UFS922
+	cp -dp $(targetprefix)/sbin/jfs_fsck $(prefix)/release_neutrino/sbin/ && \
+	ln -sf /sbin/jfs_fsck $(prefix)/release_neutrino/sbin/fsck.jfs && \
+	cp -dp $(targetprefix)/sbin/jfs_mkfs $(prefix)/release_neutrino/sbin/ && \
+	ln -sf /sbin/jfs_mkfs $(prefix)/release_neutrino/sbin/mkfs.jfs && \
+	cp -dp $(targetprefix)/sbin/jfs_tune $(prefix)/release_neutrino/sbin/
+endif
+endif
+
+	cp -dp $(buildprefix)/root/etc/inittab$(if $(FORTIS_HDBOX)$(OCTAGON1008)$(CUBEREVO_MINI2),_ttyAS1) $(prefix)/release_neutrino/etc/inittab
+	cp $(buildprefix)/root/etc/fw_env.config$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(TF7700),_$(TF7700))$(if $(UFS910),_$(UFS910))$(if $(UFS912),_$(UFS912))$(if $(UFS913),_$(UFS913))$(if $(UFS922),_$(UFS922))$(if $(ADB_BOX),_$(ADB_BOX))$(if $(IPBOX9900),_$(IPBOX9900))$(if $(IPBOX99),_$(IPBOX99))$(if $(IPBOX55),_$(IPBOX55)) $(prefix)/release_neutrino/etc/fw_env.config
 
 #
 # Player
 #
-if ENABLE_PLAYER191
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stm_v4l2.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmvbi.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmvout.ko $(prefix)/release_neutrino/lib/modules/
@@ -602,9 +587,6 @@ if ENABLE_PLAYER191
 		stm/monitor/stm_monitor.ko \
 		media/dvb/stm/dvb/stmdvb.ko \
 		sound/ksound/ksound.ko \
-		sound/kreplay/kreplay.ko \
-		sound/kreplay/kreplay-fdma.ko \
-		sound/ksound/ktone.ko \
 		media/dvb/stm/mpeg2_hard_host_transformer/mpeg2hw.ko \
 		media/dvb/stm/backend/player2.ko \
 		media/dvb/stm/h264_preprocessor/sth264pp.ko \
@@ -623,7 +605,6 @@ if ENABLE_PLAYER191
 		echo "."; \
 	done
 	echo "touched";
-endif
 
 #
 # modules
@@ -631,8 +612,6 @@ endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/avs/avs.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/bpamem/bpamem.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/boxtype/boxtype.ko $(prefix)/release_neutrino/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/lzo-kmod/lzo1x_compress.ko $(prefix)/release_neutrino/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/lzo-kmod/lzo1x_decompress.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/ramzswap.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/e2_proc/e2_proc.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxshell/embxshell.ko $(prefix)/release_neutrino/lib/modules/
@@ -657,13 +636,15 @@ endif
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko ] && cp $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/net/tun.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/tun.ko $(prefix)/release_neutrino/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release_neutrino/lib/modules/ftdi.ko || true
+	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/fs/fuse/fuse.ko ] && cp $(kernelprefix)/linux-sh4/fs/fuse/fuse.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/fs/cifs/cifs.ko ] && cp $(kernelprefix)/linux-sh4/fs/cifs/cifs.ko $(prefix)/release_neutrino/lib/modules || true
+if !ENABLE_UFS910
 	[ -e $(kernelprefix)/linux-sh4/fs/jfs/jfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/jfs/jfs.ko $(prefix)/release_neutrino/lib/modules || true
+endif
 	[ -e $(kernelprefix)/linux-sh4/fs/nfsd/nfsd.ko ] && cp $(kernelprefix)/linux-sh4/fs/nfsd/nfsd.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/fs/exportfs/exportfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/exportfs/exportfs.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/fs/nfs_common/nfs_acl.ko ] && cp $(kernelprefix)/linux-sh4/fs/nfs_common/nfs_acl.ko $(prefix)/release_neutrino/lib/modules || true
@@ -697,12 +678,14 @@ endif
 #
 # fonts
 #
-	cp -aR $(targetprefix)/usr/share/fonts $(prefix)/release_neutrino/usr/share/
+	cp -aR $(targetprefix)/usr/share/fonts/{neutrino,DejaVuLGCSansMono-Bold}.ttf $(prefix)/release_neutrino/usr/share/fonts
+	ln -s /usr/share/fonts/DejaVuLGCSansMono-Bold.ttf $(prefix)/release_neutrino/usr/share/fonts/tuxtxt.ttf
 
 #
 # neutrino
 #
 	mkdir -p $(prefix)/release_neutrino/usr/local/bin
+	ln -sf /usr/share $(prefix)/release_neutrino/usr/local/share
 	cp $(targetprefix)/usr/local/bin/neutrino $(prefix)/release_neutrino/usr/local/bin/
 	cp $(targetprefix)/usr/local/bin/pzapit $(prefix)/release_neutrino/usr/local/bin/
 	cp $(targetprefix)/usr/local/bin/sectionsdcontrol $(prefix)/release_neutrino/usr/local/bin/
@@ -710,9 +693,19 @@ endif
 	cp $(targetprefix)/usr/local/sbin/udpstreampes $(prefix)/release_neutrino/usr/local/sbin/
 
 #
-# channellist
+# channellist / tuxtxt
 #
 	cp -aR $(targetprefix)/var/tuxbox/config/* $(prefix)/release_neutrino/var/tuxbox/config
+	cp -aR $(buildprefix)/root/usr/local/share/config/zapit $(prefix)/release_neutrino/var/tuxbox/config
+	cp $(buildprefix)/root/etc/tuxbox/tuxtxt2.conf $(prefix)/release_neutrino/var/tuxbox/config/tuxtxt
+if !ENABLE_CUBEREVO_MINI2
+if !ENABLE_ATEVIO7500
+if !ENABLE_SPARK7162
+	rm -f $(prefix)/release_neutrino/var/tuxbox/config/cables.xml
+	rm -f $(prefix)/release_neutrino/var/tuxbox/config/terrestrial.xml
+endif
+endif
+endif
 
 #
 # iso-codes
@@ -725,17 +718,10 @@ endif
 	cp -aR $(targetprefix)/usr/share/tuxbox/neutrino/* $(prefix)/release_neutrino/usr/share/tuxbox/neutrino
 
 #
+# backup/restore NMP
 #
-#
-	mv -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/scan.jpg $(prefix)/release_neutrino/var/boot/
-	ln -s /var/boot/scan.jpg $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/
-	mv -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/mp3.jpg $(prefix)/release_neutrino/var/boot/
-	ln -s /var/boot/mp3.jpg $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/
-	rm -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/mp3-?.jpg
-	mv -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/shutdown.jpg $(prefix)/release_neutrino/var/boot/
-	ln -s /var/boot/shutdown.jpg $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/
-	mv -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/radiomode.jpg $(prefix)/release_neutrino/var/boot/
-	ln -s /var/boot/radiomode.jpg $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/
+	[ -e $(targetprefix)/usr/local/bin/backup.sh ] && cp -aR $(targetprefix)/usr/local/bin/backup.sh $(prefix)/release_neutrino/bin || true
+	[ -e $(targetprefix)/usr/local/bin/restore.sh ] && cp -aR $(targetprefix)/usr/local/bin/restore.sh $(prefix)/release_neutrino/bin || true
 
 #
 # Delete unnecessary files
@@ -761,6 +747,12 @@ endif
 	rm -f $(prefix)/release_neutrino/lib/libanl*
 	rm -f $(prefix)/release_neutrino/usr/lib/libanl*
 	rm -rf $(prefix)/release_neutrino/lib/m4-nofpu/
+	rm -f $(prefix)/release_neutrino/usr/lib/libcurses.so
+	rm -f $(prefix)/release_neutrino/usr/lib/libncurses.so
+	rm -f $(prefix)/release_neutrino/usr/lib/libopkg*
+	rm -f $(prefix)/release_neutrino/lib/modules/lzo*.ko
+	rm -f $(prefix)/release_neutrino/bin/gitVCInfo
+	rm -f $(prefix)/release_neutrino/bin/libstb-hal-test
 
 #
 # AUTOFS
@@ -777,12 +769,23 @@ endif
 #
 	if [ -e $(prefix)/release_neutrino/usr/lib/libglcddrivers.so ]; then \
 		cp -f $(targetprefix)/etc/graphlcd.conf $(prefix)/release_neutrino/etc/graphlcd.conf; \
+		rm -f $(prefix)/release_neutrino/usr/lib/libglcdskin.so*; \
 	fi
 
 #
-# Delete unnecessary plugins and files
+# Tuxbox Commander
 #
+	if [ -e $(targetprefix)/var/plugins/tuxcom.so -a -e $(targetprefix)/var/plugins/tuxcom.cfg ]; then \
+		cp -f $(targetprefix)/var/plugins/tuxcom* $(prefix)/release_neutrino/var/plugins; \
+	fi
 
+#
+# Neutrino HD2 Workaround Build in Player
+#
+	if [ -e $(targetprefix)/usr/local/bin/eplayer3 ]; then \
+		cp -f $(targetprefix)/usr/local/bin/eplayer3 $(prefix)/release_neutrino/bin/; \
+		cp -f $(targetprefix)/usr/local/bin/meta $(prefix)/release_neutrino/bin/; \
+	fi
 
 #
 # The main target depends on the model.
@@ -795,7 +798,38 @@ $(DEPDIR)/%release_neutrino_nightly: release_neutrino_base release_neutrino_$(TF
 #
 # FOR YOUR OWN CHANGES use these folder in cdk/own_build/neutrino-hd
 #
-	cp -RP $(buildprefix)/own_build/neutrino-hd/* $(prefix)/release_neutrino/
+#	default for all receiver
+	find $(buildprefix)/own_build/neutrino-hd/ -mindepth 1 -maxdepth 1 -exec cp -at$(prefix)/release_neutrino/ -- {} +
+#	receiver specific (only if directory exist)
+	[ -d "$(buildprefix)/own_build/neutrino-hd.$(BOXTYPE)" ] && find $(buildprefix)/own_build/neutrino-hd.$(BOXTYPE)/ -mindepth 1 -maxdepth 1 -exec cp -at$(prefix)/release_neutrino/ -- {} + || true
+	rm -f $(prefix)/release_neutrino/for_your_own_changes
+
+# nicht die feine Art, aber funktioniert ;)
+	cp -dpfr $(prefix)/release_neutrino/etc $(prefix)/release_neutrino/var
+	rm -fr $(prefix)/release_neutrino/etc
+	ln -sf /var/etc $(prefix)/release_neutrino
+
+	ln -s /tmp $(prefix)/release_neutrino/lib/init
+	ln -s /tmp $(prefix)/release_neutrino/var/lib/urandom
+	ln -s /tmp $(prefix)/release_neutrino/var/lock
+	ln -s /tmp $(prefix)/release_neutrino/var/log
+	ln -s /tmp $(prefix)/release_neutrino/var/run
+	ln -s /tmp $(prefix)/release_neutrino/var/tmp
+
+#
+#
+#
+	mv -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/scan.jpg $(prefix)/release_neutrino/var/boot/
+	ln -s /var/boot/scan.jpg $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/
+	mv -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/mp3.jpg $(prefix)/release_neutrino/var/boot/
+	ln -s /var/boot/mp3.jpg $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/
+	rm -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/mp3-?.jpg
+	mv -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/shutdown.jpg $(prefix)/release_neutrino/var/boot/
+	ln -s /var/boot/shutdown.jpg $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/
+	mv -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/radiomode.jpg $(prefix)/release_neutrino/var/boot/
+	ln -s /var/boot/radiomode.jpg $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/
+	mv -f $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/start.jpg $(prefix)/release_neutrino/var/boot/
+	ln -s /var/boot/start.jpg $(prefix)/release_neutrino/usr/share/tuxbox/neutrino/icons/
 
 #
 # sh4-linux-strip all
@@ -807,3 +841,4 @@ $(DEPDIR)/%release_neutrino_nightly: release_neutrino_base release_neutrino_$(TF
 #
 release_neutrino_nightly-clean:
 	rm -f $(DEPDIR)/release_neutrino_nightly
+
