@@ -997,6 +997,7 @@ $(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
 		--enable-parser=mjpeg \
 		--enable-demuxer=mjpeg \
 		--enable-small \
+		--enable-avresample \
 		--enable-pthreads \
 		--enable-bzlib \
 		--enable-librtmp \

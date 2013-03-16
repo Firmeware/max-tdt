@@ -113,18 +113,6 @@ if [ `which arch > /dev/null 2>&1 && arch || uname -m` == x86_64 ]; then
 fi
 $INSTALL $PACKAGES
 
-#Is this also necessary for other dists?
-#if [ "$UBUNTU" == 1 ]; then
-#	DEBIAN_VERSION=`cat /etc/debian_version`
-#	if [ "$DEBIAN_VERSION" == "wheezy/sid" ]; then
-#		if [ `which arch > /dev/null 2>&1 && arch || uname -m` == i686 ]; then
-#			ln -s /usr/include/i386-linux-gnu/bits /usr/include
-#			ln -s /usr/include/i386-linux-gnu/gnu /usr/include
-#			ln -s /usr/include/i386-linux-gnu/sys /usr/include
-#		fi
-#	fi
-#fi
-
 # Link sh to bash instead of dash on Ubuntu (and possibly others)
 /bin/sh --version 2>/dev/null | grep bash -s -q
 if [ ! "$?" -eq "0" ]; then
