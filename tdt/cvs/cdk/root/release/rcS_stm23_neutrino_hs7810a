@@ -92,7 +92,7 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/bpamem.ko
    mknod /dev/bpamem c 153 0 
 
-   showiframe -p /boot/bootlogo.mvi &
+   showiframe -p /var/boot/bootlogo.mvi &
    stfbcontrol a 0
 
    mknod /dev/rc c 147 1 
@@ -128,13 +128,16 @@ if [ ! -e /var/etc/.firstboot ]; then
       fi 
    fi
 
+   #timefix
+   date -s "200901011200"
+
    echo "neu" > /dev/vfd
    echo "LOADING NEUTRINO"
 
    until false
    do
       echo "starting neutrino ->"
-      /usr/local/bin/neutrino -f -u
+      /usr/local/bin/neutrino
       rtv=$?
       echo "neutrino ended <- RTV: " $rtv
       case "$rtv" in
@@ -150,7 +153,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		3) echo "3"
 		   echo "RESTART"
 		   echo "0" > /proc/progress
-		   showiframe -p /boot/bootlogo.mvi &;;
+		   showiframe -p /var/boot/bootlogo.mvi &;;
 		*) echo "*"
 		   echo "ERROR"
            init 6;;

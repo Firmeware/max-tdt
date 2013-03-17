@@ -45,7 +45,7 @@ if [ ! -e /var/etc/.firstboot ]; then
    fp_control -c
 
    # green led on
-   fp_control -l 2 1
+   #fp_control -l 2 1
    # led brightness
    fp_control -led 80
 
@@ -54,11 +54,9 @@ if [ ! -e /var/etc/.firstboot ]; then
  echo "starting telnetd"
    /usr/sbin/telnetd -l /bin/autologin
 
-   /etc/init.d/vsftpd start
-
  echo "init stmfb"
    insmod $MODDIR/stmcore-display-sti7105.ko
-   insmod $MODDIR/stmfb.ko display0=1280x720-32@50:12m:pal:yuv:yuv;# display1=720x576-16@50:8m:pal:cvbs;
+   insmod $MODDIR/stmfb.ko display0=1280x720-32@50:12m:pal:cvbs:yuv;# display1=720x576-16@50:8m:pal:cvbs;
 
    echo "LOADING MODULES"
    fp_control -t "LOADING MODULES"
@@ -85,8 +83,6 @@ if [ ! -e /var/etc/.firstboot ]; then
 
  echo "init AVS"
    insmod $MODDIR/avs.ko type=stv6417
-
-
    insmod $MODDIR/mmelog.ko
    insmod $MODDIR/ksound.ko
    insmod $MODDIR/p2div64.ko
@@ -105,16 +101,14 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/stm_monitor.ko
    insmod $MODDIR/stmsysfs.ko
    insmod $MODDIR/stmdvb.ko
-
-   insmod $MODDIR/player2.ko
+   insmod $MODDIR/player2.ko discardlateframe=0
    insmod $MODDIR/sth264pp.ko
    insmod $MODDIR/stmalloc.ko
    insmod $MODDIR/platform.ko
    insmod $MODDIR/silencegen.ko
-
    insmod $MODDIR/bpamem.ko
 
-   #showiframe -p /boot/bootlogo.mvi &
+   #showiframe -p /var/boot/bootlogo.mvi &
    stfbcontrol a 0
 
    echo "init frontpanel"
@@ -125,13 +119,12 @@ if [ ! -e /var/etc/.firstboot ]; then
    #delay
    /bin/evremote2 10 120 &
 
-   # timefix e2
-   # date -s "121220001970"
+   #timefix
+   date -s "200901011200"
 
    /etc/init.d/mountall start
 
    /etc/init.d/hostname start
-
 
    /etc/init.d/vsftpd start
    /usr/sbin/inetd
@@ -144,18 +137,31 @@ if [ ! -e /var/etc/.firstboot ]; then
    until false
    do
       echo "starting neutrino ->"
-      /usr/local/bin/neutrino -v 3
-      if [ -e /tmp/.reboot ]; then
-         echo "REBOOT"
-         init 6
-      else
-         echo "SHUTDOWN"
-         init 0
-      fi
+      /usr/local/bin/neutrino
+      rtv=$?
+      echo "neutrino ended <- RTV: " $rtv
+      case "$rtv" in
+		0) echo "0"
+		   echo "ERROR"
+		   init 6;;
+		1) echo "1"
+		   echo "SHUTDOWN"
+		   init 0;;
+		2) echo "2"
+		   echo "REBOOT"
+		   init 6;;
+		3) echo "3"
+		   echo "RESTART"
+		   echo "0" > /proc/progress
+		   showiframe -p /var/boot/bootlogo.mvi &;;
+		*) echo "*"
+		   echo "ERROR"
+		   init 6;;
+      esac
    done
 fi
 
 #never reached
-echo "REBOOT UFS913"/dev/vfd
+echo "REBOOT UFS913" > /dev/vfd
 echo "REBOOT UFS913"
-reboot
+init 6

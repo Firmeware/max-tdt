@@ -101,14 +101,14 @@ if [ ! -e /var/etc/.firstboot ]; then
 
    #DVD-PLAYER EXIT-TASTE LOAD OR EJECT DVD
    #mount /dev/sr0 /media/dvd
-   mount -t ext3 /dev/sda1 /hdd/movie
+   #mount -t ext3 /dev/sda1 /hdd/movie
 
    /etc/init.d/portmap start
    /etc/init.d/vsftpd start
    /usr/sbin/inetd
 
-   #timefix e2
-   date -s "121220001970"
+   #timefix
+   date -s "200901011200"
 
    stfbcontrol a 255
 
@@ -118,7 +118,7 @@ if [ ! -e /var/etc/.firstboot ]; then
    until false
    do
       echo "starting neutrino ->"
-      /usr/local/bin/neutrino -f -u
+      /usr/local/bin/neutrino
       rtv=$?
       echo "neutrino ended <- RTV: " $rtv
       case "$rtv" in
@@ -134,7 +134,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		3) echo "3"
 		   echo "RESTART"
 		   echo "0" > /proc/progress
-		   showiframe -p /boot/bootlogo.mvi &;;
+		   showiframe -p /var/boot/bootlogo.mvi &;;
 		*) echo "*"
 		   echo "ERROR"
            init 6;;

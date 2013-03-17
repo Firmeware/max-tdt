@@ -37,15 +37,15 @@ if [ ! -e /var/etc/.firstboot ]; then
    #used by fp_control! otherwise crash
    insmod $MODDIR/boxtype.ko
 
-   echo "LOADING MODULES"   
+   echo "LOADING MODULES"
    fp_control -c
-   
+
    echo "init embxshell"
    insmod $MODDIR/embxshell.ko
    echo "init embxmailbox"
-   insmod $MODDIR/embxmailbox.ko mailbox0=0xb9211000:136:set2 mailbox1=0xb9212000:137:set2 ;
+   insmod $MODDIR/embxmailbox.ko mailbox0=0xb9211000:136:set2 mailbox1=0xb9212000:137:set2
    echo "init embxshm"
-   insmod $MODDIR/embxshm.ko mailbox0=shm:0:7:0x60000000:0:256:256:0:512:0xa4000000:0x10000000 ;
+   insmod $MODDIR/embxshm.ko mailbox0=shm:0:7:0x60000000:0:256:256:0:512:0xa4000000:0x10000000
    echo "init mme_host"
    insmod $MODDIR/mme_host.ko transport0=shm
 
@@ -54,15 +54,13 @@ if [ ! -e /var/etc/.firstboot ]; then
 
    echo "init stmfb"
    insmod $MODDIR/stmcore-display-stx7100.ko
-   insmod $MODDIR/stmfb.ko display0=1280x720-32@50:12m:pal:yuv:yuv;# display1=720x576-16@50:1m:pal:cvbs;
+   insmod $MODDIR/stmfb.ko display0=1280x720-32@50:12m:pal:cvbs:yuv;# display1=720x576-16@50:1m:pal:cvbs;
 
    echo "init player"
    insmod $MODDIR/mmelog.ko
-   insmod $MODDIR/mpeg2hw.ko mmeName=MPEG2_TRANSFORMER0;
+   insmod $MODDIR/mpeg2hw.ko mmeName=MPEG2_TRANSFORMER0
    insmod $MODDIR/ksound.ko
-# only for stm23
    insmod $MODDIR/p2div64.ko
-# only for stm23
    insmod $MODDIR/stm_v4l2.ko
    insmod $MODDIR/stmvout.ko
    insmod $MODDIR/stmvbi.ko
@@ -73,7 +71,7 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/stm_monitor.ko
    insmod $MODDIR/stmsysfs.ko
    insmod $MODDIR/stmdvb.ko
-   insmod $MODDIR/player2.ko
+   insmod $MODDIR/player2.ko discardlateframe=0
    insmod $MODDIR/sth264pp.ko
    insmod $MODDIR/stmalloc.ko
    insmod $MODDIR/platform.ko
@@ -101,14 +99,14 @@ if [ ! -e /var/etc/.firstboot ]; then
 
    #DVD-PLAYER EXIT-TASTE LOAD OR EJECT DVD
    #mount /dev/sr0 /media/dvd
-   mount -t ext3 /dev/sda1 /hdd/movie
+   #mount -t ext3 /dev/sda1 /hdd/movie
 
    /etc/init.d/portmap start
    /etc/init.d/vsftpd start
    /usr/sbin/inetd
 
-   #timefix e2
-   date -s "121220001970"
+   #timefix
+   date -s "200901011200"
 
    stfbcontrol a 255
 
@@ -124,7 +122,7 @@ if [ ! -e /var/etc/.firstboot ]; then
       case "$rtv" in
 		0) echo "0"
 		   echo "ERROR"
-      	   init 6;;
+		   init 6;;
 		1) echo "1"
 		   echo "SHUTDOWN"
 		   init 0;;
@@ -134,15 +132,15 @@ if [ ! -e /var/etc/.firstboot ]; then
 		3) echo "3"
 		   echo "RESTART"
 		   echo "0" > /proc/progress
-		   showiframe -p /boot/bootlogo.mvi &;;
+		   showiframe -p /var/boot/bootlogo.mvi &;;
 		*) echo "*"
 		   echo "ERROR"
-           init 6;;
+		   init 6;;
       esac
-   done 
+   done
 fi
 
 #never reached
 echo "REBOOT UFS910" > /dev/vfd
 echo "REBOOT UFS910"
-reboot
+init 6
