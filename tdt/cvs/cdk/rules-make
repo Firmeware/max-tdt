@@ -163,7 +163,7 @@ lxml;2.2.8;lxml-2.2.8;lxml-2.2.8.tgz;extract:lxml-2.2.8.tgz
 setuptools;0.6c11;setuptools-0.6c11;setuptools-0.6c11.tar.gz;extract:setuptools-0.6c11.tar.gz
 twisted;12.1.0;Twisted-12.1.0;Twisted-12.1.0.tar.bz2;extract:Twisted-12.1.0.tar.bz2
 twistedweb2;8.1.0;TwistedWeb2-8.1.0;TwistedWeb2-8.1.0.tar.bz2;extract:TwistedWeb2-8.1.0.tar.bz2
-pilimaging;1.1.7;Imaging-1.1.7;Imaging-1.1.7.tar.gz;extract:Imaging-1.1.7.tar.gz
+pilimaging;1.1.7;Imaging-1.1.7;Imaging-1.1.7.tar.gz;extract:Imaging-1.1.7.tar.gz;patch:Imaging-1.1.7-crosscompiling.patch
 pycrypto;2.5;pycrypto-2.5;pycrypto-2.5.tar.gz;extract:pycrypto-2.5.tar.gz;patch:python-pycrypto-no-usr-include.patch
 pyopenssl;0.11;pyOpenSSL-0.11;pyOpenSSL-0.11.tar.gz;extract:pyOpenSSL-0.11.tar.gz
 pyusb;1.0.0a2;pyusb-1.0.0a2;pyusb-1.0.0a2.tar.gz;extract:pyusb-1.0.0a2.tar.gz

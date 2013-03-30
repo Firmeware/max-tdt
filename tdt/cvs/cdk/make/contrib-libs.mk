@@ -1579,27 +1579,16 @@ $(DEPDIR)/%twistedweb2: $(DEPDIR)/twistedweb2.do_compile
 #
 # pilimaging
 #
-$(DEPDIR)/pilimaging.do_prepare: bootstrap libjpeg libfreetype python @DEPENDS_pilimaging@
+$(DEPDIR)/pilimaging: bootstrap libjpeg libfreetype python @DEPENDS_pilimaging@
 	@PREPARE_pilimaging@
-	touch $@
-
-$(DEPDIR)/pilimaging.do_compile: $(DEPDIR)/pilimaging.do_prepare
-	cd @DIR_pilimaging@ && \
-		echo 'JPEG_ROOT = "$(targetprefix)/usr/lib", "$(targetprefix)/usr/include"' > setup_site.py && \
-		echo 'ZLIB_ROOT = "$(targetprefix)/usr/lib", "$(targetprefix)/usr/include"' >> setup_site.py && \
-		echo 'FREETYPE_ROOT = "$(targetprefix)/usr/lib", "$(targetprefix)/usr/include"' >> setup_site.py && \
+	cd @DIR_pilimaging@&& \
+		sed -ie "s|"darwin"|"darwinNot"|g" "setup.py"; \
+		sed -ie "s|ZLIB_ROOT = None|ZLIB_ROOT = libinclude(\"${targetprefix}/usr\")|" "setup.py"; \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
-		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python ./setup.py build
-	touch $@
-
-$(DEPDIR)/pilimaging: \
-$(DEPDIR)/%pilimaging: $(DEPDIR)/pilimaging.do_compile
-	cd @DIR_pilimaging@ && \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@DISTCLEANUP_pilimaging@
-	[ "x$*" = "x" ] && touch $@ || true
+	touch $@ || true
 
 #
 # pycrypto
