@@ -2,12 +2,11 @@
 
 MODDIR=/lib/modules
 
-insmod $MODDIR/micom.ko
+insmod $MODDIR/micom.ko paramDebug=0
 
 if [ -e /var/etc/.firstboot ]; then
-   #fp_control does not work here
-   echo "WAIT 1 min" >/dev/vfd
-   echo "WAIT 1 min"
+   echo "WAIT 3 min" > /dev/vfd
+   echo "WAIT 3 min"
    rm /var/etc/.firstboot
    touch /dev/.devfsd
 fi
@@ -15,7 +14,6 @@ fi
 /etc/init.d/mountvirtfs start
 
 insmod $MODDIR/e2_proc.ko
-#insmod $MODDIR/fan_ctrl.ko
 
 if [ ! -e /var/etc/.firstboot ]; then
 
@@ -24,58 +22,66 @@ if [ ! -e /var/etc/.firstboot ]; then
    /etc/init.d/hostname start
 
    echo "starting telnetd"
-   /usr/sbin/telnetd -l /bin/autologin
+   /usr/sbin/telnetd -l /bin/login
 
    echo "init stmfb"
    insmod $MODDIR/stmcore-display-stx7109c3.ko
-   insmod $MODDIR/stmfb.ko display0=1280x720-32@50:12m:pal:yuv:yuv;# display1=720x576-16@50:1m:pal:cvbs;
+   insmod $MODDIR/stmfb.ko display0=720x576-32@60:10m:pal:yuv:yuv;# display1=720x576-16@50:1m:pal:cvbs;
 
    echo "LOADING MODULES"   
    fp_control -c
    fp_control -t "LOADING MODULES"
 
    echo "load a/v firmware"
-   #/bin/stslave -t stb7100.0 -R /boot/video.elf
-   #/bin/stslave -t stb7100.1 -R /boot/audio.elf
-   /bin/ustslave /dev/st231-0 /boot/video.elf
    /bin/ustslave /dev/st231-1 /boot/audio.elf
+   /bin/ustslave /dev/st231-0 /boot/video.elf
 
    echo "init embx"
    insmod $MODDIR/embxshell.ko
    insmod $MODDIR/embxmailbox.ko mailbox0=0xb9211000:136:set2 mailbox1=0xb9212000:0 ;
-   insmod $MODDIR/embxshm.ko mailbox0=shm:0:7:0x60000000:0:256:256:0:512:0xa4000000:0x10000000 ;
+   insmod $MODDIR/embxshm.ko mailbox0=shm:0:7:0x60000000:0:256:256:0:1024:0xa4000000:0x10000000 ;
    insmod $MODDIR/mme_host.ko transport0=shm
 
    echo "init AVS"
    insmod $MODDIR/avs.ko type=stv6412
 
-   echo "init player"
+   player=`cat /proc/stb/player/version`
+   if [ $player=='player179' ]; then
+     echo "init player 179"
+   else
+     echo "init player 131"
+   fi
    insmod $MODDIR/mmelog.ko
-   insmod $MODDIR/mpeg2hw.ko mmeName=HW_MPEG2_TRANSFORMER;
+   insmod $MODDIR/mpeg2hw.ko mmeName=MPEG2_TRANSFORMER0;
    insmod $MODDIR/ksound.ko
    insmod $MODDIR/p2div64.ko
    insmod $MODDIR/stm_v4l2.ko
+   if [ $player=='player179' ]; then
+     insmod $MODDIR/stmvout.ko
+     insmod $MODDIR/stmvbi.ko
+   fi
    insmod $MODDIR/pseudocard.ko
 
-   #insmod $MODDIR/cx21143.ko
-   #insmod $MODDIR/ufs922_cic.ko
-   #insmod $MODDIR/dvb-pll.ko
-   insmod $MODDIR/tda10023.ko
+   insmod $MODDIR/cx21143.ko
    insmod $MODDIR/ufc960_cic.ko
-   insmod $MODDIR/pti.ko
-   insmod $MODDIR/stmdvb.ko
-   insmod $MODDIR/stm_monitor.ko
+   if [ $player=='player179' ]; then
+     insmod $MODDIR/pti.ko
+     insmod $MODDIR/stm_monitor.ko
+     insmod $MODDIR/stmsysfs.ko
+     insmod $MODDIR/stmdvb.ko
+   else
+     insmod $MODDIR/pti.ko
+     insmod $MODDIR/stmdvb.ko
+     insmod $MODDIR/stm_monitor.ko
+   fi
    insmod $MODDIR/player2.ko
    insmod $MODDIR/sth264pp.ko
    insmod $MODDIR/stmalloc.ko
    insmod $MODDIR/platform.ko
    insmod $MODDIR/silencegen.ko
 
-   #showiframe -p /boot/bootlogo.mvi &
-   #stfbcontrol a 0
-
-   insmod $MODDIR/bpamem.ko
-   mknod /dev/bpamem c 153 0 
+   showiframe -p /boot/bootlogo.mvi &
+   stfbcontrol a 0
 
    echo "init frontpanel"
    insmod $MODDIR/boxtype.ko
@@ -102,20 +108,20 @@ if [ ! -e /var/etc/.firstboot ]; then
    #timefix e2
    date -s "121220001970"
 
-   #stfbcontrol a 255
+   stfbcontrol a 255
 
-   fp_control -t "LOADING enigma"
-   echo "LOADING engima"
+   fp_control -t "LOADING e2"
+   echo "LOADING e2"
 
    until false
    do
-      echo "starting enigma ->"
+      echo "starting e2->"
       /usr/local/bin/enigma2
       rtv=$?
-      echo "neutrino ended <- RTV: " $rtv
-      case "$rtv" in
+      echo "e2 ended <- RTV: " $rtv
+     case "$rtv" in
 		0) echo "0"
-		   echo "ERROR"
+		   echo "E2 ERROR"
       	   init 6;;
 		1) echo "1"
 		   echo "SHUTDOWN"
@@ -124,7 +130,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		   echo "REBOOT"
 		   init 6;;
 		3) echo "3"
-		   echo "RESTART"
+		   echo "E2 RESTART"
 		   echo "0" > /proc/progress
 		   showiframe -p /boot/bootlogo.mvi &;;
 		*) echo "*"
