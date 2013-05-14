@@ -21,6 +21,7 @@ if `which lsb_release > /dev/null 2>&1`; then
 		Fedora*) FEDORA=1; INSTALL="yum install -y";;
 		SUSE*)   SUSE=1;   INSTALL="zypper install -y";;
 		Ubuntu*) UBUNTU=1; INSTALL="apt-get -y install";;
+		LinuxM*) UBUNTU=1; INSTALL="apt-get --force-yes install";;
 	esac
 fi
 
@@ -29,7 +30,7 @@ if [ -z "$FEDORA$SUSE$UBUNTU" ]; then
 	if   [ -f /etc/redhat-release ]; then FEDORA=1; INSTALL="yum install -y"; 
 	elif [ -f /etc/fedora-release ]; then FEDORA=1; INSTALL="yum install -y"; 
 	elif [ -f /etc/SuSE-release ];   then SUSE=1;   INSTALL="zypper install -y";
-	elif [ -f /etc/debian_version ]; then UBUNTU=1; INSTALL="apt-get -y install";
+	elif [ -f /etc/debian_version ]; then UBUNTU=1; INSTALL="apt-get --force-yes install";
 	fi
 fi
 
@@ -51,6 +52,9 @@ fi
 
 if [ "$SUSE" == 1 ]; then
 	SUSE_VERSION=`cat /etc/SuSE-release | line | awk '{ print $2 }'`
+	if [ "$SUSE_VERSION" == "12.2" ]; then
+		zypper ar "http://download.opensuse.org/repositories/home:/toganm/openSUSE_12.2/" fakeroot
+	fi
 	if [ "$SUSE_VERSION" == "12.1" ]; then
 		zypper ar "http://download.opensuse.org/repositories/home:/toganm/openSUSE_12.1/" fakeroot
 	fi
@@ -66,6 +70,7 @@ fi
 PACKAGES="\
 	make \
 	subversion \
+	ccache \
 	flex \
 	bison \
 	texinfo \
@@ -73,6 +78,7 @@ PACKAGES="\
 	swig \
 	dialog \
 	wget \
+	\
 	${UBUNTU:+rpm}                                               ${FEDORA:+rpm-build} \
 	${UBUNTU:+lsb-release}          ${SUSE:+lsb-release}         ${FEDORA:+redhat-lsb} \
 	${UBUNTU:+git-core}             ${SUSE:+git-core}            ${FEDORA:+git} \
@@ -94,11 +100,13 @@ PACKAGES="\
 	${UBUNTU:+doc-base} \
 	${UBUNTU:+texi2html} \
 	${UBUNTU:+help2man} \
-	${UBUNTU:+cmake} \
-	${UBUNTU:+ruby} \
+	${UBUNTU:+libgpgme11-dev} \
+	${UBUNTU:+libcurl4-openssl-dev} \
 	${UBUNTU:+liblzo2-dev} \
 	${UBUNTU:+libsdl-image1.2} \
 	${UBUNTU:+libsdl-image1.2-dev} \
+	${UBUNTU:+cmake} \
+	${UBUNTU:+ruby} \
 ";
 
 if [ `which arch > /dev/null 2>&1 && arch || uname -m` == x86_64 ]; then
@@ -106,7 +114,7 @@ if [ `which arch > /dev/null 2>&1 && arch || uname -m` == x86_64 ]; then
 	# we might need to install more 32bit versions of some packages
 	PACKAGES="$PACKAGES \
 	${UBUNTU:+gcc-multilib}         ${SUSE:+gcc-32bit}           ${FEDORA:+libstdc++-devel.i686} \
-	${UBUNTU:+g++-multilib}         ${SUSE:+zlib-devel-32bit}    ${FEDORA:+glibc-devel.i686} \
+	${UBUNTU:+libc6-dev-i386}       ${SUSE:+zlib-devel-32bit}    ${FEDORA:+glibc-devel.i686} \
 	${UBUNTU:+lib32z1-dev}                                       ${FEDORA:+libgcc.i686} \
 	                                                             ${FEDORA:+ncurses-devel.i686} \
 	";
@@ -123,3 +131,6 @@ if [ ! "$?" -eq "0" ]; then
 		ln -s /bin/bash /bin/sh
 	fi
 fi
+
+# for user mknod
+chmod +s /bin/mknod

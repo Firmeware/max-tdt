@@ -262,10 +262,8 @@ $(KERNELHEADERS_RPM): \
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	rpmbuild $(DRPMBUILD) -bb -v --clean --target=sh4-linux SPECS/$(KERNELHEADERS_SPEC)
 
-$(DEPDIR)/$(KERNELHEADERS): \
-$(DEPDIR)/%$(KERNELHEADERS): $(KERNELHEADERS_RPM)
-	@rpm $(DRPM) --ignorearch --nodeps -Uhv \
-		--badreloc --relocate $(targetprefix)=$(prefix)/$*cdkroot $(lastword $^)
+$(DEPDIR)/$(KERNELHEADERS): $(KERNELHEADERS_RPM)
+	@rpm $(DRPM) --ignorearch --nodeps -Uhv --badreloc --relocate $(targetprefix)=$(prefix)/$*cdkroot $(lastword $^)
 	touch $@
 
 #
@@ -281,6 +279,7 @@ DEBUG_STR=
 endif !DEBUG
 
 HOST_KERNEL := host-kernel
+
 if ENABLE_P0207
 HOST_KERNEL_VERSION = 2.6.32.28$(KERNELSTMLABEL)-$(KERNELLABEL)
 else
@@ -314,9 +313,7 @@ $(HOST_KERNEL_RPM): \
 $(DEPDIR)/linux-kernel.do_prepare: \
 		$(if $(HOST_KERNEL_PATCHES),$(HOST_KERNEL_PATCHES:%=Patches/%)) \
 		$(HOST_KERNEL_RPM)
-	@rpm $(DRPM) -ev $(HOST_KERNEL_SRC_RPM:%.src.rpm=%) || true
-	rm -rf $(KERNEL_DIR)
-	rm -rf linux{,-sh4}
+	rm -rf linux-sh4*
 	@rpm $(DRPM) --ignorearch --nodeps -Uhv $(lastword $^)
 	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/%) | patch -p1)
 	$(INSTALL) -m644 Patches/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
@@ -371,8 +368,7 @@ $(DEPDIR)/linux-kernel.do_compile: \
 		$(MAKE) $(if $(TF7700),TF7700=y) ARCH=sh CROSS_COMPILE=$(target)- uImage modules
 	touch $@
 
-$(DEPDIR)/linux-kernel: \
-$(DEPDIR)/%linux-kernel: bootstrap $(DEPDIR)/linux-kernel.do_compile
+$(DEPDIR)/linux-kernel: bootstrap $(DEPDIR)/linux-kernel.do_compile
 	@$(INSTALL) -d $(prefix)/$*cdkroot/boot && \
 	$(INSTALL) -d $(prefix)/$*$(notdir $(bootprefix)) && \
 	$(INSTALL) -m644 $(KERNEL_DIR)/arch/sh/boot/uImage $(prefix)/$*$(notdir $(bootprefix))/vmlinux.ub && \
@@ -383,8 +379,9 @@ $(DEPDIR)/%linux-kernel: bootstrap $(DEPDIR)/linux-kernel.do_compile
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh INSTALL_MOD_PATH=$(prefix)/$*cdkroot modules_install && \
 	rm $(prefix)/$*cdkroot/lib/modules/$(KERNELVERSION)/build || true && \
 	rm $(prefix)/$*cdkroot/lib/modules/$(KERNELVERSION)/source || true
-	@[ "x$*" = "x" ] && touch $@ || true
-	@TUXBOX_YAUD_CUSTOMIZE@
+	touch $@
+
+linux-kernel-distclean: $(KERNELHEADERS)-distclean
 
 $(DEPDIR)/driver: $(driverdir)/Makefile glibc-dev linux-kernel.do_compile
 	$(if $(PLAYER191),cp $(driverdir)/stgfb/stmfb/linux/drivers/video/stmfb.h $(targetprefix)/usr/include/linux)
@@ -406,7 +403,6 @@ $(DEPDIR)/driver: $(driverdir)/Makefile glibc-dev linux-kernel.do_compile
 		install
 	$(DEPMOD) -ae -b $(targetprefix) -F $(buildprefix)/$(KERNEL_DIR)/System.map -r $(KERNELVERSION)
 	touch $@
-	@TUXBOX_YAUD_CUSTOMIZE@
 
 driver-clean:
 	rm -f $(DEPDIR)/driver

@@ -4,16 +4,15 @@
 misc-tools-clean:
 	-$(MAKE) -C $(appsdir)/misc/tools distclean
 
-$(appsdir)/misc/tools/config.status: bootstrap driver libstdc++-dev libdvdnav libdvdcss bzip2 libpng libjpeg ffmpeg
+$(appsdir)/misc/tools/config.status: bootstrap driver libstdc++-dev bzip2 libpng libjpeg ffmpeg
 	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd $(appsdir)/misc/tools && \
-	libtoolize -f -c && \
-	$(CONFIGURE) --prefix= \
-	$(if $(MULTICOM324), --enable-multicom324)
+	cd $(appsdir)/misc/tools && $(CONFIGURE) \
+	$(if $(MULTICOM324), --enable-multicom324) \
+	$(if $(MULTICOM406), --enable-multicom406) \
+	$(if $(EPLAYER3), --enable-eplayer3)
 
-$(DEPDIR)/misc-tools: \
-$(DEPDIR)/%misc-tools: $(appsdir)/misc/tools/config.status
-	$(MAKE) -C $(appsdir)/misc/tools all install DESTDIR=$(prefix)/$*cdkroot \
+$(DEPDIR)/misc-tools: $(appsdir)/misc/tools/config.status
+	$(MAKE) -C $(appsdir)/misc/tools all prefix=$(targetprefix) \
 	CPPFLAGS="\
 	$(if $(UFS910), -DPLATFORM_UFS910) \
 	$(if $(UFS912), -DPLATFORM_UFS912) \
@@ -32,11 +31,13 @@ $(DEPDIR)/%misc-tools: $(appsdir)/misc/tools/config.status
 	$(if $(CUBEREVO_2000HD), -DPLATFORM_CUBEREVO_2000HD) \
 	$(if $(CUBEREVO_9500HD), -DPLATFORM_CUBEREVO_9500HD) \
 	$(if $(ATEVIO7500), -DPLATFORM_ATEVIO7500) \
+	$(if $(TF7700), -DPLATFORM_TF7700) \
 	$(if $(HS7810A), -DPLATFORM_HS7810A) \
 	$(if $(HS7110), -DPLATFORM_HS7110) \
 	$(if $(WHITEBOX), -DPLATFORM_WHITEBOX) \
 	$(if $(IPBOX9900), -DPLATFORM_IPBOX9900) \
 	$(if $(IPBOX99), -DPLATFORM_IPBOX99) \
 	$(if $(IPBOX55), -DPLATFORM_IPBOX55) \
-	$(if $(PLAYER191), -DPLAYER191)"
-	[ "x$*" = "x" ] && touch $@ || true
+	$(if $(PLAYER191), -DPLAYER191)" && \
+	$(MAKE) -C $(appsdir)/misc/tools install prefix=$(targetprefix)
+	touch $@

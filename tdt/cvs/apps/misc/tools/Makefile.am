@@ -3,8 +3,8 @@ AUTOMAKE_OPTIONS = gnu
 SUBDIRS = \
 	devinit \
 	evremote2 \
-	libeplayer3 \
 	fp_control \
+	fbshot \
 	showiframe \
 	streamproxy \
 	stfbcontrol \
@@ -21,4 +21,9 @@ if BOXTYPE_TF7700
 SUBDIRS += \
 	tffpctl \
 	tfd2mtd
+endif
+
+if ENABLE_EPLAYER3
+SUBDIRS += \
+	libeplayer3
 endif
