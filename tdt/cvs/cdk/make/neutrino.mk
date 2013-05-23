@@ -29,6 +29,12 @@ if ENABLE_EXTERNALLCD
 N_CONFIG_OPTS += --enable-graphlcd
 endif
 
+if ENABLE_MEDIAFWGSTREAMER
+N_CONFIG_OPTS += --enable-gstreamer
+else
+N_CONFIG_OPTS += --enable-libeplayer3
+endif
+
 #
 # LIBSTB-HAL
 #
@@ -398,7 +404,7 @@ neutrino-twin-next-distclean:
 #
 # neutrino-hd2-exp branch
 #
-$(DEPDIR)/neutrino-hd2-exp.do_prepare: | bootstrap $(EXTERNALLCD_DEP) libfreetype libjpeg libpng libungif libid3tag libcurl libmad libvorbisidec libboost libflac openssl libusb2
+$(DEPDIR)/neutrino-hd2-exp.do_prepare: | bootstrap $(MEDIAFW_DEP) $(EXTERNALLCD_DEP) libfreetype libjpeg libpng libungif libid3tag libcurl libmad libvorbisidec libboost libflac openssl libusb2
 	rm -rf $(appsdir)/neutrino-hd2-exp
 	rm -rf $(appsdir)/neutrino-hd2-exp.org
 	[ -d "$(archivedir)/neutrino-hd2-exp.svn" ] && \
@@ -426,7 +432,10 @@ $(appsdir)/neutrino-hd2-exp/config.status:
 			--with-configdir=/var/tuxbox/config \
 			--with-gamesdir=/var/tuxbox/games \
 			--with-plugindir=/var/plugins \
-			--enable-libeplayer3 \
+			--with-isocodesdir=/usr/share/iso-codes \
+			--enable-standaloneplugins \
+			--enable-radiotext \
+			--enable-upnp \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \

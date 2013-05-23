@@ -144,6 +144,7 @@ cvs/cdk/rules-downcheck.pl
 cvs/cdk/u-boot/
 cvs/driver/.config
 cvs/driver/.tmp_versions/
+cvs/driver/frontends/multituner.org/
 #make.sh changes something in this file, so dont commit by default
 cvs/driver/Makefile
 
@@ -159,6 +160,7 @@ cvs/cdk/linux-*
 cvs/cdk/own_build/enigma2
 cvs/cdk/own_build/neutrino
 cvs/cdk/own_build/neutrino-hd
+cvs/cdk/own_build/neutrino-hd.*
 cvs/cdk/own_build/xbmc
 cvs/cdk/root/var/etc/.version
 
