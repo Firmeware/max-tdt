@@ -51,7 +51,7 @@ $(DEPDIR)/net-utils: \
 	$(NETKIT_FTP) \
 	autofs \
 	portmap \
-	$(NFSSERVER) \
+	nfs-utils \
 	vsftpd \
 	$(CIFS)
 	touch $@
