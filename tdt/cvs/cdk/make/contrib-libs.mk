@@ -419,6 +419,7 @@ $(DEPDIR)/glib2: bootstrap libffi @DEPENDS_glib2@
 	echo "glib_cv_uscore=no" >> @DIR_glib2@/config.cache
 	cd @DIR_glib2@ && \
 		$(BUILDENV) \
+		PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 		./configure \
 			--cache-file=config.cache \
 			--disable-gtk-doc \
@@ -692,7 +693,7 @@ $(DEPDIR)/libdvdread: bootstrap @DEPENDS_libdvdread@
 	cd @DIR_libdvdread@ && \
 		cp $(hostprefix)/share/libtool/config/ltmain.sh . && \
 		cp $(hostprefix)/share/libtool/config/ltmain.sh .. && \
-		autoreconf --verbose --force --install -I$(hostprefix)/share/aclocal && \
+		autoreconf -f -i -I$(hostprefix)/share/aclocal && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -805,7 +806,7 @@ $(DEPDIR)/ffmpeg: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
 			--enable-avresample \
 			--enable-pthreads \
 			--enable-bzlib \
-			--disable-zlib \
+			--enable-zlib \
 			--disable-bsfs \
 			--enable-librtmp \
 			--pkg-config="pkg-config" \
@@ -814,13 +815,13 @@ $(DEPDIR)/ffmpeg: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
 			--target-os=linux \
 			--arch=sh4 \
 			--disable-debug \
+			--extra-cflags="-fno-strict-aliasing" \
 			--enable-stripping \
 			--prefix=/usr && \
 		$(MAKE) && \
 		@INSTALL_ffmpeg@
-	@DISTCLEANUP_ffmpeg@
+#	@DISTCLEANUP_ffmpeg@
 	touch $@
-
 #
 # libass
 #
