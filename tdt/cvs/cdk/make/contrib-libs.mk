@@ -2028,11 +2028,9 @@ $(DEPDIR)/libdreamdvd: bootstrap @DEPENDS_libdreamdvd@
 # libdreamdvd2
 #
 $(DEPDIR)/libdreamdvd2: bootstrap libdvdnav @DEPENDS_libdreamdvd2@
+	@PREPARE_libdreamdvd2@
 	[ -d "$(archivedir)/libdreamdvd.git" ] && \
-	(cd $(archivedir)/libdreamdvd.git; git pull; cd "$(buildprefix)";); \
-	[ -d "$(archivedir)/libdreamdvd.git" ] || \
-	git clone git://github.com/mirakels/libdreamdvd.git $(archivedir)/libdreamdvd.git; \
-	cp -ra $(archivedir)/libdreamdvd.git $(buildprefix)/libdreamdvd; \
+	(cd $(archivedir)/libdreamdvd.git; git pull ; cd "$(buildprefix)";); \
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_libdreamdvd2@ && \
 		aclocal -I $(hostprefix)/share/aclocal && \
