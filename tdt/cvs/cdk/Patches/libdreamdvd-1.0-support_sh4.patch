@@ -1,5 +1,5 @@
---- libdreamdvd.org/main.c.org	2013-05-24 20:29:13.000000000 +0200
-+++ libdreamdvd.patched/main.c	2013-06-22 19:12:45.000000000 +0200
+--- libdreamdvd-6aa22dd3f530ca4be49946e07e4a0bfe60427bdf/main.c.org	2013-05-24 20:29:13.000000000 +0200
++++ libdreamdvd-6aa22dd3f530ca4be49946e07e4a0bfe60427bdf/main.c	2013-06-22 19:12:45.000000000 +0200
 @@ -129,7 +129,11 @@
  	// defaults
  	ddvd_set_ac3thru(pconfig, 0);
@@ -260,8 +260,8 @@
  
  	//Clear Screen
  	blit_area.x_start = blit_area.y_start = 0;
---- libdreamdvd.org/main.h	2013-05-24 20:29:13.000000000 +0200
-+++ libdreamdvd.patched/main.h	2013-06-22 18:50:22.601056661 +0200
+--- libdreamdvd-6aa22dd3f530ca4be49946e07e4a0bfe60427bdf/main.h.org	2013-05-24 20:29:13.000000000 +0200
++++ libdreamdvd-6aa22dd3f530ca4be49946e07e4a0bfe60427bdf/main.h	2013-06-22 18:50:22.601056661 +0200
 @@ -32,6 +32,11 @@
  
  #include "libdreamdvd_config.h"
@@ -274,5 +274,3 @@
  // set to 1 if a start screen should be displayed
  #define SHOW_START_SCREEN 1
  
-
-
