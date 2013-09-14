@@ -302,7 +302,6 @@ $(DEPDIR)/libcurl: bootstrap openssl rtmpdump @DEPENDS_libcurl@
 			--disable-debug \
 			--disable-verbose \
 			--disable-manual \
-
 			--with-random && \
 		$(MAKE) all && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < curl-config > $(crossprefix)/bin/curl-config && \
