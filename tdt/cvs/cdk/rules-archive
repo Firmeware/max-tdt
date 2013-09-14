@@ -31,10 +31,10 @@ ccache-3.1.8.tar.gz;http://samba.org/ftp/ccache
 #
 # root
 #
-busybox-1.21.0.tar.bz2;http://www.busybox.net/downloads
+busybox-1.21.1.tar.bz2;http://www.busybox.net/downloads
 lsb_3.2-20.tar.gz;http://debian.sdinet.de/etch/sdinet/lsb
 ipkg-0.99.163.tar.gz;ftp://ftp.gwdg.de/linux/handhelds/packages/ipkg
-module-init-tools-3.16.tar.bz2;http://ftp.osuosl.org/pub/linux/utils/kernel/module-init-tools
+module-init-tools-3.16.tar.bz2;http://ftp.be.debian.org/pub/linux/utils/kernel/module-init-tools
 sysvinit-2.86.tar.gz;ftp://ftp.cistron.nl/pub/people/miquels/sysvinit
 sysvinit_2.86.ds1.orig.tar.gz;http://ftp.de.debian.org/debian/pool/main/s/sysvinit
 sysvinit_2.86.ds1-38.diff.gz;http://ftp.de.debian.org/debian/pool/main/s/sysvinit
@@ -62,6 +62,7 @@ mplayer-export-snapshot.tar.bz2;ftp://ftp.mplayerhq.hu/MPlayer/releases
 opkg-0.1.8+svnr587.tar.gz;http://src.evolux.yourweb.de
 sysstat-10.0.4.tar.gz;http://pagesperso-orange.fr/sebastien.godard
 ImageMagick-6.7.7-7.tar.bz2;ftp://ftp.fifi.org/pub/ImageMagick
+shairport.git;git://github.com/abrasive/shairport
 
 #
 # contrib libs
@@ -111,15 +112,17 @@ fontconfig-2.8.0.tar.gz;http://www.freedesktop.org/software/fontconfig/release
 libxmlccwrap-0.0.12.tar.gz;http://www.ant.uni-bremen.de/whomes/rinas/libxmlccwrap/download
 a52dec-0.7.4.tar.gz;http://liba52.sourceforge.net/files
 libdvdcss-1.2.12.tar.bz2;http://download.videolan.org/pub/libdvdcss/1.2.12
-libdvdnav-4.1.3.tar.bz2;ftp://ftp6.mplayerhq.hu/MPlayer/releases/dvdnav-old
-libdvdread-4.1.3.tar.bz2;ftp://ftp6.mplayerhq.hu/MPlayer/releases/dvdnav-old
-ffmpeg-2.0.tar.gz;http://ffmpeg.org/releases
+libdvdnav-4.2.0.tar.bz2;http://dvdnav.mplayerhq.hu/releases
+libdvdread-4.2.0.tar.bz2;http://dvdnav.mplayerhq.hu/releases
+ffmpeg-1.2.1.tar.gz;http://ffmpeg.org/releases
+ffmpeg-2.0.1.tar.bz2;http://ffmpeg.org/releases
 libass-0.10.1.tar.gz;http://libass.googlecode.com/files
 libcap-2.22.tar.bz2;http://mirror.linux.org.au/linux/libs/security/linux-privs/libcap2
 libogg-1.2.2.tar.gz;http://downloads.xiph.org/releases/ogg
 flac-1.2.1.tar.gz;http://sourceforge.net/projects/flac/files/flac-src/flac-1.2.1-src
 BroFS1.2.tgz;http://www.avalpa.com/assets/freesoft/other
 alsa-lib-1.0.25.tar.bz2;ftp://gd.tuwien.ac.at/opsys/linux/alsa/lib
+alsa-utils-1.0.25.tar.bz2;ftp://gd.tuwien.ac.at/opsys/linux/alsa/utils
 rtmpdump-2.4.tar.gz;http://rtmpdump.mplayerhq.hu/download
 libdvbsi++-0.3.6.tar.bz2;http://www.saftware.de/libdvbsi++
 libmpeg2-0.5.1.tar.gz;http://libmpeg2.sourceforge.net/files
@@ -146,7 +149,6 @@ mediatomb-0.12.1.tar.gz;http://downloads.sourceforge.net/mediatomb
 tinyxml_2_6_2.tar.gz;http://ignum.dl.sourceforge.net/project/tinyxml/tinyxml/2.6.2
 taglib-1.8.tar.gz;https://github.com/downloads/taglib/taglib
 libnfs.git;git://github.com/sahlberg/libnfs.git;c0ebf57b212ffefe83e2a50358499f68e7289e93
-libmms-0.6.2.tar.gz;http://sourceforge.net/projects/libmms/files/libmms/0.6.2
 
 #
 # PYTHON
@@ -173,21 +175,12 @@ Zope-3.3.1.tgz;http://www.zope.org/Products/Zope3/3.3.1
 #
 # GSTREAMER
 #
-gstreamer-0.10.35.2.tar.bz2;http://gstreamer.freedesktop.org/src/gstreamer/pre
-gst-plugins-base-0.10.35.2.tar.bz2;http://gstreamer.freedesktop.org/src/gst-plugins-base/pre
-gst-plugins-good-0.10.30.2.tar.bz2;http://gstreamer.freedesktop.org/src/gst-plugins-good/pre
-gst-plugins-bad-0.10.22.2.tar.bz2;http://gstreamer.freedesktop.org/src/gst-plugins-bad/pre
-gst-plugins-ugly-0.10.18.2.tar.bz2;http://gstreamer.freedesktop.org/src/gst-plugins-ugly/pre
-gst-fluendo-mpegdemux-0.10.69.tar.gz;http://core.fluendo.com/gstreamer/src/gst-fluendo-mpegdemux
-
 gstreamer-0.10.36.tar.bz2;http://gstreamer.freedesktop.org/src/gstreamer
 gst-plugins-base-0.10.36.tar.bz2;http://gstreamer.freedesktop.org/src/gst-plugins-base
 gst-plugins-good-0.10.31.tar.bz2;http://gstreamer.freedesktop.org/src/gst-plugins-good
 gst-plugins-bad-0.10.23.tar.bz2;http://gstreamer.freedesktop.org/src/gst-plugins-bad
 gst-plugins-ugly-0.10.19.tar.bz2;http://gstreamer.freedesktop.org/src/gst-plugins-ugly
 gst-fluendo-mpegdemux-0.10.71.tar.gz;http://core.fluendo.com/gstreamer/src/gst-fluendo-mpegdemux
-libdca-0.0.5.tar.bz2;http://download.videolan.org/pub/videolan/libdca/0.0.5
-orc-0.4.16.tar.gz;http://code.entropywave.com/download/orc
 gst-ffmpeg-0.10.13.tar.bz2;http://gstreamer.freedesktop.org/src/gst-ffmpeg
 gst-plugin-subsink.git;git://openpli.git.sourceforge.net/gitroot/openpli/gstsubsink;8182abe751364f6eb1ed45377b0625102aeb68d5
 
@@ -216,19 +209,21 @@ dpflib-0.12.tar.gz
 #
 dosfstools-3.0.16.tar.gz;http://www.daniel-baumann.ch/files/software/dosfstools
 e2fsprogs-1.42.8.tar.gz;http://sourceforge.net/projects/e2fsprogs/files/e2fsprogs/v1.42.8
+fdisk-1.3.0a.tar.gz;http://ftp.gnu.org/gnu/fdisk
 hddtemp-0.3-beta15.tar.bz2;http://savannah.c3sl.ufpr.br/hddtemp
 hdparm-9.43.tar.gz;http://prdownloads.sourceforge.net/sourceforge/hdparm
 jfsutils-1.1.15.tar.gz;http://jfs.sourceforge.net/project/pub
 lm_sensors-2.9.2.tar.gz;http://dl.lm-sensors.org/lm-sensors/releases
 sdparm-1.07.tgz;http://sg.danny.cz/sg/p
 parted-3.0.tar.gz;http://ftp.gnu.org/pub/gnu/parted
-util-linux-2.21.2.tar.bz2;ftp://ftp.kernel.org/pub/linux/utils/util-linux/v2.21
+util-linux-2.23.tar.bz2;ftp://ftp.kernel.org/pub/linux/utils/util-linux/v2.23
 xfsprogs-3.1.8.tar.gz;http://ftp.gwdg.de/pub/linux/misc/xfs/xfs/cmd_tars
 
 #
 # net apps
 #
 autofs-4.1.4.tar.gz;http://kernel.org/pub/linux/daemons/autofs/v4
+autofs-5.0.7.tar.gz;http://kernel.org/pub/linux/daemons/autofs/v5
 portmap_6.0.0.orig.tar.gz;http://ftp.de.debian.org/debian/pool/main/p/portmap
 portmap_6.0.0-2.diff.gz ;http://debian.osuosl.org/debian/pool/main/p/portmap
 nfs-utils-1.2.3.tar.bz2;http://downloads.sourceforge.net/project/nfs/nfs-utils/1.2.3
@@ -236,6 +231,7 @@ libevent-2.0.20-stable.tar.gz;http://downloads.sourceforge.net/project/levent/li
 libnfsidmap-0.25.tar.gz;http://www.citi.umich.edu/projects/nfsv4/linux/libnfsidmap
 vsftpd-2.3.4.tar.gz;http://gd.tuwien.ac.at/infosys/servers/ftp/vsftpd
 netkit-ftp-0.17.tar.gz;ftp://ftp.uk.linux.org/pub/linux/Networking/netkit
+ntp-4.2.6p5.tar.gz;http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2
 samba-3.6.12.tar.gz;http://www.samba.org/samba/ftp/stable
 netio126.zip;http://bnsmb.de/files/public/windows
 lighttpd-1.4.15.tar.gz;http://www.lighttpd.net/download

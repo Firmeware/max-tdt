@@ -35,7 +35,7 @@ ccache;3.1.8;ccache-3.1.8;ccache-3.1.8.tar.gz;extract:ccache-3.1.8.tar.gz
 #
 # root
 #
-busybox;1.21.0;busybox-1.21.0;busybox-1.21.0.tar.bz2;extract:busybox-1.21.0.tar.bz2
+busybox;1.21.1;busybox-1.21.1;busybox-1.21.1.tar.bz2;extract:busybox-1.21.1.tar.bz2
 lsb;3.2-20;lsb-3.2;lsb_3.2-20.tar.gz;extract:lsb_3.2-20.tar.gz
 ipkg;0.99.163;ipkg-0.99.163;ipkg-0.99.163.tar.gz;extract:ipkg-0.99.163.tar.gz
 module_init_tools;3.16;module-init-tools-3.16;module-init-tools-3.16.tar.bz2;extract:module-init-tools-3.16.tar.bz2;patch:module-init-tools-no-man.patch
@@ -60,8 +60,8 @@ mplayer;1.0;mplayer-export-*;mplayer-export-snapshot.tar.bz2;extract:mplayer-exp
 mencoder;1.0;mplayer-export-*;mplayer-export-snapshot.tar.bz2;extract:mplayer-export-snapshot.tar.bz2
 opkg;0.1.8+svnr587;opkg-0.1.8+svnr587;opkg-0.1.8+svnr587.tar.gz;extract:opkg-0.1.8+svnr587.tar.gz;patch:opkg-0.1.8-dont-segfault.diff
 sysstat;10.0.4;sysstat-10.0.4;sysstat-10.0.4.tar.gz;extract:sysstat-10.0.4.tar.gz
-hotplug_e2;1.0;hotplug-e2-helper;;
 imagemagick;6.7.7-7;ImageMagick-6.7.7-7;ImageMagick-6.7.7-7.tar.bz2;extract:ImageMagick-6.7.7-7.tar.bz2
+shairport;1.0;shairport
 
 #
 # contrib libs
@@ -110,9 +110,10 @@ fontconfig;2.5.93;fontconfig-2.5.93;fontconfig-2.5.93.tar.gz;extract:fontconfig-
 libxmlccwrap;0.0.12;libxmlccwrap-0.0.12;libxmlccwrap-0.0.12.tar.gz;extract:libxmlccwrap-0.0.12.tar.gz
 a52dec;0.7.4;a52dec-0.7.4;a52dec-0.7.4.tar.gz;extract:a52dec-0.7.4.tar.gz
 libdvdcss;1.2.12;libdvdcss-1.2.12;libdvdcss-1.2.12.tar.bz2;extract:libdvdcss-1.2.12.tar.bz2
-libdvdnav;4.1.3;libdvdnav-4.1.3;libdvdnav-4.1.3.tar.bz2:libdvdnav_4.1.3-3.diff;extract:libdvdnav-4.1.3.tar.bz2;patch:libdvdnav_4.1.3-3.diff
-libdvdread;4.1.3;libdvdread-4.1.3;libdvdread-4.1.3.tar.bz2:libdvdread_4.1.3-5.diff;extract:libdvdread-4.1.3.tar.bz2;patch:libdvdread_4.1.3-5.diff
-ffmpeg;2.0;ffmpeg-2.0;ffmpeg-2.0.tar.gz;extract:ffmpeg-2.0.tar.gz;patch:ffmpeg-2.0.patch
+libdvdnav;4.2.0;libdvdnav-4.2.0;libdvdnav-4.2.0.tar.bz2:libdvdnav_4.2.0.patch;extract:libdvdnav-4.2.0.tar.bz2;patch:libdvdnav_4.2.0.patch
+libdvdread;4.2.0;libdvdread-4.2.0;libdvdread-4.2.0.tar.bz2:libdvdread_4.2.0.patch;extract:libdvdread-4.2.0.tar.bz2;patch:libdvdread_4.2.0.patch
+ffmpeg_old;1.2.1;ffmpeg-1.2.1;ffmpeg-1.2.1.tar.gz;extract:ffmpeg-1.2.1.tar.gz;patch:ffmpeg-1.2.1.patch
+ffmpeg;2.0.1;ffmpeg-2.0.1;ffmpeg-2.0.1.tar.bz2;extract:ffmpeg-2.0.1.tar.bz2;patch:ffmpeg-2.0.patch
 libass;0.10.1;libass-0.10.1;libass-0.10.1.tar.gz;extract:libass-0.10.1.tar.gz
 libcap;2.22;libcap-2.22;libcap-2.22.tar.bz2;extract:libcap-2.22.tar.bz2
 libogg;1.2.2;libogg-1.2.2;libogg-1.2.2.tar.gz;extract:libogg-1.2.2.tar.gz
@@ -121,7 +122,8 @@ evebrowser;0.0.1;evebrowser-0.0.1
 dvbdata;0.6;dvbdata-0.6;dvbdata-0.6.tar.gz;extract:dvbdata-0.6.tar.gz
 brofs;1.2;BroFS1.2;BroFS1.2.tgz;extract:BroFS1.2.tgz
 libalsa;1.0.25;alsa-lib-1.0.25;alsa-lib-1.0.25.tar.bz2;extract:alsa-lib-1.0.25.tar.bz2
-rtmpdump;2.4;rtmpdump-2.4;rtmpdump-2.4.tar.gz;extract:rtmpdump-2.4.tar.gz;move:rtmpdump:rtmpdump-2.4
+alsautils;1.0.25;alsa-utils-1.0.25;alsa-utils-1.0.25.tar.bz2;extract:alsa-utils-1.0.25.tar.bz2
+rtmpdump;2.4;rtmpdump-2.4;rtmpdump-2.4.tar.gz;extract:rtmpdump-2.4.tar.gz;move:rtmpdump:rtmpdump-2.4;patch:rtmpdump-2.4.patch
 libdvbsipp;0.3.6;libdvbsi++-0.3.6;libdvbsi++-0.3.6.tar.bz2;extract:libdvbsi++-0.3.6.tar.bz2;patch:libdvbsi++-0.3.6.patch
 libmpeg2;0.5.1;libmpeg2-0.5.1;libmpeg2-0.5.1.tar.gz;extract:libmpeg2-0.5.1.tar.gz
 libsamplerate;0.1.8;libsamplerate-0.1.8;libsamplerate-0.1.8.tar.gz;extract:libsamplerate-0.1.8.tar.gz
@@ -137,17 +139,14 @@ mysql;5.1.40;mysql-5.1.40;mysql-5.1.40.tar.gz;extract:mysql-5.1.40.tar.gz
 libmicrohttpd;0.9.19;libmicrohttpd-0.9.19;libmicrohttpd-0.9.19.tar.gz;extract:libmicrohttpd-0.9.19.tar.gz
 libexif;0.6.20;libexif-0.6.20;libexif-0.6.20.tar.gz;extract:libexif-0.6.20.tar.gz
 minidlna;1.0.25;minidlna-1.0.25;minidlna_1.0.25_src.tar.gz;extract:minidlna_1.0.25_src.tar.gz;patch:minidlna-1.0.25.patch
-vlc;1.1.13;vlc-1.1.13;vlc-1.1.13.tar.bz2;extract:vlc-1.1.13.tar.bz2
 djmount;0.71;djmount-0.71;djmount-0.71.tar.gz;extract:djmount-0.71.tar.gz
 libupnp;1.6.17;libupnp-1.6.17;libupnp-1.6.17.tar.bz2;extract:libupnp-1.6.17.tar.bz2
 rarfs;0.1.0;rarfs-0.1.0;rarfs-0.1.0.tar.gz;extract:rarfs-0.1.0.tar.gz
 sshfs;2.4;sshfs-fuse-2.4;sshfs-fuse-2.4.tar.bz2;extract:sshfs-fuse-2.4.tar.bz2
 gmediarender;0.0.6;gmediarender-0.0.6;gmediarender-0.0.6.tar.bz2;extract:gmediarender-0.0.6.tar.bz2;patch:gmediarender.patch
-mediatomb;0.12.1;mediatomb-0.12.1;mediatomb-0.12.1.tar.gz;extract:mediatomb-0.12.1.tar.gz;patch:mediatomb_libav_support.patch
 tinyxml;2.6.2;tinyxml2.6.2;tinyxml_2_6_2.tar.gz;extract:tinyxml_2_6_2.tar.gz;move:tinyxml:tinyxml2.6.2;patch:tinyxml2.6.2.patch
 libnfs;c0ebf57b21;libnfs-c0ebf57b21;libnfs.git;extract:libnfs.git
 taglib;1.8;taglib-1.8;taglib-1.8.tar.gz;extract:taglib-1.8.tar.gz
-libmms;0.6.2;libmms-0.6.2;libmms-0.6.2.tar.gz;extract:libmms-0.6.2.tar.gz
 
 #
 # PYTHON
@@ -181,7 +180,6 @@ gst_ffmpeg;0.10.13;gst-ffmpeg-0.10.13;gst-ffmpeg-0.10.13.tar.bz2;extract:gst-ffm
 gst_plugins_fluendo_mpegdemux;0.10.71;gst-fluendo-mpegdemux-0.10.71;gst-fluendo-mpegdemux-0.10.71.tar.gz:gst-plugins-fluendo-mpegdemux-0.10.69-add_dts_hd_detection.diff;extract:gst-fluendo-mpegdemux-0.10.71.tar.gz;patch:gst-plugins-fluendo-mpegdemux-0.10.69-add_dts_hd_detection.diff
 gst_plugins_dvbmediasink;0.10.1;gst-plugins-dvbmediasink-0.10.1;;link:../apps/misc/tools/gst-plugins-dvbmediasink:gst-plugins-dvbmediasink-0.10.1
 gst_plugin_subsink;1.0;gst-plugin-subsink;gst-plugin-subsink.git;extract:gst-plugin-subsink.git
-libdca;0.0.5;libdca-0.0.5;libdca-0.0.5.tar.bz2;extract:libdca-0.0.5.tar.bz2
 
 #
 # ENGIMA2
@@ -192,6 +190,7 @@ enigma2_networkbrowser;1.0;enigma2-networkbrowser;enigma2-openpli-plugins-enigma
 enigma2_webinterface;1.0;enigma2-webinterface;enigma2-openpli-plugins-enigma2.git;extract:enigma2-openpli-plugins-enigma2.git/webinterface:enigma2-webinterface
 enigma2_openwebif;1.0;e2openplugin-OpenWebif;e2openplugin-OpenWebif.git;extract:e2openplugin-OpenWebif.git
 enigma2_plugins_all;1.0;enigma2-plugins-all;enigma2-openpli-plugins-enigma2.git;extract:enigma2-openpli-plugins-enigma2.git:enigma2-plugins-all;patch:enigma2-plugins.patch
+hotplug_e2;1.0;hotplug-e2-helper;;
 libdreamdvd;1.0;libdreamdvd;;link:../apps/misc/tools/libdreamdvd:libdreamdvd
 libdreamdvd2;libdreamdvd;libdreamdvd;libdreamdvd.git:libdreamdvd-1.0-support_sh4.patch;extract:libdreamdvd.git;patch:libdreamdvd-1.0-support_sh4.patch
 
@@ -201,7 +200,6 @@ libdreamdvd2;libdreamdvd;libdreamdvd;libdreamdvd.git:libdreamdvd-1.0-support_sh4
 graphlcd;base-touchcol;graphlcd-base-touchcol;graphlcd-base-touchcol.git:graphlcd.patch;extract:graphlcd-base-touchcol.git;patch:graphlcd.patch
 lcd4_linux;;lcd4linux;lcd4linux.svn;extract:lcd4linux.svn;patch:lcd4linux-dpf.patch;patch:lcd4linux-spf.patch
 libusb;0.1.12;libusb-0.1.12;libusb-0.1.12.tar.gz;extract:libusb-0.1.12.tar.gz
-#libusb2;1.0.8;libusb-1.0.8;libusb-1.0.8.tar.bz2;extract:libusb-1.0.8.tar.bz2
 libusb2;1.0.9;libusb-1.0.9;libusb-1.0.9.tar.bz2;extract:libusb-1.0.9.tar.bz2
 libusbcompat;0.1.3;libusb-compat-0.1.3;libusb-compat-0.1.3.tar.bz2;extract:libusb-compat-0.1.3.tar.bz2
 libgd2;2.0.35;gd-2.0.35;gd-2.0.35.tar.gz;extract:gd-2.0.35.tar.gz
@@ -213,8 +211,10 @@ libdpf;0.12;dpflib-0.12;dpflib-0.12.tar.gz;extract:dpflib-0.12.tar.gz
 # ide apps
 #
 autofs;4.1.4;autofs-4.1.4;autofs-4.1.4.tar.gz;extract:autofs-4.1.4.tar.gz;patch:autofs-4.1.4.patch
+#autofs;5.0.7;autofs-5.0.7;autofs-5.0.7.tar.gz;extract:autofs-5.0.7.tar.gz
 dosfstools;3.0.16;dosfstools-3.0.16;dosfstools-3.0.16.tar.gz;extract:dosfstools-3.0.16.tar.gz
 e2fsprogs;1.42.8;e2fsprogs-1.42.8;e2fsprogs-1.42.8.tar.gz;extract:e2fsprogs-1.42.8.tar.gz;patch:e2fsprogs-remove.ldconfig.call.patch
+fdisk;1.3.0a;fdisk-1.3.0a;fdisk-1.3.0a.tar.gz;extract:fdisk-1.3.0a.tar.gz
 hddtemp;0.3-beta15;hddtemp-0.3-beta15;hddtemp-0.3-beta15.tar.bz2;extract:hddtemp-0.3-beta15.tar.bz2
 hdparm;9.43;hdparm-9.43;hdparm-9.43.tar.gz;extract:hdparm-9.43.tar.gz
 jfsutils;1.1.15;jfsutils-1.1.15;jfsutils-1.1.15.tar.gz;extract:jfsutils-1.1.15.tar.gz
@@ -233,6 +233,7 @@ libevent;2.0.20-stable;libevent-2.0.20-stable;libevent-2.0.20-stable.tar.gz;extr
 libnfsidmap;0.25;libnfsidmap-0.25;libnfsidmap-0.25.tar.gz;extract:libnfsidmap-0.25.tar.gz
 vsftpd;2.3.4;vsftpd-2.3.4;vsftpd-2.3.4.tar.gz:vsftpd_2.3.4.diff;extract:vsftpd-2.3.4.tar.gz;patch:vsftpd_2.3.4.diff
 netkit_ftp;0.17;netkit-ftp-0.17;netkit-ftp-0.17.tar.gz:netkit-ftp.diff;extract:netkit-ftp-0.17.tar.gz;patch:netkit-ftp.diff
+ntp;4.2.6p5;ntp-4.2.6p5;ntp-4.2.6p5.tar.gz;extract:ntp-4.2.6p5.tar.gz;patch:ntp-4.2.6p5.patch
 samba;3.6.12;samba-3.6.12;samba-3.6.12.tar.gz:samba-3.6.12.patch;extract:samba-3.6.12.tar.gz;patch:samba-3.6.12.patch
 netio;1.26;netio126;netio126.zip;extract:netio126.zip:netio126
 lighttpd;1.4.15;lighttpd-1.4.15;lighttpd-1.4.15.tar.gz;extract:lighttpd-1.4.15.tar.gz

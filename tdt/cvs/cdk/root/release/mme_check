@@ -16,7 +16,7 @@ if [ -e /etc/mme.tmp ]; then
            gotosleep 20:00:02;;
      *)    var=$(lsmod | grep vfd)
            if [ -z "$var" ] ; then
-              insmod $MODDIR/vfd.ko       
+              insmod $MODDIR/vfd.ko
            fi
 
            until false

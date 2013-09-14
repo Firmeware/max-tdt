@@ -561,7 +561,10 @@ $(DEPDIR)/$(CROSS_PROTOIZE): $(CROSS_PROTOIZE_RPM)
 #
 $(DEPDIR)/filesystem: bootstrap-cross
 	$(INSTALL) -d $(targetprefix)/{bin,boot,dev,dev.static,etc,lib,mnt,opt,proc,root,sbin,sys,tmp,usr,var}
-	$(INSTALL) -d $(targetprefix)/etc/{default,opt}
+	$(INSTALL) -d $(targetprefix)/etc/{default,init.d,mdev,opt,rc.d,samba}
+	$(INSTALL) -d $(targetprefix)/etc/rc.d/{rc3.d,rcS.d}
+	ln -s ../init.d $(targetprefix)/etc/rc.d/init.d
+	$(INSTALL) -d $(targetprefix)/etc/samba/private
 	$(INSTALL) -d $(targetprefix)/lib/lsb
 	$(INSTALL) -d $(targetprefix)/usr/{bin,include,lib,local,sbin,share,src}
 	$(INSTALL) -d $(targetprefix)/usr/local/{bin,include,lib,sbin,share,src}
@@ -572,10 +575,6 @@ $(DEPDIR)/filesystem: bootstrap-cross
 #	ln -sf $(targetprefix)/usr/lib $(targetprefix)/usr/lib64
 	$(INSTALL) -d $(targetprefix)/var/lib/{misc,nfs}
 	$(INSTALL) -d $(targetprefix)/var/lock/subsys
-	$(INSTALL) -d $(targetprefix)/etc/{init.d,rc.d,samba}
-	$(INSTALL) -d $(targetprefix)/etc/rc.d/{rc3.d,rcS.d}
-	ln -s ../init.d $(targetprefix)/etc/rc.d/init.d
-	$(INSTALL) -d $(targetprefix)/etc/samba/private
 	$(INSTALL) -d $(targetprefix)/media
 	$(INSTALL) -d $(targetprefix)/var/bin
 	touch $@
@@ -608,16 +607,16 @@ cross-sh4-filesystem:
 #
 # BOOTSTRAP-HOST
 #
-bootstrap-host: \
+bootstrap-host: | \
 	host-filesystem \
 	cross-sh4-filesystem \
 	$(CCACHE) \
-	host-rpmconfig \
-	host-autotools \
 	host_libtool \
+	host-rpmconfig \
 	host_autoconf \
-	host_automake \
 	host_pkgconfig \
+	host-autotools \
+	host_automake \
 	host-ldd \
 	host-base-passwd \
 	host-distributionutils \
@@ -631,11 +630,11 @@ bootstrap-host: \
 bootstrap-cross: \
 	bootstrap-host \
 	cross-sh4-distributionutils \
-	cross-sh4-binutils \
-	cross-sh4-binutils-dev \
 	cross-sh4-gmp \
 	cross-sh4-mpfr \
 	cross-sh4-mpc \
+	cross-sh4-binutils \
+	cross-sh4-binutils-dev \
 	cross-sh4-cpp \
 	cross-sh4-gcc \
 	cross-sh4-g++ \
@@ -658,6 +657,7 @@ $(DEPDIR)/host_libtool: @DEPENDS_host_libtool@
 	@PREPARE_host_libtool@
 	cd @DIR_host_libtool@ && \
 		./configure \
+			lt_cv_sys_dlsearch_path="" \
 			--prefix=$(hostprefix) && \
 		$(MAKE) && \
 		@INSTALL_host_libtool@

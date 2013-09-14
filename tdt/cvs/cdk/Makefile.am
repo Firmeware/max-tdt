@@ -98,4 +98,3 @@ include make/release_xbmc.mk
 # downloads in parallel...), but the sub-targets are still built in
 # parallel, which is useful on multi-processor / multi-core machines
 .NOTPARALLEL:
-#.SILENT:

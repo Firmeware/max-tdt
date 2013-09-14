@@ -344,6 +344,14 @@ AC_ARG_ENABLE(hs7810a,
 AM_CONDITIONAL(ENABLE_HS7810A,test "$enable_hs7810a" = "yes")
 AC_SUBST(HS7810A)
 
+AC_ARG_ENABLE(vitamin_hd5000,
+	AS_HELP_STRING(--enable-vitamin_hd5000,    enable vitamin_hd5000 stuff),
+	[case "${enableval}" in
+		yes) VITAMIN_HD5000=vitamin_hd5000 ;;
+	esac],[enable_vitamin_hd5000=no])
+AM_CONDITIONAL(ENABLE_VITAMIN_HD5000,test "$enable_vitamin_hd5000" = "yes")
+AC_SUBST(VITAMIN_HD5000)
+
 AC_ARG_ENABLE(hs7110,
 	AS_HELP_STRING(--enable-hs7110, enable fortis hs7110 stuff),
 	[case "${enableval}" in
@@ -454,16 +462,11 @@ AC_SUBST(TARGET_CXXFLAGS)
 AC_SUBST(TARGET_LDFLAGS)
 
 AC_PREFIX_DEFAULT(/ufs910)
-
 if test "x$prefix" = xNONE; then
 	prefix=/ufs910
 else
 	prefix=$prefix
 fi
-
-#if test "$prefix" = "NONE"; then
-#	prefix=/ufs910
-#fi
 
 AC_ARG_WITH(targetprefix,
 	[  --with-targetprefix=DIR    prefix for target files [[PREFIX/cdkroot]]],
@@ -832,6 +835,7 @@ TUXBOX_RULES_MAKE(mencoder)
 TUXBOX_RULES_MAKE(opkg)
 TUXBOX_RULES_MAKE(sysstat)
 TUXBOX_RULES_MAKE(imagemagick)
+TUXBOX_RULES_MAKE(shairport)
 
 #
 # contrib libs
@@ -872,6 +876,7 @@ TUXBOX_RULES_MAKE(a52dec)
 TUXBOX_RULES_MAKE(libdvdcss)
 TUXBOX_RULES_MAKE(libdvdnav)
 TUXBOX_RULES_MAKE(libdvdread)
+TUXBOX_RULES_MAKE(ffmpeg_old)
 TUXBOX_RULES_MAKE(ffmpeg)
 TUXBOX_RULES_MAKE(libass)
 TUXBOX_RULES_MAKE(webkitdfb)
@@ -888,6 +893,7 @@ TUXBOX_RULES_MAKE(libcap)
 TUXBOX_RULES_MAKE(evebrowser)
 TUXBOX_RULES_MAKE(brofs)
 TUXBOX_RULES_MAKE(libalsa)
+TUXBOX_RULES_MAKE(alsautils)
 TUXBOX_RULES_MAKE(rtmpdump)
 TUXBOX_RULES_MAKE(libdvbsipp)
 TUXBOX_RULES_MAKE(libdreamdvd)
@@ -906,17 +912,14 @@ TUXBOX_RULES_MAKE(mysql)
 TUXBOX_RULES_MAKE(libmicrohttpd)
 TUXBOX_RULES_MAKE(libexif)
 TUXBOX_RULES_MAKE(minidlna)
-TUXBOX_RULES_MAKE(vlc)
 TUXBOX_RULES_MAKE(djmount)
 TUXBOX_RULES_MAKE(libupnp)
 TUXBOX_RULES_MAKE(rarfs)
 TUXBOX_RULES_MAKE(sshfs)
 TUXBOX_RULES_MAKE(gmediarender)
-TUXBOX_RULES_MAKE(mediatomb)
 TUXBOX_RULES_MAKE(tinyxml)
 TUXBOX_RULES_MAKE(libnfs)
 TUXBOX_RULES_MAKE(taglib)
-TUXBOX_RULES_MAKE(libmms)
 
 #
 # python
@@ -951,8 +954,6 @@ TUXBOX_RULES_MAKE(gst_ffmpeg)
 TUXBOX_RULES_MAKE(gst_plugins_fluendo_mpegdemux)
 TUXBOX_RULES_MAKE(gst_plugins_dvbmediasink)
 TUXBOX_RULES_MAKE(gst_plugin_subsink)
-TUXBOX_RULES_MAKE(libdca)
-TUXBOX_RULES_MAKE(liborc)
 
 #
 # enigma2
@@ -982,6 +983,7 @@ TUXBOX_RULES_MAKE(libdpf)
 #
 TUXBOX_RULES_MAKE(dosfstools)
 TUXBOX_RULES_MAKE(e2fsprogs)
+TUXBOX_RULES_MAKE(fdisk)
 TUXBOX_RULES_MAKE(hddtemp)
 TUXBOX_RULES_MAKE(hdparm)
 TUXBOX_RULES_MAKE(jfsutils)

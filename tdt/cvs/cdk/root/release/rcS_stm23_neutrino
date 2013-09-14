@@ -18,14 +18,15 @@ if [ ! -e /var/etc/.firstboot ]; then
 
    insmod $MODDIR/e2_proc.ko
 
-   # mme bug workaround
+   echo "load video firmware"
    /bin/dd if=/dev/zero of=/dev/st231-0 bs=1024 count=4096
+#   /bin/stslave -t st231.0 -R /lib/firmware/video.elf
+   /bin/ustslave /dev/st231-0 /lib/firmware/video.elf
+
+   echo "load audio firmware"
    /bin/dd if=/dev/zero of=/dev/st231-1 bs=1024 count=4096
-   # end mme bug wa
-   echo "load a firmware"
-   /bin/ustslave /dev/st231-1 /boot/audio.elf
-   echo "load v firmware"
-   /bin/ustslave /dev/st231-0 /boot/video.elf
+#   /bin/stslave -t st231.1 -R /lib/firmware/audio.elf
+   /bin/ustslave /dev/st231-1 /lib/firmware/audio.elf
 
    echo "Starting DEBUG Interface"
    mount -av -t nonfs,nonfs4,nosmbfs,nocifs,noncp,noncpfs,nocoda
@@ -123,26 +124,19 @@ if [ ! -e /var/etc/.firstboot ]; then
       echo "neutrino ended <- RTV: " $rtv
       case "$rtv" in
 		0) echo "0"
-		   echo "ERROR"
-      	   init 6;;
-		1) echo "1"
 		   echo "SHUTDOWN"
 		   init 0;;
-		2) echo "2"
+		1) echo "1"
 		   echo "REBOOT"
 		   init 6;;
-		3) echo "3"
-		   echo "RESTART"
-		   echo "0" > /proc/progress
-		   showiframe -p /var/boot/bootlogo.mvi &;;
 		*) echo "*"
 		   echo "ERROR"
-           init 6;;
+		   init 6;;
       esac
-   done 
+   done
 fi
 
 #never reached
 echo "REBOOT UFS910" > /dev/vfd
 echo "REBOOT UFS910"
-reboot
+init 6

@@ -70,7 +70,7 @@ $(DEPDIR)/libboost: bootstrap @DEPENDS_libboost@
 #
 # libz
 #
-$(DEPDIR)/libz: @DEPENDS_libz@
+$(DEPDIR)/libz: bootstrap @DEPENDS_libz@
 	@PREPARE_libz@
 	cd @DIR_libz@ && \
 		ln -sf /bin/true ./ldconfig && \
@@ -139,8 +139,6 @@ $(DEPDIR)/lirc: bootstrap @DEPENDS_lirc@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
-			--sbindir=\$${exec_prefix}/bin \
-			--mandir=\$${prefix}/share/man \
 			--with-kerneldir=$(buildprefix)/$(KERNEL_DIR) \
 			--without-x \
 			--with-devdir=/dev \
@@ -175,8 +173,8 @@ $(DEPDIR)/libjpeg: bootstrap @DEPENDS_libjpeg@
 # libjpeg_turbo
 #
 $(DEPDIR)/libjpeg_turbo: bootstrap @DEPENDS_libjpeg_turbo@
-	$(PREPARE_libjpeg_turbo@
-	cd @DIR_libjpeg_turbo@&& \
+	@PREPARE_libjpeg_turbo@
+	cd @DIR_libjpeg_turbo@ && \
 		export CC=$(target)-gcc && \
 		$(BUILDENV) \
 		./configure \
@@ -206,7 +204,7 @@ $(DEPDIR)/libjpeg_turbo: bootstrap @DEPENDS_libjpeg_turbo@
 #
 $(DEPDIR)/libpng12: bootstrap @DEPENDS_libpng12@
 	@PREPARE_libpng12@
-	cd @DIR_libpng12@&& \
+	cd @DIR_libpng12@ && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -222,7 +220,7 @@ $(DEPDIR)/libpng12: bootstrap @DEPENDS_libpng12@
 #
 # libpng
 #
-$(DEPDIR)/libpng: bootstrap @DEPENDS_libpng@
+$(DEPDIR)/libpng: bootstrap libz @DEPENDS_libpng@
 	@PREPARE_libpng@
 	cd @DIR_libpng@ && \
 		$(BUILDENV) \
@@ -304,7 +302,7 @@ $(DEPDIR)/libcurl: bootstrap openssl rtmpdump @DEPENDS_libcurl@
 			--disable-debug \
 			--disable-verbose \
 			--disable-manual \
-			--mandir=/usr/share/man \
+
 			--with-random && \
 		$(MAKE) all && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < curl-config > $(crossprefix)/bin/curl-config && \
@@ -549,7 +547,7 @@ $(DEPDIR)/dfbpp: bootstrap libjpeg directfb @DEPENDS_dfbpp@
 $(DEPDIR)/libstgles: bootstrap directfb @DEPENDS_libstgles@
 	@PREPARE_libstgles@
 	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_libstgles@&& \
+	cd @DIR_libstgles@ && \
 		cp --remove-destination $(hostprefix)/share/libtool/config/ltmain.sh . && \
 		aclocal -I $(hostprefix)/share/aclocal && \
 		autoconf && \
@@ -709,125 +707,117 @@ $(DEPDIR)/libdvdread: bootstrap @DEPENDS_libdvdread@
 	touch $@
 
 #
-# ffmpeg
+# libdreamdvd2
 #
-$(DEPDIR)/ffmpeg: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
-	@PREPARE_ffmpeg@
-	cd @DIR_ffmpeg@ && \
+$(DEPDIR)/libdreamdvd2: bootstrap libdvdnav @DEPENDS_libdreamdvd2@
+	@PREPARE_libdreamdvd2@
+	[ -d "$(archivedir)/libdreamdvd.git" ] && \
+	(cd $(archivedir)/libdreamdvd.git; git pull ; cd "$(buildprefix)";); \
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_libdreamdvd2@ && \
+		aclocal -I $(hostprefix)/share/aclocal && \
+		autoheader && \
+		autoconf && \
+		automake --foreign --add-missing && \
+		libtoolize --force && \
 		$(BUILDENV) \
 		./configure \
-			--disable-static \
-			--enable-shared \
-			--enable-small \
-			--disable-runtime-cpudetect \
-			\
-			--disable-ffserver \
-			--disable-ffplay \
-			--disable-ffprobe \
-			\
-			--disable-doc \
-			--disable-htmlpages \
-			--disable-manpages \
-			--disable-podpages \
-			--disable-txtpages \
-			\
-			--disable-asm \
-			--disable-altivec \
-			--disable-amd3dnow \
-			--disable-amd3dnowext \
-			--disable-mmx \
-			--disable-mmxext \
-			--disable-sse \
-			--disable-sse2 \
-			--disable-sse3 \
-			--disable-ssse3 \
-			--disable-sse4 \
-			--disable-sse42 \
-			--disable-avx \
-			--disable-fma4 \
-			--disable-armv5te \
-			--disable-armv6 \
-			--disable-armv6t2 \
-			--disable-vfp \
-			--disable-neon \
-			--disable-vis \
-			--disable-inline-asm \
-			--disable-yasm \
-			--disable-mips32r2 \
-			--disable-mipsdspr1 \
-			--disable-mipsdspr2 \
-			--disable-mipsfpu \
-			--disable-fast-unaligned \
-			\
-			--disable-muxers \
-			--enable-muxer=flac \
-			--enable-muxer=mp3 \
-			--enable-muxer=h261 \
-			--enable-muxer=h263 \
-			--enable-muxer=h264 \
-			--enable-muxer=image2 \
-			--enable-muxer=mpeg1video \
-			--enable-muxer=mpeg2video \
-			--enable-muxer=ogg \
-			\
-			--disable-encoders \
-			--enable-encoder=aac \
-			--enable-encoder=h261 \
-			--enable-encoder=h263 \
-			--enable-encoder=h263p \
-			--enable-encoder=ljpeg \
-			--enable-encoder=mjpeg \
-			--enable-encoder=mpeg1video \
-			--enable-encoder=mpeg2video \
-			--enable-encoder=png \
-			\
-			--disable-decoders \
-			--enable-decoder=aac \
-			--enable-decoder=dvbsub \
-			--enable-decoder=flac \
-			--enable-decoder=h261 \
-			--enable-decoder=h263 \
-			--enable-decoder=h263i \
-			--enable-decoder=h264 \
-			--enable-decoder=iff_byterun1 \
-			--enable-decoder=mjpeg \
-			--enable-decoder=mp3 \
-			--enable-decoder=mpeg1video \
-			--enable-decoder=mpeg2video \
-			--enable-decoder=png \
-			--enable-decoder=theora \
-			--enable-decoder=vorbis \
-			\
-			--enable-parser=mjpeg \
-			--enable-demuxer=mjpeg \
-			--enable-protocol=file \
-			--disable-indevs \
-			--disable-outdevs \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr && \
+		$(MAKE) all && \
+		@INSTALL_libdreamdvd2@
+	@DISTCLEANUP_libdreamdvd2@
+	touch $@
+
+#
+# libdreamdvd
+#
+$(DEPDIR)/libdreamdvd: bootstrap @DEPENDS_libdreamdvd@
+	@PREPARE_libdreamdvd@
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_libdreamdvd@ && \
+		aclocal -I $(hostprefix)/share/aclocal && \
+		autoheader && \
+		autoconf && \
+		automake --foreign && \
+		libtoolize --force && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr && \
+		$(MAKE) all && \
+		@INSTALL_libdreamdvd@
+	@DISTCLEANUP_libdreamdvd@
+	touch $@
+
+#
+# ffmpeg
+#
+FFMPEG_CONFIGURE  = --disable-static --enable-shared --enable-small --disable-runtime-cpudetect
+FFMPEG_CONFIGURE += --disable-ffserver --disable-ffplay --disable-ffprobe
+FFMPEG_CONFIGURE += --disable-doc --disable-htmlpages --disable-manpages --disable-podpages --disable-txtpages
+FFMPEG_CONFIGURE += --disable-asm --disable-altivec --disable-amd3dnow --disable-amd3dnowext --disable-mmx --disable-mmxext
+FFMPEG_CONFIGURE += --disable-sse --disable-sse2 --disable-sse3 --disable-ssse3 --disable-sse4 --disable-sse42 --disable-avx --disable-fma4
+FFMPEG_CONFIGURE += --disable-armv5te --disable-armv6 --disable-armv6t2 --disable-vfp --disable-neon --disable-vis --disable-inline-asm
+FFMPEG_CONFIGURE += --disable-yasm --disable-mips32r2 --disable-mipsdspr1 --disable-mipsdspr2 --disable-mipsfpu --disable-fast-unaligned
+FFMPEG_CONFIGURE += --disable-muxers
+FFMPEG_CONFIGURE += --enable-muxer=flac --enable-muxer=mp3 --enable-muxer=h261 --enable-muxer=h263 --enable-muxer=h264
+FFMPEG_CONFIGURE += --enable-muxer=image2 --enable-muxer=mpeg1video --enable-muxer=mpeg2video --enable-muxer=ogg
+FFMPEG_CONFIGURE += --disable-encoders
+FFMPEG_CONFIGURE += --enable-encoder=aac --enable-encoder=h261 --enable-encoder=h263 --enable-encoder=h263p --enable-encoder=ljpeg
+FFMPEG_CONFIGURE += --enable-encoder=mjpeg --enable-encoder=mpeg1video --enable-encoder=mpeg2video --enable-encoder=png
+FFMPEG_CONFIGURE += --disable-decoders
+FFMPEG_CONFIGURE += --enable-decoder=aac --enable-decoder=dvbsub --enable-decoder=flac --enable-decoder=h261 --enable-decoder=h263
+FFMPEG_CONFIGURE += --enable-decoder=h263i --enable-decoder=h264 --enable-decoder=iff_byterun1 --enable-decoder=mjpeg
+FFMPEG_CONFIGURE += --enable-decoder=mp3 --enable-decoder=mpeg1video --enable-decoder=mpeg2video --enable-decoder=png
+FFMPEG_CONFIGURE += --enable-decoder=theora --enable-decoder=vorbis --enable-decoder=wmv3 --enable-decoder=pcm_s16le
+FFMPEG_CONFIGURE += --enable-demuxer=mjpeg --enable-demuxer=wav --enable-demuxer=rtsp
+FFMPEG_CONFIGURE += --enable-parser=mjpeg
+FFMPEG_CONFIGURE += --disable-indevs --disable-outdevs --disable-bsfs --disable-debug
+FFMPEG_CONFIGURE += --enable-pthreads --enable-bzlib --enable-zlib --enable-stripping
+
+$(DEPDIR)/ffmpeg: bootstrap libass @DEPENDS_ffmpeg@
+	@PREPARE_ffmpeg@
+	cd @DIR_ffmpeg@; \
+		$(BUILDENV) \
+		./configure \
+			$(FFMPEG_CONFIGURE) \
+			--enable-cross-compile \
+			--cross-prefix=$(target)- \
+			--target-os=linux \
+			--arch=sh4 \
+			--prefix=/usr; \
+		$(MAKE); \
+		@INSTALL_ffmpeg@
+	@DISTCLEANUP_ffmpeg@
+	touch $@
+
+$(DEPDIR)/ffmpeg_old: bootstrap libass rtmpdump @DEPENDS_ffmpeg_old@
+	@PREPARE_ffmpeg_old@
+	cd @DIR_ffmpeg_old@; \
+		$(BUILDENV) \
+		./configure \
+			$(FFMPEG_CONFIGURE) \
 			--enable-avresample \
-			--enable-pthreads \
-			--enable-bzlib \
-			--enable-zlib \
-			--disable-bsfs \
-			--enable-librtmp \
 			--pkg-config="pkg-config" \
 			--enable-cross-compile \
 			--cross-prefix=$(target)- \
 			--target-os=linux \
 			--arch=sh4 \
-			--disable-debug \
-			--extra-cflags="-fno-strict-aliasing" \
-			--enable-stripping \
-			--prefix=/usr && \
-		$(MAKE) && \
-		@INSTALL_ffmpeg@
-	@DISTCLEANUP_ffmpeg@
+			--prefix=/usr; \
+		$(MAKE); \
+		@INSTALL_ffmpeg_old@
+	@DISTCLEANUP_ffmpeg_old@
 	touch $@
+
 #
 # libass
 #
 $(DEPDIR)/libass: bootstrap libfreetype libfribidi @DEPENDS_libass@
 	@PREPARE_libass@
-	cd @DIR_libass@&& \
+	cd @DIR_libass@ && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -1222,7 +1212,7 @@ $(DEPDIR)/twistedmail: bootstrap setuptools @DEPENDS_twistedmail@
 #
 $(DEPDIR)/pilimaging: bootstrap libjpeg libfreetype python @DEPENDS_pilimaging@
 	@PREPARE_pilimaging@
-	cd @DIR_pilimaging@&& \
+	cd @DIR_pilimaging@ && \
 		sed -ie "s|"darwin"|"darwinNot"|g" "setup.py"; \
 		sed -ie "s|ZLIB_ROOT = None|ZLIB_ROOT = libinclude(\"${targetprefix}/usr\")|" "setup.py"; \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
@@ -1541,7 +1531,7 @@ $(DEPDIR)/gst_ffmpeg: bootstrap gstreamer gst_plugins_base @DEPENDS_gst_ffmpeg@
 $(DEPDIR)/gst_plugins_fluendo_mpegdemux: bootstrap gstreamer gst_plugins_base @DEPENDS_gst_plugins_fluendo_mpegdemux@
 	@PREPARE_gst_plugins_fluendo_mpegdemux@
 	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_gst_plugins_fluendo_mpegdemux@&& \
+	cd @DIR_gst_plugins_fluendo_mpegdemux@ && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -1580,7 +1570,7 @@ $(DEPDIR)/gst_plugin_subsink: bootstrap gstreamer gst_plugins_base gst_plugins_g
 #
 # gst_plugins_dvbmediasink
 #
-$(DEPDIR)/gst_plugins_dvbmediasink: bootstrap gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly gst_plugin_subsink libdca @DEPENDS_gst_plugins_dvbmediasink@
+$(DEPDIR)/gst_plugins_dvbmediasink: bootstrap gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly gst_plugin_subsink @DEPENDS_gst_plugins_dvbmediasink@
 	@PREPARE_gst_plugins_dvbmediasink@
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_gst_plugins_dvbmediasink@ && \
@@ -1597,54 +1587,6 @@ $(DEPDIR)/gst_plugins_dvbmediasink: bootstrap gstreamer gst_plugins_base gst_plu
 		$(MAKE) && \
 		@INSTALL_gst_plugins_dvbmediasink@
 	@DISTCLEANUP_gst_plugins_dvbmediasink@
-	touch $@
-
-#
-# libmms
-#
-$(DEPDIR)/libmms: bootstrap @DEPENDS_libmms@
-	@PREPARE_libmms@
-	cd @DIR_libmms@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix=/usr && \
-		$(MAKE) all && \
-		@INSTALL_libmms@
-	@DISTCLEANUP_libmms@
-	touch $@
-
-#
-# libdca
-#
-$(DEPDIR)/libdca: @DEPENDS_libdca@
-	@PREPARE_libdca@
-	cd @DIR_libdca@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix=/usr && \
-		$(MAKE) all && \
-		@INSTALL_libdca@
-	@DISTCLEANUP_libdca@
-	touch $@
-
-#
-# liborc
-#
-$(DEPDIR)/liborc: @DEPENDS_liborc@
-	@PREPARE_liborc@
-	cd @DIR_liborc@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix=/usr && \
-		$(MAKE) all && \
-		@INSTALL_liborc@
-	@DISTCLEANUP_liborc@
 	touch $@
 
 ##############################   EXTERNAL_LCD   ################################
@@ -1674,7 +1616,7 @@ $(DEPDIR)/graphlcd: bootstrap libfreetype libusb @DEPENDS_graphlcd@
 	@PREPARE_graphlcd@
 	[ -d "$(archivedir)/graphlcd-base-touchcol.git" ] && \
 	(cd $(archivedir)/graphlcd-base-touchcol.git; git pull ; git checkout touchcol; cd "$(buildprefix)";); \
-	cd @DIR_graphlcd@&& \
+	cd @DIR_graphlcd@ && \
 		$(BUILDENV) \
 		$(MAKE) all DESTDIR=$(targetprefix)/usr && \
 		@INSTALL_graphlcd@
@@ -1725,7 +1667,7 @@ $(DEPDIR)/%lcd4_linux: $(DEPDIR)/lcd4_linux.do_compile
 #
 $(DEPDIR)/libdpfax: bootstrap libusbcompat @DEPENDS_libdpfax@
 	@PREPARE_libdpfax@
-	cd @DIR_libdpfax@&& \
+	cd @DIR_libdpfax@ && \
 		$(BUILDENV) \
 			$(MAKE) all &&\
 		@INSTALL_libdpfax@
@@ -2000,52 +1942,6 @@ $(DEPDIR)/tuxtxt32bpp: tuxtxtlib @DEPENDS_tuxtxt32bpp@
 		$(MAKE) all && \
 		@INSTALL_tuxtxt32bpp@
 	@DISTCLEANUP_tuxtxt32bpp@
-	touch $@
-
-#
-# libdreamdvd
-#
-$(DEPDIR)/libdreamdvd: bootstrap @DEPENDS_libdreamdvd@
-	@PREPARE_libdreamdvd@
-	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_libdreamdvd@ && \
-		aclocal -I $(hostprefix)/share/aclocal && \
-		autoheader && \
-		autoconf && \
-		automake --foreign && \
-		libtoolize --force && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix=/usr && \
-		$(MAKE) all && \
-		@INSTALL_libdreamdvd@
-	@DISTCLEANUP_libdreamdvd@
-	touch $@
-
-#
-# libdreamdvd2
-#
-$(DEPDIR)/libdreamdvd2: bootstrap libdvdnav @DEPENDS_libdreamdvd2@
-	@PREPARE_libdreamdvd2@
-	[ -d "$(archivedir)/libdreamdvd.git" ] && \
-	(cd $(archivedir)/libdreamdvd.git; git pull ; cd "$(buildprefix)";); \
-	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_libdreamdvd2@ && \
-		aclocal -I $(hostprefix)/share/aclocal && \
-		autoheader && \
-		autoconf && \
-		automake --foreign --add-missing && \
-		libtoolize --force && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix=/usr && \
-		$(MAKE) all && \
-		@INSTALL_libdreamdvd2@
-	@DISTCLEANUP_libdreamdvd2@
 	touch $@
 
 #
