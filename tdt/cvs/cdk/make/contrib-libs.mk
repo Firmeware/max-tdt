@@ -775,15 +775,16 @@ FFMPEG_CONFIGURE += --enable-decoder=theora --enable-decoder=vorbis --enable-dec
 FFMPEG_CONFIGURE += --enable-demuxer=mjpeg --enable-demuxer=wav --enable-demuxer=rtsp
 FFMPEG_CONFIGURE += --enable-parser=mjpeg
 FFMPEG_CONFIGURE += --disable-indevs --disable-outdevs --disable-bsfs --disable-debug
-FFMPEG_CONFIGURE += --enable-pthreads --enable-bzlib --enable-zlib --enable-stripping
+FFMPEG_CONFIGURE += --enable-pthreads --enable-bzlib --enable-zlib --enable-librtmp --enable-stripping
 
-$(DEPDIR)/ffmpeg: bootstrap libass @DEPENDS_ffmpeg@
+$(DEPDIR)/ffmpeg: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	cd @DIR_ffmpeg@; \
 		$(BUILDENV) \
 		./configure \
 			$(FFMPEG_CONFIGURE) \
 			--enable-cross-compile \
+			--pkg-config="pkg-config" \
 			--cross-prefix=$(target)- \
 			--target-os=linux \
 			--arch=sh4 \
