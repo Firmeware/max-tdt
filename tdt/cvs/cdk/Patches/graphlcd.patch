@@ -1,6 +1,6 @@
 --- graphlcd-base/Make.config.orig	2013-05-20 21:33:15.373657360 +0200
 +++ graphlcd-base/Make.config	2013-05-20 21:37:00.605647889 +0200
-@@ -3,12 +3,12 @@
+@@ -3,17 +3,17 @@
  
  ### The C compiler and options:
  
@@ -15,15 +15,12 @@
  #CXXFLAGS = -g -ggdb -O0 -Wall -Woverloaded-virtual
  
  # no CXX given at all: force g++
-@@ -18,7 +18,7 @@
- 
- # CXX set to clang++: force clang
- ifeq ($(CXX),clang++)
--  CXX = clang
+ ifeq (x$(CXX)x,xx)
+-  CXX=g++
 +  CXX=sh4-linux-g++
  endif
  
- # set CXXEXTRA and MAKEDEP according to compiler that is used
+ # CXX set to clang++: force clang
 @@ -40,10 +40,11 @@
  DESTDIR = /usr/local
  endif
@@ -49,15 +46,15 @@
  
  # comment this variable out if you want binaries to be stripped when installing (for production-level binaries or packages)
  #HAVE_STRIP = -s
-@@ -75,7 +76,7 @@
+@@ -80,7 +81,7 @@
  
  # uncomment this variable if you want to enable the experimental AX 206 based digital photo frame driver
  # Read DRIVER.ax206dpf before use!
--#HAVE_AX206DPF_EXPERIMENTAL=1
-+HAVE_AX206DPF_EXPERIMENTAL=1
+-#HAVE_DRIVER_AX206DPF=1
++HAVE_DRIVER_AX206DPF=1
  
  # uncomment this variable if you want to enable the experimental support for picoLCD 256x64 
- #HAVE_picoLCD_256x64_EXPERIMENTAL=1
+ #HAVE_DRIVER_picoLCD_256x64=1
 --- graphlcd-base/Makefile	2011-12-06 23:03:38.986910111 +0100
 +++ graphlcd-base/Makefile.fix	2011-12-06 23:03:18.216901196 +0100
 @@ -7,6 +7,7 @@
@@ -128,7 +125,7 @@
  
  # General driver settings
  #  This section lists the display settings that are parsed and
-@@ -114,472 +114,12 @@
+@@ -114,467 +114,7 @@
  #  A value of 0 completely disables complete refreshs. 
  #  Possible values: 0 <= x <= 50
  #  Default value: 5
@@ -524,8 +521,8 @@
 -#UpsideDown=no
 -#Invert=no
 -Brightness=50
--#AdjustTiming=0		# not used
--#RefreshDisplay=0	# not used
+-AdjustTiming=50
+ RefreshDisplay=50
 -
 -# Wiring
 -#  Select the type of wiring your display is connected with.
@@ -593,16 +590,9 @@
 -# USB ID activy 5xx:
 -#Vendor=0x1509
 -#Product=0x925d
-+RefreshDisplay=50
  ########################################################################
  
  [ax206dpf]
- #  THIS IS AN EXPERIMENTAL DRIVER!
--#  You have to uncomment the variable HAVE_AX206DPF_EXPERIMENTAL
-+#  You have to uncomment the variable HAVE_DRIVER_AX206DPF
- #  in Make.config to use this driver.  
- #  READ the READDME.ax206dpf before use!
- #
 @@ -588,8 +128,8 @@
  #
  #  Default size: 320 x 240 or 240 x 320 (see "Portrait")
@@ -614,7 +604,6 @@
  #
  # UpsideDown
  #  Rotates the display output by 180 degrees. This might be useful, if
-
 --- graphlcd-base/tools/convpic/Makefile.org	2012-01-21 23:04:06.899524642 +0100
 +++ graphlcd-base/tools/convpic/Makefile	2012-01-21 23:04:06.847524649 +0100
 @@ -36,7 +36,7 @@ $(PRGNAME): $(OBJS)
@@ -681,3 +670,5 @@
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
+
+
