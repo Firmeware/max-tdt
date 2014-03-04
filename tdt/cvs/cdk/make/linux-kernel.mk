@@ -9,17 +9,17 @@ CUBEMOD=$(CUBEREVO)$(CUBEREVO_MINI)$(CUBEREVO_MINI2)$(CUBEREVO_MINI_FTA)$(CUBERE
 if ENABLE_P0207
 PATCH_STR=_0207
 endif
-
 if ENABLE_P0209
 PATCH_STR=_0209
 endif
-
 if ENABLE_P0210
 PATCH_STR=_0210
 endif
-
 if ENABLE_P0211
 PATCH_STR=_0211
+endif
+if ENABLE_P0212
+PATCH_STR=_0212
 endif
 
 COMMONPATCHES_24 = \
@@ -39,8 +39,12 @@ COMMONPATCHES_24 = \
 		linux-ftdi_sio.c_stm24$(PATCH_STR).patch \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
 		linux-tune_stm24.patch \
+<<<<<<< HEAD
 		$(if $(P0209)$(P0210)$(P0211),linux-sh4-mmap_stm24.patch) \
 		$(if $(P0209)$(P0210)$(P0211),linux-sh4-remove_pcm_reader_stm24.patch) \
+=======
+		$(if $(P0209)$(P0210)$(P0211)$(P0212),linux-sh4-mmap_stm24.patch) \
+>>>>>>> 5815fff... [AV7500] add host-kernel-source-sh4-2.6.32.61_stm24_0212
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0207),linux-sh4-sti7100_missing_clk_alias_stm24$(PATCH_STR).patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch)
@@ -241,13 +245,17 @@ if ENABLE_P0207
 KERNELHEADERS_VERSION := 2.6.32.16-44
 else
 if ENABLE_P0209
-KERNELHEADERS_VERSION := 2.6.32.46-45
+KERNELHEADERS_VERSION := 2.6.32.46-47
 else
 if ENABLE_P0210
-KERNELHEADERS_VERSION := 2.6.32.46-45
+KERNELHEADERS_VERSION := 2.6.32.46-47
 else
 if ENABLE_P0211
-KERNELHEADERS_VERSION := 2.6.32.46-45
+KERNELHEADERS_VERSION := 2.6.32.46-47
+else
+if ENABLE_P0211
+KERNELHEADERS_VERSION := 2.6.32.46-47
+endif
 endif
 endif
 endif
@@ -298,6 +306,10 @@ HOST_KERNEL_VERSION = 2.6.32.57$(KERNELSTMLABEL)-$(KERNELLABEL)
 else
 if ENABLE_P0211
 HOST_KERNEL_VERSION = 2.6.32.59$(KERNELSTMLABEL)-$(KERNELLABEL)
+else
+if ENABLE_P0212
+HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
+endif
 endif
 endif
 endif
@@ -406,3 +418,4 @@ linux-kernel.%:
 	@echo ""
 	diff $(KERNEL_DIR)/.config.old $(KERNEL_DIR)/.config
 	@echo ""
+

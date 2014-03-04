@@ -13,6 +13,7 @@ AUTOMAKE_OPTIONS = -Wno-portability
 #
 #
 KERNEL_DEPENDS = @DEPENDS_linux24@
+KERNEL_PREPARE = @PREPARE_linux24@
 if ENABLE_P0207
 KERNEL_DIR = @DIR_linuxp0207@
 else
@@ -25,12 +26,13 @@ else
 if ENABLE_P0211
 KERNEL_DIR = @DIR_linuxp0211@
 else
+if ENABLE_P0212
+KERNEL_DIR = @DIR_linuxp0212@
 endif
 endif
 endif
 endif
-
-KERNEL_PREPARE = @PREPARE_linux24@
+endif
 
 DEPMOD = $(hostprefix)/bin/depmod
 
