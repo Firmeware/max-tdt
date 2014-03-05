@@ -156,12 +156,8 @@ echo -e "\nKernel:"
 echo "   1) STM 24 P0207"
 echo "   2) STM 24 P0209"
 echo "   3) STM 24 P0210"
-<<<<<<< HEAD
-echo "   4) STM 24 P0211"
-=======
 echo "   4) STM 24 P0211 (recommended)"
 echo "   5) STM 24 P0212)"
->>>>>>> 5815fff... [AV7500] add host-kernel-source-sh4-2.6.32.61_stm24_0212
 case $2 in
 	[1-5]) REPLY=$2
 	echo -e "\nSelected kernel: $REPLY\n"
