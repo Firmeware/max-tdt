@@ -1,56 +1,6 @@
-*** a/arch/sh/kernel/setup.c	2011-01-05 10:45:31.000000000 +0100
---- b/setup.c	2011-01-22 12:22:31.340928000 +0100
-***************
-*** 388,393 ****
---- 388,421 ----
-  #endif
-  #endif
-  
-+ 	{
-+ 	char org_command_line[] = "console=ttyAS0,115200 root=/dev/mtdblock6";
-+ 	char tdt_command_line[] = "console=ttyAS0,115200 root=/dev/mtdblock9 rw rootfstype=jffs2 init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 panic=2 stmmaceth=ethaddr:";
-+ 	char mac[] = "00:00:00:00:00:00";
-+ 	int command_line_len = strlen(command_line);
-+ 	int org_command_line_len = strlen(org_command_line);
-+ 
-+ 	if(command_line_len >= org_command_line_len && !strncmp(command_line, org_command_line, org_command_line_len))
-+ 	{
-+ 		int i;
-+ 		for(i = 0; i < (command_line_len - 7); i++)
-+ 		{
-+ 			if(!strncmp(command_line + i, "ethaddr", 7))
-+ 			{
-+ 				strlcpy(mac, command_line + i + 8, sizeof(mac));
-+ 				break;
-+ 			}
-+ 			if(!strncmp(command_line + i, "hwaddr", 6))
-+ 			{
-+ 				strlcpy(mac, command_line + i + 7, sizeof(mac));
-+ 				break;
-+ 			}
-+ 		}
-+ 		strlcpy(command_line, tdt_command_line, sizeof(command_line));
-+ 		strlcat(command_line, mac, sizeof(command_line));
-+ 	}
-+ 	}
-+ 
-  	/* Save unparsed command line copy for /proc/cmdline */
-  	memcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
-  	*cmdline_p = command_line;
---- linux-sh4/drivers/mtd/chips/cfi_util.c.org	2012-04-11 14:50:46.000000000 +0200
-+++ linux-sh4/drivers/mtd/chips/cfi_util.c	2012-07-15 11:36:33.220376415 +0200
-@@ -83,7 +83,7 @@
- 	cfi_send_gen_cmd(0xFF, 0, base, map, cfi, cfi->device_type, NULL);
- 	/* M29W128G flashes require an additional reset command
- 	   when exit qry mode */
--	if ((cfi->mfr == CFI_MFR_ST) && (cfi->id == 0x227E || cfi->id == 0x7E))
-+	if ((cfi->mfr == CFI_MFR_ST || cfi->mfr == 0x7F /* kdhong for EON */) && (cfi->id == 0x227E || cfi->id == 0x7E))
- 		cfi_send_gen_cmd(0xF0, 0, base, map, cfi, cfi->device_type, NULL);
- }
- EXPORT_SYMBOL_GPL(cfi_qry_mode_off);
---- a/arch/sh/boards/mach-hdk7105/setup.c	2012-07-07 18:39:46.000000000 +0200
-+++ b/setup.c	2012-07-10 12:47:07.000000000 +0200
-@@ -14,154 +14,222 @@
+--- linux-sh4-2.6.32.61_stm24_0212.org/arch/sh/boards/mach-hdk7105/setup.c	2014-03-05 08:32:54.000000000 +0100
++++ linux-sh4-2.6.32.61_stm24_0212/arch/sh/boards/mach-hdk7105/setup.c	2014-03-05 23:09:23.778997591 +0100
+@@ -14,156 +14,224 @@
  #include <linux/platform_device.h>
  #include <linux/delay.h>
  #include <linux/io.h>
@@ -63,6 +13,8 @@
  #include <linux/stm/stx7105.h>
 -#include <linux/stm/pci-glue.h>
  #include <linux/stm/emi.h>
+ #include <linux/stm/nand.h>
+ #include <linux/stm/nand_devices.h>
  #include <linux/mtd/mtd.h>
  #include <linux/mtd/physmap.h>
 +#include <linux/stm/pci-glue.h>
@@ -130,22 +82,22 @@
 +/*
 +0x40000000 - 0x403FFFFF - cocpu 1 ram (4mb)
 +0x40400000 - 0x407FFFFF - cocpu 2 ram (4mb)
-+0x40800000 - 0x47FFFFFF - linux   (120mb) 
-+0x48000000 - 0x49FFFFFF - bigphys ( 32mb)
-+0x4A000000 - 0x4FFFFFFF - lmi_io  ( 96mb)
++0x40800000 - 0x49FFFFFF - linux   (159mb)
++0x4A000000 - 0x4B1FFFFF - bigphys ( 18mb)
++0x4B200000 - 0x4FFFFFFF - lmi_io  ( 78mb)
 +*/
 +static struct bpa2_partition_desc bpa2_parts_table[] = {
 +    {
 + 	    .name  = "bigphysarea",
-+ 	    .start = 0x48000000,
-+ 	    .size  = 0x02000000, /* 32 Mb */
++ 	    .start = 0x4A000000,
++ 	    .size  = 0x01200000, /* 18 Mb */
 + 	    .flags = 0,
 + 	    .aka   = NULL
 +    }, 
 +    {
 + 	    .name  = "LMI_IO",
-+ 	    .start = 0x4A000000,
-+ 	    .size  = 0x06000000, /* 96 Mb */
++ 	    .start = 0x4B200000,
++ 	    .size  = 0x04E00000, /* 78 Mb */
 + 	    .flags = 0,
 + 	    .aka   = LMI_IO_partalias
 +    }, 
@@ -188,6 +140,12 @@
 -	.pci_clk = 33333333,
 -	.pci_reset_gpio = HDK7105_PIO_PCI_RESET,
 -};
+-
+-int pcibios_map_platform_irq(struct pci_dev *dev, u8 slot, u8 pin)
+-{
+-        /* We can use the standard function on this board */
+-	return stx7105_pcibios_map_platform_irq(&hdk7105_pci_config, pin);
+-}
 +	#define OR32( a, b ) ( iowrite32( ( ioread32( a ) | b ), a ));
 +	#define UPDATE32( a, b, c ) ( iowrite32(( ( ioread32( a ) & b ) | c ), a) );
 +	#define WHILE_NE32( a, b, c ) while( ( ioread32( a ) & b ) != c );
@@ -281,13 +239,6 @@
 +	  POKE32(0xfe213024, 0x0000000a)
 +#endif
  
--int pcibios_map_platform_irq(struct pci_dev *dev, u8 slot, u8 pin)
--{
--        /* We can use the standard function on this board */
--	return stx7105_pcibios_map_platform_irq(&hdk7105_pci_config, pin);
--}
-+	/* DDR */
- 
 -static struct platform_device hdk7105_leds = {
 -	.name = "leds-gpio",
 -	.id = 0,
@@ -310,7 +261,8 @@
 -		},
 -	},
 -};
--
++	/* DDR */
+ 
 -static struct tm1668_key hdk7105_front_panel_keys[] = {
 -	{ 0x00001000, KEY_UP, "Up (SWF2)" },
 -	{ 0x00800000, KEY_DOWN, "Down (SWF7)" },
@@ -391,7 +343,7 @@
  
  	return 1;
  }
-@@ -180,29 +248,110 @@
+@@ -182,29 +250,110 @@
  	.resource	= (struct resource[]) {
  		{
  			.start		= 0x00000000,
@@ -434,7 +386,7 @@
 +			{
 +				.name = "NOR Emergency Root",
 +				.size = 0x00180000,
-+				.offset = MTDPART_OFS_NXTBLK,
+ 				.offset = MTDPART_OFS_NXTBLK,
 +			},
 +			{
 +				.name = "NOR Box Configuration",
@@ -455,8 +407,8 @@
 +				.name = "NOR 4M",
 +				.size = 0x00400000,
 +				.offset = 0x00400000,
-+			}
-+		},
+ 			}
+ 		},
 +#else
 +		.nr_parts	= 8,
 +		.parts		=  (struct mtd_partition []) {
@@ -481,7 +433,7 @@
 +			{
 +				.name = "NOR  Emergency Kernel (ro)",
 +				.size = 0x001c0000,
- 				.offset = MTDPART_OFS_NXTBLK,
++				.offset = MTDPART_OFS_NXTBLK,
 +				.mask_flags = MTD_WRITEABLE,
 +			},
 +			{
@@ -507,13 +459,13 @@
 +				.name = "NOR  Root",
 +				.offset = MTDPART_OFS_NXTBLK,
 +				.size = 0x001a0000,
- 			}
- 		},
++			}
++		},
 +#endif
  	},
  };
  
-@@ -210,153 +359,66 @@
+@@ -212,6 +361,7 @@
  struct stm_nand_bank_data hdk7105_nand_flash = {
  	.csn		= 1,
  	.options	= NAND_NO_AUTOINCR | NAND_USE_FLASH_BBT,
@@ -521,46 +473,11 @@
  	.nr_partitions	= 2,
  	.partitions	= (struct mtd_partition []) {
  		{
--			.name	= "NAND Flash 1",
-+			.name	= "NAND config",
- 			.offset	= 0,
--			.size 	= 0x00800000
-+			.size 	= 0x02800000
- 		}, {
--			.name	= "NAND Flash 2",
-+			.name	= "NAND home",
- 			.offset = MTDPART_OFS_NXTBLK,
+@@ -224,131 +374,48 @@
  			.size	= MTDPART_SIZ_FULL
  		},
  	},
-+#else
-+	.nr_partitions	= 2,
-+	.partitions	= (struct mtd_partition []) {
-+		{
-+			.name	= "NAND FW        0x0000.0000-0x007F.FFFF (  8MB)",
-+			.offset	= 0,
-+			.size 	= 0x00800000
-+		},
-+		{
-+			.name	= "NAND ROOT      0x0080.0000-0x047F.FFFF ( 64MB)",
-+			.offset = MTDPART_OFS_NXTBLK,
-+			.size   = MTDPART_SIZ_FULL
-+		}
-+	},
-+#endif
- 	.timing_data		= &(struct stm_nand_timing_data) {
--		.sig_setup	= 50,		/* times in ns */
--		.sig_hold	= 50,
-+		.sig_setup	= 60,		/* times in ns */
-+		.sig_hold	= 60,
- 		.CE_deassert	= 0,
--		.WE_to_RBn	= 100,
--		.wr_on		= 10,
--		.wr_off		= 40,
--		.rd_on		= 10,
--		.rd_off		= 40,
--		.chip_delay	= 30,		/* in us */
--	},
+-	.timing_spec	= &NAND_TSPEC_HYNIX_HY27UH08AG5B,
 -};
 -
 -/* Serial Flash */
@@ -568,7 +485,7 @@
 -	.modalias       = "m25p80",
 -	.bus_num        = 0,
 -	.chip_select    = stm_gpio(2, 4),
--	.max_speed_hz   = 7000000,
+-	.max_speed_hz   = 3000000,
 -	.mode           = SPI_MODE_3,
 -	.platform_data  = &(struct flash_platform_data) {
 -		.name = "m25p80",
@@ -584,14 +501,27 @@
 -				.size = MTDPART_SIZ_FULL,
 -				.offset = MTDPART_OFS_NXTBLK,
 -			},
--		},
-+		.WE_to_RBn	= 120,
-+		.wr_on		= 20,
-+		.wr_off		= 50,
-+		.rd_on		= 20,
-+		.rd_off		= 50,
-+		.chip_delay	= 40,		/* in us */
++#else
++	.nr_partitions	= 3,
++	.partitions	= (struct mtd_partition []) {
++		{
++			.name	= "NAND FW        0x0000.0000-0x007F.FFFF (  8MB)",
++			.offset	= 0,
++			.size 	= 0x00800000
++		},
++		{
++			.name	= "NAND ROOT      0x0080.0000-0x047F.FFFF ( 64MB)",
++			.offset = MTDPART_OFS_NXTBLK,
++			.size   = 0x04000000
+ 		},
++		{
++			.name	= "NAND DATA      0x0480.0000-0x07FF.FFFF ( 52MB)",
++			.offset = MTDPART_OFS_NXTBLK,
++			.size   = MTDPART_SIZ_FULL
++		}
  	},
++#endif
++	.timing_spec	= &NAND_TSPEC_HYNIX_HY27UH08AG5B,
 +	.emi_withinbankoffset	= 0,
  };
  
@@ -700,7 +630,7 @@
  	/* I2C_xxxC - JN1 (NIM), JN3, UT1 (CI chip), US2 (EEPROM) */
  	stx7105_configure_ssc_i2c(2, &(struct stx7105_ssc_config) {
  			.routing.ssc2.sclk = stx7105_ssc2_sclk_pio3_4,
-@@ -388,33 +450,14 @@
+@@ -380,34 +447,15 @@
  			.mdio_bus_data = &stmmac_mdio_bus,
  		});
  
@@ -728,11 +658,61 @@
  			.driver = stm_nand_flex,
  			.nr_banks = 1,
  			.banks = &hdk7105_nand_flash,
- 			.rbn.flex_connected = -1,});
+ 			.rbn.flex_connected = 1,});
  
 -	spi_register_board_info(&hdk7105_serial_flash, 1);
+-
 +	stx7105_configure_audio(&(struct stx7105_audio_config) {
 +			.spdif_player_output_enabled = 1, });
- 
++ 
  	return platform_add_devices(hdk7105_devices,
  			ARRAY_SIZE(hdk7105_devices));
+ }
+--- linux-sh4-2.6.32.61_stm24_0212.org/arch/sh/kernel/setup.c	2014-03-05 22:13:00.931108010 +0100
++++ linux-sh4-2.6.32.61_stm24_0212/arch/sh/kernel/setup.c	2014-03-05 22:02:12.000000000 +0100
+@@ -389,6 +389,34 @@
+ #endif
+ #endif
+ 
++	{
++	char org_command_line[] = "console=ttyAS0,115200 root=/dev/mtdblock6";
++	char tdt_command_line[] = "console=ttyAS0,115200 root=/dev/mtdblock9 rw rootfstype=jffs2 init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 panic=2 stmmaceth=ethaddr:";
++	char mac[] = "00:00:00:00:00:00";
++	int command_line_len = strlen(command_line);
++	int org_command_line_len = strlen(org_command_line);
++
++	if(command_line_len >= org_command_line_len && !strncmp(command_line, org_command_line, org_command_line_len))
++	{
++		int i;
++		for(i = 0; i < (command_line_len - 7); i++)
++		{
++			if(!strncmp(command_line + i, "ethaddr", 7))
++			{
++				strlcpy(mac, command_line + i + 8, sizeof(mac));
++				break;
++			}
++			if(!strncmp(command_line + i, "hwaddr", 6))
++			{
++				strlcpy(mac, command_line + i + 7, sizeof(mac));
++				break;
++			}
++		}
++		strlcpy(command_line, tdt_command_line, sizeof(command_line));
++		strlcat(command_line, mac, sizeof(command_line));
++	}
++	}
++
+ 	/* Save unparsed command line copy for /proc/cmdline */
+ 	memcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
+ 	*cmdline_p = command_line;
+--- linux-sh4-2.6.32.61_stm24_0212.org/drivers/mtd/chips/cfi_util.c	2014-03-05 08:32:56.000000000 +0100
++++ linux-sh4-2.6.32.61_stm24_0212/drivers/mtd/chips/cfi_util.c	2014-03-05 22:02:12.000000000 +0100
+@@ -83,7 +83,7 @@
+ 	cfi_send_gen_cmd(0xFF, 0, base, map, cfi, cfi->device_type, NULL);
+ 	/* M29W128G flashes require an additional reset command
+ 	   when exit qry mode */
+-	if ((cfi->mfr == CFI_MFR_ST) && (cfi->id == 0x227E || cfi->id == 0x7E))
++	if ((cfi->mfr == CFI_MFR_ST || cfi->mfr == 0x7F /* kdhong for EON */) && (cfi->id == 0x227E || cfi->id == 0x7E))
+ 		cfi_send_gen_cmd(0xF0, 0, base, map, cfi, cfi->device_type, NULL);
+ }
+ EXPORT_SYMBOL_GPL(cfi_qry_mode_off);
