@@ -30,7 +30,6 @@ COMMONPATCHES_24 = \
 		linux-sh4-init_mm_stm24$(PATCH_STR).patch \
 		linux-sh4-copro_stm24$(PATCH_STR).patch \
 		linux-sh4-strcpy_stm24$(PATCH_STR).patch \
-		linux-squashfs-lzma_stm24$(PATCH_STR).patch \
 		linux-sh4-ext23_as_ext4_stm24$(PATCH_STR).patch \
 		bpa2_procfs_stm24$(PATCH_STR).patch \
 		$(if $(P0207),xchg_fix_stm24$(PATCH_STR).patch) \
@@ -49,7 +48,7 @@ TF7700PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-usbwait123_stm24.patch \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
-		linux-sh4-sata-v06_stm24$(PATCH_STR).patch
+		$(if $(P0207)$(P0209),linux-sh4-sata-v06_stm24$(PATCH_STR).patch)
 
 UFS910PATCHES_24 = $(COMMONPATCHES_24) \
 		stx7100_fdma_fix_stm24$(PATCH_STR).patch \
@@ -60,8 +59,7 @@ UFS910PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-ufs910_reboot_stm24.patch \
 		linux-sh4-smsc911x_dma_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
-		linux-sh4-pcm_noise_fix_stm24$(PATCH_STR).patch \
-		mini_fo_stm24$(PATCH_STR).patch
+		linux-sh4-pcm_noise_fix_stm24$(PATCH_STR).patch
 
 UFS912PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-ufs912_setup_stm24$(PATCH_STR).patch \
@@ -82,8 +80,7 @@ OCTAGON1008PATCHES_24 = $(COMMONPATCHES_24) \
 ATEVIO7500PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-atevio7500_setup_stm24$(PATCH_STR).patch \
-		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
-		$(if $(P0209)$(P0210)$(P0211),linux-sh4-atevio7500_mtdconcat_stm24$(PATCH_STR).patch)
+		linux-sh4-stmmac_stm24$(PATCH_STR).patch
 
 HS7810APATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
@@ -95,20 +92,26 @@ HS7110PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-hs7110_setup_stm24$(PATCH_STR).patch \
-		$(if $(P0207)$(P0209)$(P0211),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch) \
-		linux-squashfs-downgrade-stm24$(PATCH_STR)-to-stm23.patch \
-		linux-squashfs3.0_lzma_stm24.patch \
-		linux-squashfs-downgrade-stm24-2.6.25.patch \
-		linux-squashfs-downgrade-stm24-rm_d_alloc_anon.patch
+		$(if $(P0207)$(P0209)$(P0211),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
 
-WHITEBOXPATCHES_24 = $(COMMONPATCHES_24) \
+ATEMIO520PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
-		linux-sh4-whitebox_setup_stm24$(PATCH_STR).patch \
+		linux-sh4-atemio520_setup_stm24$(PATCH_STR).patch \
 		$(if $(P0207)$(P0209)$(P0211),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch) \
 		linux-squashfs-downgrade-stm24$(PATCH_STR)-to-stm23.patch \
-		linux-squashfs3.0_lzma_stm24.patch \
-		linux-squashfs-downgrade-stm24-2.6.25.patch \
+		linux-squashfs3.0_lzma_stm23.patch \
+		linux-squashfs-downgrade-stm24-patch-2.6.25 \
+		linux-squashfs-downgrade-stm24-rm_d_alloc_anon.patch
+
+ATEMIO530PATCHES_24 = $(COMMONPATCHES_24) \
+		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
+		linux-sh4-lmb_stm24$(PATCH_STR).patch \
+		linux-sh4-atemio530_setup_stm24$(PATCH_STR).patch \
+		$(if $(P0207)$(P0209)$(P0211),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch) \
+		linux-squashfs-downgrade-stm24$(PATCH_STR)-to-stm23.patch \
+		linux-squashfs3.0_lzma_stm23.patch \
+		linux-squashfs-downgrade-stm24-patch-2.6.25 \
 		linux-squashfs-downgrade-stm24-rm_d_alloc_anon.patch
 
 UFS922PATCHES_24 = $(COMMONPATCHES_24) \
@@ -168,8 +171,7 @@ ADB_BOXPATCHES_24 = $(COMMONPATCHES_24) \
 		linux-usbwait123_stm24.patch \
 		linux-sh4-ufs910_reboot_stm24.patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
-		linux-sh4-pcm_noise_fix_stm24$(PATCH_STR).patch \
-		mini_fo_stm24$(PATCH_STR).patch
+		linux-sh4-pcm_noise_fix_stm24$(PATCH_STR).patch
 
 IPBOX9900PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-ipbox9900_setup_stm24$(PATCH_STR).patch \
@@ -213,7 +215,8 @@ KERNELPATCHES_24 =  \
 		$(if $(FORTIS_HDBOX),$(FORTISPATCHES_24)) \
 		$(if $(HS7810A),$(HS7810APATCHES_24)) \
 		$(if $(HS7110),$(HS7110PATCHES_24)) \
-		$(if $(WHITEBOX),$(WHITEBOXPATCHES_24)) \
+		$(if $(ATEMIO520),$(ATEMIO520PATCHES_24)) \
+		$(if $(ATEMIO530),$(ATEMIO530PATCHES_24)) \
 		$(if $(ATEVIO7500),$(ATEVIO7500PATCHES_24)) \
 		$(if $(OCTAGON1008),$(OCTAGON1008PATCHES_24)) \
 		$(if $(ADB_BOX),$(ADB_BOXPATCHES_24)) \
@@ -280,7 +283,7 @@ $(DEPDIR)/$(KERNELHEADERS): $(KERNELHEADERS_RPM)
 # HOST-KERNEL
 #
 # IMPORTANT: it is expected that only one define is set
-MODNAME = $(UFS910)$(UFS912)$(UFS913)$(UFS922)$(UFC960)$(TF7700)$(HL101)$(VIP1_V2)$(VIP2_V1)$(CUBEMOD)$(FORTIS_HDBOX)$(ATEVIO7500)$(OCTAGON1008)$(HS7810A)$(HS7110)$(WHITEBOX)$(HOMECAST5101)$(IPBOX9900)$(IPBOX99)$(IPBOX55)$(ADB_BOX)$(SPARK)$(SPARK7162)$(VITAMIN_HD5000)
+MODNAME = $(UFS910)$(UFS912)$(UFS913)$(UFS922)$(UFC960)$(TF7700)$(HL101)$(VIP1_V2)$(VIP2_V1)$(CUBEMOD)$(FORTIS_HDBOX)$(ATEVIO7500)$(OCTAGON1008)$(HS7810A)$(HS7110)$(ATEMIO530)$(ATEMIO520)$(HOMECAST5101)$(IPBOX9900)$(IPBOX99)$(IPBOX55)$(ADB_BOX)$(SPARK)$(SPARK7162)$(VITAMIN_HD5000)
 
 if DEBUG
 DEBUG_STR=.debug
@@ -360,6 +363,12 @@ $(DEPDIR)/linux-kernel.do_compile: \
 		$(MAKE) $(if $(TF7700),TF7700=y) ARCH=sh CROSS_COMPILE=$(target)- uImage modules
 	touch $@
 
+$(DEPDIR)/tfkernel.do_compile:
+	cd $(KERNEL_DIR) && \
+		export PATH=$(hostprefix)/bin:$(PATH) && \
+		$(MAKE) $(if $(TF7700),TF7700=y) ARCH=sh CROSS_COMPILE=$(target)- uImage
+	touch $@
+
 $(DEPDIR)/linux-kernel: bootstrap $(DEPDIR)/linux-kernel.do_compile
 	@$(INSTALL) -d $(prefix)/$*cdkroot/boot && \
 	$(INSTALL) -d $(prefix)/$*$(notdir $(bootprefix)) && \
@@ -413,4 +422,5 @@ linux-kernel.%:
 	@echo ""
 	diff $(KERNEL_DIR)/.config.old $(KERNEL_DIR)/.config
 	@echo ""
+
 
