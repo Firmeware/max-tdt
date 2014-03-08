@@ -513,7 +513,12 @@
 +			.name	= "NAND ROOT      0x0080.0000-0x047F.FFFF ( 64MB)",
 +			.offset = MTDPART_OFS_NXTBLK,
 +			.size   = MTDPART_SIZ_FULL
-+		}
+ 		},
++		
++		
++		
++		
++		
  	},
 +#endif
 +	.timing_spec	= &NAND_TSPEC_HYNIX_HY27UH08AG5B,
