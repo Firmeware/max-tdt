@@ -1280,7 +1280,7 @@ $(DEPDIR)/python: bootstrap host_python openssl-dev sqlite libreadline bzip2 @DE
 			--prefix=/usr \
 			--sysconfdir=/etc \
 			--enable-shared \
-			--disable-ipv6 \
+			--enable-ipv6 \
 			--without-cxx-main \
 			--with-threads \
 			--with-pymalloc \
