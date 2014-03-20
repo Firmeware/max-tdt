@@ -30,11 +30,7 @@ ccache-3.1.8.tar.gz;http://samba.org/ftp/ccache
 #
 # root
 #
-<<<<<<< HEAD
-busybox-1.21.1.tar.bz2;http://www.busybox.net/downloads
-=======
 busybox-1.22.1.tar.bz2;http://www.busybox.net/downloads
->>>>>>> 1046f85... update busybox 1.22.1
 lsb_3.2-20.tar.gz;http://debian.sdinet.de/etch/sdinet/lsb
 ipkg-0.99.163.tar.gz;ftp://ftp.gwdg.de/linux/handhelds/packages/ipkg
 module-init-tools-3.16.tar.bz2;http://ftp.be.debian.org/pub/linux/utils/kernel/module-init-tools
