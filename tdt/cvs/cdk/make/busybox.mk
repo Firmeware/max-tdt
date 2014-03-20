@@ -10,7 +10,6 @@ $(DEPDIR)/busybox: bootstrap @DEPENDS_busybox@ $(buildprefix)/Patches/busybox.co
 		patch -p1 < ../Patches/busybox-1.22.1-nc.patch && \
 		$(INSTALL) -m644 $(lastword $^) .config && \
 		sed -i -e 's#^CONFIG_PREFIX.*#CONFIG_PREFIX="$(targetprefix)"#' .config
-	cd @DIR_busybox@ && \
 		export CROSS_COMPILE=$(target)- && \
 		$(MAKE) all \
 			CROSS_COMPILE=$(target)- \
