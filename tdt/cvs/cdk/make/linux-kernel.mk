@@ -241,6 +241,7 @@ $(DEPDIR)/kernel-headers: linux-kernel.do_prepare
 KERNELHEADERS := linux-kernel-headers
 if ENABLE_P0209
 KERNELHEADERS_VERSION := 2.6.32.46-47
+<<<<<<< HEAD
 else
 if ENABLE_P0210
 KERNELHEADERS_VERSION := 2.6.32.46-47
@@ -258,6 +259,20 @@ endif
 endif
 endif
 endif
+=======
+endif
+if ENABLE_P0210
+KERNELHEADERS_VERSION := 2.6.32.46-47
+endif
+if ENABLE_P0211
+KERNELHEADERS_VERSION := 2.6.32.46-47
+endif
+if ENABLE_P0212
+KERNELHEADERS_VERSION := 2.6.32.46-47
+endif
+if ENABLE_P0213
+KERNELHEADERS_VERSION := 2.6.32.46-47
+>>>>>>> db1d337... fix KERNELHEADERS_VERSION
 endif
 KERNELHEADERS_SPEC := stm-target-kernel-headers-kbuild.spec
 KERNELHEADERS_SPEC_PATCH :=
