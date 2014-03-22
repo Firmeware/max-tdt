@@ -86,14 +86,6 @@ AC_ARG_ENABLE(multicom406,
 AM_CONDITIONAL(ENABLE_MULTICOM406,test "$enable_multicom406" = "yes")
 AC_SUBST(MULTICOM406)
 
-AC_ARG_ENABLE(p0207,
-	AS_HELP_STRING(--enable-p0207, set up the CDK to use the STLinux 2.4 with patchlevel 0207),
-	[case "${enableval}" in
-		yes) P0207=p0207 ;;
-	esac], [enable_p0207=no])
-AM_CONDITIONAL(ENABLE_P0207,test "$enable_p0207" = "yes")
-AC_SUBST(P0207)
-
 AC_ARG_ENABLE(p0209,
 	AS_HELP_STRING(--enable-p0209, set up the CDK to use the STLinux 2.4 with patchlevel 0209),
 	[case "${enableval}" in
@@ -697,35 +689,30 @@ AC_SUBST(DISTCLEANUP)
 AC_SUBST(KERNELVERSION)
 AC_SUBST(KERNELSTMLABEL)
 AC_SUBST(KERNELLABEL)
-TUXBOX_RULES_MAKE(linuxp0207)
-TUXBOX_RULES_MAKE(linuxp0209)
-TUXBOX_RULES_MAKE(linuxp0210)
-TUXBOX_RULES_MAKE(linuxp0211)
-TUXBOX_RULES_MAKE(linuxp0212)
-TUXBOX_RULES_MAKE(linuxp0213)
 
 if test "$enable_stm24" = "yes"; then
-	if test "$enable_p0207" == "yes"; then
-		KERNELVERSION=${VERSION_linuxp0207}
-		KERNELSTMLABEL="_${VERSION_linuxp0207#*_}"
-		KERNELLABEL="207"
-	elif test "$enable_p0209" == "yes"; then
+	if test "$enable_p0209" == "yes"; then
+		TUXBOX_RULES_MAKE(linuxp0209)
 		KERNELVERSION=${VERSION_linuxp0209}
 		KERNELSTMLABEL="_${VERSION_linuxp0209#*_}"
 		KERNELLABEL="209"
 	elif test "$enable_p0210" == "yes"; then
+		TUXBOX_RULES_MAKE(linuxp0210)
 		KERNELVERSION=${VERSION_linuxp0210}
 		KERNELSTMLABEL="_${VERSION_linuxp0210#*_}"
 		KERNELLABEL="210"
 	elif test "$enable_p0211" == "yes"; then
+		TUXBOX_RULES_MAKE(linuxp0211)
 		KERNELVERSION=${VERSION_linuxp0211}
 		KERNELSTMLABEL="_${VERSION_linuxp0211#*_}"
 		KERNELLABEL="211"
 	elif test "$enable_p0212" == "yes"; then
+		TUXBOX_RULES_MAKE(linuxp0212)
 		KERNELVERSION=${VERSION_linuxp0212}
 		KERNELSTMLABEL="_${VERSION_linuxp0212#*_}"
 		KERNELLABEL="212"
 	elif test "$enable_p0213" == "yes"; then
+		TUXBOX_RULES_MAKE(linuxp0213)
 		KERNELVERSION=${VERSION_linuxp0213}
 		KERNELSTMLABEL="_${VERSION_linuxp0213#*_}"
 		KERNELLABEL="213"
@@ -1077,7 +1064,6 @@ kernelversion               : $KERNELVERSION
 localversion                : $KERNELSTMLABEL
 STLinux 2.4                 : $enable_stm24
 GCC 4.7.2                   : $enable_gcc47
-Patchlevel P0207            : $enable_p0207
 Patchlevel P0209            : $enable_p0209
 Patchlevel P0210            : $enable_p0210
 Patchlevel P0211            : $enable_p0211
