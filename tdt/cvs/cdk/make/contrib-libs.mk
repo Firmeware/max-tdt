@@ -270,19 +270,20 @@ $(DEPDIR)/libgif: bootstrap @DEPENDS_libgif@
 	touch $@
 
 #
-# libgif_current
+# libgif_e2
 #
-$(DEPDIR)/libgif_current: bootstrap @DEPENDS_libgif_current@
-	@PREPARE_libgif_current@
-	cd @DIR_libgif_current@ && \
+$(DEPDIR)/libgif_e2: bootstrap @DEPENDS_libgif_e2@
+	@PREPARE_libgif_e2@
+	cd @DIR_libgif_e2@ && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr && \
+			--prefix=/usr \
+			--without-x && \
 		$(MAKE) && \
-		@INSTALL_libgif_current@
-	@DISTCLEANUP_libgif_current@
+		@INSTALL_libgif_e2@
+	@DISTCLEANUP_libgif_e2@
 	touch $@
 
 #
