@@ -9,9 +9,6 @@ CUBEMOD=$(CUBEREVO)$(CUBEREVO_MINI)$(CUBEREVO_MINI2)$(CUBEREVO_MINI_FTA)$(CUBERE
 if ENABLE_P0209
 PATCH_STR=_0209
 endif
-if ENABLE_P0210
-PATCH_STR=_0210
-endif
 if ENABLE_P0211
 PATCH_STR=_0211
 endif
@@ -35,7 +32,7 @@ COMMONPATCHES_24 = \
 		linux-ftdi_sio.c_stm24$(PATCH_STR).patch \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
 		linux-tune_stm24.patch \
-		$(if $(P0209)$(P0210)$(P0211)$(P0212)$(P0213),linux-sh4-mmap_stm24.patch) \
+		$(if $(P0209)$(P0211)$(P0212)$(P0213),linux-sh4-mmap_stm24.patch) \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch)
 
@@ -145,7 +142,7 @@ SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-spark_setup_stm24$(PATCH_STR).patch \
 		$(if $(P0209),linux-sh4-linux_yaffs2_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-lirc_stm.patch) \
-		$(if $(P0210)$(P0211)$(P0212)$(P0213),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch) \
+		$(if $(P0211)$(P0212)$(P0213),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch) \
 		$(if $(P0211)$(P0212)$(P0213),af901x-NXP-TDA18218.patch) \
 		dvb-as102.patch
 
@@ -240,10 +237,6 @@ if ENABLE_P0209
 KERNEL_DIR = @DIR_linuxp0209@
 KERNELHEADERS_VERSION := 2.6.32.46-47
 endif
-if ENABLE_P0210
-KERNEL_DIR = @DIR_linuxp0210@
-KERNELHEADERS_VERSION := 2.6.32.46-47
-endif
 if ENABLE_P0211
 KERNEL_DIR = @DIR_linuxp0211@
 KERNELHEADERS_VERSION := 2.6.32.46-47
@@ -294,9 +287,6 @@ HOST_KERNEL := host-kernel
 if ENABLE_P0209
 HOST_KERNEL_VERSION = 2.6.32.46$(KERNELSTMLABEL)-$(KERNELLABEL)
 else
-if ENABLE_P0210
-HOST_KERNEL_VERSION = 2.6.32.57$(KERNELSTMLABEL)-$(KERNELLABEL)
-else
 if ENABLE_P0211
 HOST_KERNEL_VERSION = 2.6.32.59$(KERNELSTMLABEL)-$(KERNELLABEL)
 else
@@ -305,8 +295,6 @@ HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
 else
 if ENABLE_P0213
 HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
-endif
-endif
 endif
 endif
 endif
