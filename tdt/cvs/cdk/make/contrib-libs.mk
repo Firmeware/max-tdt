@@ -385,6 +385,23 @@ $(DEPDIR)/libid3tag: bootstrap @DEPENDS_libid3tag@
 	touch $@
 
 #
+# libvorbis
+#
+$(DEPDIR)/libvorbis: bootstrap libogg @DEPENDS_libvorbis@
+	@PREPARE_libvorbis@
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_libvorbis@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr && \
+		$(MAKE) all && \
+		@INSTALL_libvorbis@
+	@DISTCLEANUP_libvorbis@
+	touch $@
+
+#
 # libvorbisidec
 #
 $(DEPDIR)/libvorbisidec: bootstrap libogg @DEPENDS_libvorbisidec@
@@ -2003,24 +2020,6 @@ $(DEPDIR)/libsamplerate: bootstrap @DEPENDS_libsamplerate@
 	@DISTCLEANUP_libsamplerate@
 	touch $@
 
-#
-# libvorbis
-#
-$(DEPDIR)/libvorbis: bootstrap @DEPENDS_libvorbis@
-	@PREPARE_libvorbis@
-	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_libvorbis@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix=/usr && \
-		$(MAKE) all && \
-		@INSTALL_libvorbis@
-	@DISTCLEANUP_libvorbis@
-	touch $@
-
-#
 # libmodplug
 #
 $(DEPDIR)/libmodplug: bootstrap @DEPENDS_libmodplug@
