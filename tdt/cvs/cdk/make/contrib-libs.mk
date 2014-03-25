@@ -7,19 +7,14 @@ $(DEPDIR)/liblua: bootstrap ncurses $(archivedir)/luaposix.git @DEPENDS_liblua@
 	cd @DIR_liblua@ && \
 		$(BUILDENV) \
 		cp -r $(archivedir)/luaposix.git .; \
-		cd luaposix.git; cp lposix.c lua52compat.h ../src/; cd ..; \
-		sed -i 's/<config.h>/"config.h"/' src/lposix.c; \
+		cd luaposix.git/ext; cp posix/posix.c include/lua52compat.h ../../src/; cd ../..; \
+		sed -i 's/<config.h>/"config.h"/' src/posix.c; \
 		sed -i '/^#define/d' src/lua52compat.h; \
 		sed -i 's@^#define LUA_ROOT.*@#define LUA_ROOT "/"@' src/luaconf.h; \
 		sed -i '/^#define LUA_USE_READLINE/d' src/luaconf.h; \
 		sed -i 's/ -lreadline//' src/Makefile; \
-		sed -i 's|man/man1|.remove|' Makefile; \
-		$(MAKE) linux \
-		CC='$(target)-gcc' \
-		AR='$(target)-ar rcu' \
-		RANLIB='$(target)-ranlib' && \
-		@INSTALL_liblua@ && \
-		rm -rf $(targetprefix)/.remove
+		$(MAKE) linux CC='$(target)-gcc' LDFLAGS="-L$(targetprefix)/usr/lib" && \
+		@INSTALL_liblua@
 	@DISTCLEANUP_liblua@
 	touch $@
 
@@ -73,7 +68,6 @@ $(DEPDIR)/libboost: bootstrap @DEPENDS_libboost@
 $(DEPDIR)/libz: bootstrap @DEPENDS_libz@
 	@PREPARE_libz@
 	cd @DIR_libz@ && \
-		ln -sf /bin/true ./ldconfig && \
 		$(BUILDENV) \
 		./configure \
 			--prefix=/usr \
