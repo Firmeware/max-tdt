@@ -263,8 +263,8 @@ $(DEPDIR)/libgif: bootstrap @DEPENDS_libgif@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr \
-			--without-x && \
+			--bindir=/.remove \
+			--prefix=/usr && \
 		$(MAKE) && \
 		@INSTALL_libgif@
 	@DISTCLEANUP_libgif@
@@ -443,8 +443,7 @@ $(DEPDIR)/glib2: bootstrap libffi @DEPENDS_glib2@
 			--enable-static \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr \
-			--mandir=/usr/share/man && \
+			--prefix=/usr && \
 		$(MAKE) all && \
 		@INSTALL_glib2@
 	@DISTCLEANUP_glib2@
@@ -671,7 +670,7 @@ $(DEPDIR)/libdvdcss: bootstrap @DEPENDS_libdvdcss@
 			--host=$(target) \
 			--prefix=/usr \
 			--disable-doc && \
-		$(MAKE) all
+		$(MAKE) all && \
 		@INSTALL_libdvdcss@
 	@DISTCLEANUP_libdvdcss@
 	touch $@
@@ -798,7 +797,7 @@ FFMPEG_CONFIGURE += --enable-pthreads --enable-bzlib --enable-zlib --enable-libr
 
 $(DEPDIR)/ffmpeg: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
-	cd @DIR_ffmpeg@; \
+	cd @DIR_ffmpeg@ && \
 		$(BUILDENV) \
 		./configure \
 			$(FFMPEG_CONFIGURE) \
@@ -807,8 +806,8 @@ $(DEPDIR)/ffmpeg: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
 			--cross-prefix=$(target)- \
 			--target-os=linux \
 			--arch=sh4 \
-			--prefix=/usr; \
-		$(MAKE); \
+			--prefix=/usr && \
+		$(MAKE) && \
 		@INSTALL_ffmpeg@
 	@DISTCLEANUP_ffmpeg@
 	touch $@
@@ -1109,8 +1108,7 @@ $(DEPDIR)/libxml2: bootstrap @DEPENDS_libxml2@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
-			--mandir=/usr/share/man \
-			--with-python=$(hostprefix) \
+			--with-python=$(hostprefix)/bin \
 			--without-c14n \
 			--without-debug \
 			--without-mem-debug && \
@@ -1139,7 +1137,7 @@ $(DEPDIR)/libxslt: bootstrap libxml2 @DEPENDS_libxslt@
 			--with-libxml-prefix="$(crossprefix)" \
 			--with-libxml-include-prefix="$(targetprefix)/usr/include" \
 			--with-libxml-libs-prefix="$(targetprefix)/usr/lib" \
-			--with-python=$(hostprefix) \
+			--with-python=$(hostprefix)/bin \
 			--without-crypto \
 			--without-debug \
 			--without-mem-debug && \
@@ -1431,7 +1429,6 @@ $(DEPDIR)/gst_plugins_good: bootstrap gstreamer gst_plugins_base libsoup libflac
 			--disable-esdtest \
 			--disable-aalib \
 			--disable-shout2 \
-			--disable-shout2test \
 			--disable-x && \
 		$(MAKE) && \
 		@INSTALL_gst_plugins_good@
@@ -1622,8 +1619,6 @@ $(DEPDIR)/graphlcd: bootstrap libfreetype libusb @DEPENDS_graphlcd@
 		@INSTALL_graphlcd@
 	@DISTCLEANUP_graphlcd@
 	touch $@
-
-##############################   LCD4LINUX   ###################################
 
 #
 # LCD4LINUX
@@ -2269,7 +2264,6 @@ $(DEPDIR)/sshfs: bootstrap fuse @DEPENDS_sshfs@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr
 			--prefix=/usr && \
 		$(MAKE) all && \
 		@INSTALL_sshfs@
