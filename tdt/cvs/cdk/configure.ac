@@ -126,12 +126,6 @@ AC_ARG_ENABLE(mediafwgstreamer,
 AM_CONDITIONAL(ENABLE_MEDIAFWGSTREAMER,test "$enable_mediafwgstreamer" = "yes")
 AC_SUBST(MEDIAFWGSTREAMER)
 
-AC_ARG_ENABLE(graphicfwdirectfb,
-	AS_HELP_STRING(--enable-graphicfwdirectfb,    set up the CDK to use graphicfw directfb),
-	,[enable_graphicfwdirectfb=no])
-AM_CONDITIONAL(ENABLE_GRAPHICFWDIRECTFB,test "$enable_graphicfwdirectfb" = "yes")
-AC_SUBST(GRAPHICFWDIRECTFB)
-
 AC_ARG_ENABLE(externallcd,
 	AS_HELP_STRING(--enable-externallcd,    set up the CDK to use graphlcd),
 	,[enable_externallcd=no])
@@ -296,13 +290,21 @@ AC_ARG_ENABLE(hs7110,
 AM_CONDITIONAL(ENABLE_HS7110,test "$enable_hs7110" = "yes")
 AC_SUBST(HS7110)
 
-AC_ARG_ENABLE(whitebox,
-	AS_HELP_STRING(--enable-whitebox, enable fortis whitebox stuff),
+AC_ARG_ENABLE(atemio520,
+	AS_HELP_STRING(--enable-atemio520, enable atemio520 stuff),
 	[case "${enableval}" in
-		yes) WHITEBOX=whitebox ;;
-	esac],[enable_WHITEBOX=no])
-AM_CONDITIONAL(ENABLE_WHITEBOX,test "$enable_whitebox" = "yes")
-AC_SUBST(WHITEBOX)
+		yes) ATEMIO520=atemio520 ;;
+	esac],[enable_ATEMIO520=no])
+AM_CONDITIONAL(ENABLE_ATEMIO520,test "$enable_atemio520" = "yes")
+AC_SUBST(ATEMIO520)
+
+AC_ARG_ENABLE(atemio530,
+	AS_HELP_STRING(--enable-atemio530, enable atemio530 stuff),
+	[case "${enableval}" in
+		yes) ATEMIO530=atemio530 ;;
+	esac],[enable_ATEMIO530=no])
+AM_CONDITIONAL(ENABLE_ATEMIO530,test "$enable_atemio530" = "yes")
+AC_SUBST(ATEMIO530)
 
 AC_ARG_ENABLE(cuberevo,
 	AS_HELP_STRING(--enable-cuberevo, enable cuberevo stuff),
@@ -398,10 +400,8 @@ AC_SUBST(TARGET_CXXFLAGS)
 AC_SUBST(TARGET_LDFLAGS)
 
 AC_PREFIX_DEFAULT(/ufs910)
-if test "x$prefix" = xNONE; then
+if test "$prefix" = "NONE"; then
 	prefix=/ufs910
-else
-	prefix=$prefix
 fi
 
 AC_ARG_WITH(targetprefix,
@@ -719,17 +719,6 @@ else
 	MEDIAFW_DEP="ffmpeg"
 fi
 
-AC_SUBST(GRAPHICFW)
-AC_SUBST(GRAPHICFW_DEP)
-if test "$enable_graphicfwdirectfb" == "yes"; then
-	GRAPHICFW="directfb"
-	GRAPHICFW_DEP="directfb"
-else
-	GRAPHICFW="framebuffer"
-	GRAPHICFW_DEP=""
-fi
-
-
 #
 # core
 #
@@ -945,6 +934,7 @@ TUXBOX_RULES_MAKE(wireless_tools)
 TUXBOX_RULES_MAKE(zd1211)
 TUXBOX_RULES_MAKE(wpa_supplicant)
 TUXBOX_RULES_MAKE(ethtool)
+TUXBOX_RULES_MAKE(xupnpd)
 
 #
 # RPM stuff
@@ -1067,9 +1057,6 @@ Multicom406                 : $enable_multicom406
 MediaFw Gstreamer           : $enable_mediafwgstreamer
 MediaFw                     : $MEDIAFW
 MediaFw Dep                 : $MEDIAFW_DEP
-GraphicFw DirectFB          : $enable_graphicfwdirectfb
-GraphicFw                   : $GRAPHICFW
-GraphicFw Dep               : $GRAPHICFW_DEP
 EXTERNALLCD                 : $enable_externallcd
 EXTERNALLCD_DEP             : $EXTERNALLCD_DEP
 ccache support              : $enable_ccache

@@ -1,32 +1,9 @@
-#
-#
-#
 export CFLAGS
 export CXXFLAGS
-
 export DRPM
 export DRPMBUILD
 
 AUTOMAKE_OPTIONS = -Wno-portability
-
-#
-#
-#
-KERNEL_DEPENDS = @DEPENDS_linux24@
-KERNEL_PREPARE = @PREPARE_linux24@
-if ENABLE_P0209
-KERNEL_DIR = @DIR_linuxp0209@
-else
-if ENABLE_P0211
-KERNEL_DIR = @DIR_linuxp0211@
-else
-if ENABLE_P0213
-KERNEL_DIR = @DIR_linuxp0213@
-endif
-endif
-endif
-
-DEPMOD = $(hostprefix)/bin/depmod
 
 #
 # Stlinux Version
@@ -63,6 +40,7 @@ endif
 #
 #
 #
+export RM=$(shell which rm) -f
 INSTALL_DIR=$(INSTALL) -d
 INSTALL_BIN=$(INSTALL) -m 755
 INSTALL_FILE=$(INSTALL) -m 644
@@ -75,6 +53,18 @@ ADAPTED_ETC_FILES =
 ETC_RW_FILES =
 SOCKSIFY=
 WGET=$(SOCKSIFY) wget
+
+
+BASE_DIR    := $(shell pwd)
+PATCHES      = $(BASE_DIR)/Patches
+BUILD_TMP    = $(BASE_DIR)/BUILD
+
+# unpack tarballs, clean up
+UNTAR = tar -C $(BUILD_TMP) -xf $(archivedir)
+REMOVE = rm -rf $(BUILD_TMP)
+PATCH = patch -p1 -i $(PATCHES)
+# wget tarballs into archive directory
+WGETN = wget -t3 -T10 -c -P $(archivedir)
 
 #
 #
@@ -147,7 +137,8 @@ PLATFORM_CPPFLAGS := \
 	$(if $(OCTAGON1008),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_OCTAGON1008 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
 	$(if $(HS7810A),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_HS7810A -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
 	$(if $(HS7110),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_HS7110 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
-	$(if $(WHITEBOX),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_WHITEBOX -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
+	$(if $(ATEMIO520),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_ATEMIO520 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
+	$(if $(ATEMIO530),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_ATEMIO530 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
 	$(if $(TF7700),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_TF7700 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include" --enable-tf7700) \
 	$(if $(HL101),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_HL101 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include" --enable-hl101) \
 	$(if $(VIP1_V2),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_VIP1_V2 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include" --enable-vip1_v2) \
@@ -178,7 +169,8 @@ DRIVER_PLATFORM := \
 	$(if $(OCTAGON1008),OCTAGON1008=$(OCTAGON1008)) \
 	$(if $(HS7810A),HS7810A=$(HS7810A)) \
 	$(if $(HS7110),HS7110=$(HS7110)) \
-	$(if $(WHITEBOX),WHITEBOX=$(WHITEBOX)) \
+	$(if $(ATEMIO520),ATEMIO520=$(ATEMIO520)) \
+	$(if $(ATEMIO530),ATEMIO530=$(ATEMIO530)) \
 	$(if $(TF7700),TF7700=$(TF7700)) \
 	$(if $(HL101),HL101=$(HL101)) \
 	$(if $(VIP1_V2),VIP1_V2=$(VIP1_V2)) \

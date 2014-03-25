@@ -1,21 +1,13 @@
 #
 # IMPORTANT: it is expected that only one define is set
 #
-CUBEMOD=$(CUBEREVO)$(CUBEREVO_MINI)$(CUBEREVO_MINI2)$(CUBEREVO_MINI_FTA)$(CUBEREVO_250HD)$(CUBEREVO_2000HD)$(CUBEREVO_9500HD)
+CUBEMOD = $(CUBEREVO)$(CUBEREVO_MINI)$(CUBEREVO_MINI2)$(CUBEREVO_MINI_FTA)$(CUBEREVO_250HD)$(CUBEREVO_2000HD)$(CUBEREVO_9500HD)
+MODNAME = $(UFS910)$(UFS912)$(UFS913)$(UFS922)$(UFC960)$(TF7700)$(HL101)$(VIP1_V2)$(VIP2_V1)$(CUBEMOD)$(FORTIS_HDBOX)$(ATEVIO7500)$(OCTAGON1008)$(HS7810A)$(HS7110)$(ATEMIO530)$(ATEMIO520)$(HOMECAST5101)$(IPBOX9900)$(IPBOX99)$(IPBOX55)$(ADB_BOX)$(SPARK)$(SPARK7162)$(VITAMIN_HD5000)
+DEPMOD = $(hostprefix)/bin/depmod
 
 #
 # Patches Kernel 24
 #
-if ENABLE_P0209
-PATCH_STR=_0209
-endif
-if ENABLE_P0211
-PATCH_STR=_0211
-endif
-if ENABLE_P0213
-PATCH_STR=_0213
-endif
-
 COMMONPATCHES_24 = \
 		linux-sh4-linuxdvb_stm24$(PATCH_STR).patch \
 		$(if $(P0209),linux-sh4-makefile_stm24.patch) \
@@ -29,6 +21,7 @@ COMMONPATCHES_24 = \
 		linux-ftdi_sio.c_stm24$(PATCH_STR).patch \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
 		linux-tune_stm24.patch \
+		$(if $(P0209)$(P0211)$(P0213),linux-sh4-permit_gcc_command_line_sections_stm24.patch) \
 		$(if $(P0209)$(P0211)$(P0213),linux-sh4-mmap_stm24.patch) \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch)
@@ -187,7 +180,7 @@ VITAMINHD5000PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		$(if $(P0207),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
 
-KERNELPATCHES_24 =  \
+KERNELPATCHES_24 = \
 		$(if $(UFS910),$(UFS910PATCHES_24)) \
 		$(if $(UFS912),$(UFS912PATCHES_24)) \
 		$(if $(UFS913),$(UFS913PATCHES_24)) \
@@ -259,11 +252,6 @@ $(DEPDIR)/$(KERNELHEADERS): $(KERNELHEADERS_RPM)
 	@rpm $(DRPM) --ignorearch --nodeps -Uhv --badreloc --relocate $(targetprefix)=$(prefix)/$*cdkroot $(lastword $^)
 	touch $@
 
-#
-# HOST-KERNEL
-#
-# IMPORTANT: it is expected that only one define is set
-MODNAME = $(UFS910)$(UFS912)$(UFS913)$(UFS922)$(UFC960)$(TF7700)$(HL101)$(VIP1_V2)$(VIP2_V1)$(CUBEMOD)$(FORTIS_HDBOX)$(ATEVIO7500)$(OCTAGON1008)$(HS7810A)$(HS7110)$(ATEMIO530)$(ATEMIO520)$(HOMECAST5101)$(IPBOX9900)$(IPBOX99)$(IPBOX55)$(ADB_BOX)$(SPARK)$(SPARK7162)$(VITAMIN_HD5000)
 
 if DEBUG
 DEBUG_STR=.debug
@@ -271,18 +259,19 @@ else !DEBUG
 DEBUG_STR=
 endif !DEBUG
 
+#
+# HOST-KERNEL
+#
 HOST_KERNEL := host-kernel
 
 if ENABLE_P0209
 HOST_KERNEL_VERSION = 2.6.32.46$(KERNELSTMLABEL)-$(KERNELLABEL)
-else
+endif
 if ENABLE_P0211
 HOST_KERNEL_VERSION = 2.6.32.59$(KERNELSTMLABEL)-$(KERNELLABEL)
-else
+endif
 if ENABLE_P0213
 HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
-endif
-endif
 endif
 
 HOST_KERNEL_SPEC = stm-$(HOST_KERNEL)-sh4.spec
@@ -308,18 +297,11 @@ $(DEPDIR)/linux-kernel.do_prepare: \
 	$(INSTALL) -m644 Patches/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
 	-rm $(KERNEL_DIR)/localversion*
 	echo "$(KERNELSTMLABEL)" > $(KERNEL_DIR)/localversion-stm
-	if [ `grep -c "CONFIG_BPA2_DIRECTFBOPTIMIZED" $(KERNEL_DIR)/.config` -eq 0 ]; then echo "# CONFIG_BPA2_DIRECTFBOPTIMIZED is not set" >> $(KERNEL_DIR)/.config; fi
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh oldconfig
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh include/asm
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh include/linux/version.h
 	rm $(KERNEL_DIR)/.config
 	touch $@
-
-if ENABLE_GRAPHICFWDIRECTFB
-GRAPHICFWDIRECTFB_SED_CONF=-i s"/^\# CONFIG_BPA2_DIRECTFBOPTIMIZED is not set/CONFIG_BPA2_DIRECTFBOPTIMIZED=y/"
-else
-GRAPHICFWDIRECTFB_SED_CONF=-i s"/^CONFIG_BPA2_DIRECTFBOPTIMIZED=y/\# CONFIG_BPA2_DIRECTFBOPTIMIZED is not set/"
-endif
 
 $(DEPDIR)/linux-kernel.do_compile: \
 		bootstrap-cross \
@@ -330,8 +312,6 @@ $(DEPDIR)/linux-kernel.do_compile: \
 		export PATH=$(hostprefix)/bin:$(PATH) && \
 		$(MAKE) ARCH=sh CROSS_COMPILE=$(target)- mrproper && \
 		@M4@ $(buildprefix)/Patches/$(HOST_KERNEL_CONFIG) > .config && \
-	if [ `grep -c "CONFIG_BPA2_DIRECTFBOPTIMIZED" .config` -eq 0 ]; then echo "# CONFIG_BPA2_DIRECTFBOPTIMIZED is not set" >> .config; fi && \
-		sed $(GRAPHICFWDIRECTFB_SED_CONF) .config && \
 		$(MAKE) $(if $(TF7700),TF7700=y) ARCH=sh CROSS_COMPILE=$(target)- uImage modules
 	touch $@
 
@@ -394,5 +374,4 @@ linux-kernel.%:
 	@echo ""
 	diff $(KERNEL_DIR)/.config.old $(KERNEL_DIR)/.config
 	@echo ""
-
 

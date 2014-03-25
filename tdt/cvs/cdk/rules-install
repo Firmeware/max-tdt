@@ -186,7 +186,7 @@ jfsutils;make:install:mandir=/usr/share/man:DESTDIR=TARGETS
 lm_sensors;make:user_install:MACHINE=sh:PREFIX=/usr:MANDIR=/usr/share/man:DESTDIR=TARGETS
 sdparm;make:install:DESTDIR=TARGETS
 parted;make:install
-utillinux;rewrite-pkgconfig:libblkid/blkid.pc:libuuid/uuid.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libblkid.la:TARGETS/usr/lib/libuuid.la;rewrite-dependency:TARGETS/usr/lib/libblkid.la
+utillinux;make:install:DESTDIR=TARGETS
 xfsprogs;make:install:prefix=TARGETS/usr
 
 #
@@ -207,6 +207,7 @@ lighttpd;make:install:DESTDIR=TARGETS
 wireless_tools;make:install:INSTALL_MAN=TARGETS/usr/share/man:PREFIX=TARGETS/usr
 wpa_supplicant;make:install:DESTDIR=TARGETS
 ethtool;make:install:DESTDIR=TARGETS
+xupnpd;make:install:DESTDIR=TARGETS
 
 
 >>?;rules-install-local

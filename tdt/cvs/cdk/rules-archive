@@ -9,7 +9,6 @@
 #
 # core
 #
-stlinux24-host-kernel-source-sh4-2.6.32.10_stm24_0201-201.src.rpm;ftp://ftp.stlinux.com/pub/stlinux/2.4/SRPMS
 squashfs3.0.tar.gz;http://heanet.dl.sourceforge.net/sourceforge/squashfs
 lzma442.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/sevenzip
 squashfs4.0.tar.gz;http://heanet.dl.sourceforge.net/sourceforge/squashfs
@@ -66,8 +65,8 @@ shairport.git;git://github.com/abrasive/shairport;1.0-dev
 #
 # contrib libs
 #
-lua-5.2.1.tar.gz;http://www.lua.org/ftp
-luaposix.git;git://github.com/luaposix/luaposix.git;release-v5.1.28
+lua-5.2.3.tar.gz;http://www.lua.org/ftp
+luaposix.git;git://github.com/luaposix/luaposix.git;release-v31
 libao-1.1.0.tar.gz;http://downloads.xiph.org/releases/ao
 howl-1.0.0.tar.gz;http://downloads.sourceforge.net/project/howl/howl/1.0.0
 zlib-1.2.8.tar.gz;http://zlib.net
@@ -192,9 +191,8 @@ libdreamdvd.git;git://github.com/mirakels/libdreamdvd
 # EXTERNAL_LCD
 #
 graphlcd-base-touchcol.git;git://projects.vdr-developer.org/graphlcd-base.git;touchcol
-libusb-0.1.12.tar.gz;http://downloads.sourceforge.net/libusb
 libusb-1.0.9.tar.bz2;http://downloads.sourceforge.net/project/libusb/libusb-1.0/libusb-1.0.9
-libusb-compat-0.1.3.tar.bz2;http://downloads.sourceforge.net/project/libusb/libusb-compat-0.1/libusb-compat-0.1.3
+libusb-compat-0.1.5.tar.bz2;http://downloads.sourceforge.net/project/libusb/libusb-compat-0.1/libusb-compat-0.1.5
 gd-2.0.35.tar.gz;http://www.chipsnbytes.net/downloads
 dpf-ax.svn;https://dpf-ax.svn.sourceforge.net/svnroot/dpf-ax/trunk/
 dpflib-0.12.tar.gz

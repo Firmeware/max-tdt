@@ -1231,4 +1231,3 @@ diff -Naur graphlcd-base-touchcol.git/tools/showtext/Makefile graphlcd-base-touc
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
-
