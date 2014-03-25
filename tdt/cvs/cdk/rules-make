@@ -12,11 +12,8 @@
 #
 # core
 #
-linuxp0207;2.6.32.28_stm24_0207;linux-sh4-2.6.32.28_stm24_0207;stlinux24-host-kernel-source-sh4-2.6.32.28_stm24_0207-207.src.rpm
 linuxp0209;2.6.32.46_stm24_0209;linux-sh4-2.6.32.46_stm24_0209;stlinux24-host-kernel-source-sh4-2.6.32.46_stm24_0209-209.src.rpm
-linuxp0210;2.6.32.57_stm24_0210;linux-sh4-2.6.32.57_stm24_0210;stlinux24-host-kernel-source-sh4-2.6.32.57_stm24_0210-210.src.rpm
 linuxp0211;2.6.32.59_stm24_0211;linux-sh4-2.6.32.59_stm24_0211;stlinux24-host-kernel-source-sh4-2.6.32.59_stm24_0211-211.src.rpm
-linuxp0212;2.6.32.61_stm24_0212;linux-sh4-2.6.32.61_stm24_0212;stlinux24-host-kernel-source-sh4-2.6.32.61_stm24_0212-212.src.rpm
 linuxp0213;2.6.32.61_stm24_0213;linux-sh4-2.6.32.61_stm24_0213;stlinux24-host-kernel-source-sh4-2.6.32.61_stm24_0213-213.src.rpm
 
 squashfs;3.0;mksquashfs;squashfs3.0.tar.gz:mksquashfs_lzma.diff:lzma442.tar.bz2:lzma_zlib-stream.diff;dircreate:mksquashfs;extract:lzma442.tar.bz2;patch:lzma_zlib-stream.diff;extract:squashfs3.0.tar.gz;patch:mksquashfs_lzma.diff
@@ -28,7 +25,7 @@ host_python;2.7.3;host-python-2.7.3;Python-2.7.3.tar.bz2:python_2.7.3.diff;extra
 host_libtool;2.4.2;libtool-2.4.2;libtool-2.4.2.tar.gz;extract:libtool-2.4.2.tar.gz;patch:libtool-2.4.2-duckbox-branding.patch
 host_pkgconfig;0.28;pkg-config-0.28;pkg-config-0.28.tar.gz;extract:pkg-config-0.28.tar.gz
 host_automake;1.11.6;automake-1.11.6;automake-1.11.6.tar.gz;extract:automake-1.11.6.tar.gz;patch:automake-py-compile-compile-only-optimized-byte-code.patch
-host_autoconf;2.64;autoconf-2.64;autoconf-2.64.tar.gz;extract:autoconf-2.64.tar.gz;patch:autoconf-remove-usr-local-lib-from-m4.patch
+host_autoconf;2.64;autoconf-2.64;autoconf-2.64.tar.gz;extract:autoconf-2.64.tar.gz;patch:autoconf-remove-usr-local-lib-from-m4.patch;patch:autoconf.texi.2.65.patch
 
 #
 # ccache
@@ -69,7 +66,7 @@ shairport;1.0;shairport;shairport.git;extract:shairport.git
 #
 # contrib libs
 #
-liblua;5.2.1;lua-5.2.1;lua-5.2.1.tar.gz;extract:lua-5.2.1.tar.gz;patch:lua-5.2.1-luaposix.patch
+liblua;5.2.3;lua-5.2.3;lua-5.2.3.tar.gz;extract:lua-5.2.3.tar.gz;patch:liblua-5.2.3-luaposix-31.patch
 libao;1.1.0;libao-1.1.0;libao-1.1.0.tar.gz;extract:libao-1.1.0.tar.gz
 howl;1.0.0;howl-1.0.0;howl-1.0.0.tar.gz;extract:howl-1.0.0.tar.gz
 libopenthreads;1.00;openthreads;;
@@ -206,7 +203,7 @@ libusb;1.0.9;libusb-1.0.9;libusb-1.0.9.tar.bz2;extract:libusb-1.0.9.tar.bz2;patc
 libusbcompat;0.1.5;libusb-compat-0.1.5;libusb-compat-0.1.5.tar.bz2;extract:libusb-compat-0.1.5.tar.bz2
 libgd2;2.0.35;gd-2.0.35;gd-2.0.35.tar.gz;extract:gd-2.0.35.tar.gz
 #libdpfax;ax;dpf-ax;dpf-ax.svn:libdpfax.diff;extract:dpf-ax.svn;patch:libdpfax.diff
-libdpfax;ax;dpf-ax;dpf-ax.svn:libdpfax.diff;extract:dpf-ax.svn
+libdpfax;ax;dpf-ax;dpf-ax.svn;extract:dpf-ax.svn
 libdpf;0.12;dpflib-0.12;dpflib-0.12.tar.gz;extract:dpflib-0.12.tar.gz
 
 #

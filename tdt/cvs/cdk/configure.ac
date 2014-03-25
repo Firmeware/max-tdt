@@ -673,6 +673,7 @@ AC_SUBST(DISTCLEANUP)
 AC_SUBST(KERNELVERSION)
 AC_SUBST(KERNELSTMLABEL)
 AC_SUBST(KERNELLABEL)
+AC_SUBST(PATCH_STR)
 
 if test "$enable_stm24" = "yes"; then
 	if test "$enable_p0209" == "yes"; then
@@ -680,16 +681,19 @@ if test "$enable_stm24" = "yes"; then
 		KERNELVERSION=${VERSION_linuxp0209}
 		KERNELSTMLABEL="_${VERSION_linuxp0209#*_}"
 		KERNELLABEL="209"
+		PATCH_STR="_0209"
 	elif test "$enable_p0211" == "yes"; then
 		TUXBOX_RULES_MAKE(linuxp0211)
 		KERNELVERSION=${VERSION_linuxp0211}
 		KERNELSTMLABEL="_${VERSION_linuxp0211#*_}"
 		KERNELLABEL="211"
+		PATCH_STR="_0211"
 	elif test "$enable_p0213" == "yes"; then
 		TUXBOX_RULES_MAKE(linuxp0213)
 		KERNELVERSION=${VERSION_linuxp0213}
 		KERNELSTMLABEL="_${VERSION_linuxp0213#*_}"
 		KERNELLABEL="213"
+		PATCH_STR="_0213"
 	fi
 fi
 
@@ -903,7 +907,6 @@ TUXBOX_RULES_MAKE(hotplug_e2)
 TUXBOX_RULES_MAKE(graphlcd)
 TUXBOX_RULES_MAKE(lcd4_linux)
 TUXBOX_RULES_MAKE(libusb)
-TUXBOX_RULES_MAKE(libusb2)
 TUXBOX_RULES_MAKE(libusbcompat)
 TUXBOX_RULES_MAKE(libgd2)
 TUXBOX_RULES_MAKE(libdpfax)
@@ -946,8 +949,8 @@ TUXBOX_RULES_MAKE(ethtool)
 #
 # RPM stuff
 #
-configprefix=$prefix/config
 crossprefix=$prefix/devkit/sh4
+configprefix=$prefix/config
 devkitprefix=$prefix/devkit
 rpmdbprefix=${targetprefix}-rpmdb
 kernelprefix=$buildprefix
@@ -961,8 +964,8 @@ AC_SUBST(kernelprefix)
 # localmacros
 #
 $INSTALL -d SOURCES SPECS BUILD SRPMS RPMS/{noarch,${host_arch},sh4}
-test -f config && rm config || true
-ln -sf $configprefix/rpm config || true
+##test -f config && rm config || true
+##ln -sf $configprefix/rpm config || true
 echo "%_topdir $buildprefix" >localmacros
 echo "%_specdir %_topdir/SPECS" >>localmacros
 echo "%_sourcedir %_topdir/SOURCES" >>localmacros

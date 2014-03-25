@@ -107,7 +107,7 @@ $(DEPDIR)/libreadline: bootstrap ncurses-dev @DEPENDS_libreadline@
 #
 # libfreetype
 #
-$(DEPDIR)/libfreetype: bootstrap @DEPENDS_libfreetype@
+$(DEPDIR)/libfreetype: bootstrap libpng @DEPENDS_libfreetype@
 	@PREPARE_libfreetype@
 	cd @DIR_libfreetype@ && \
 		sed -i '/#define FT_CONFIG_OPTION_OLD_INTERNALS/d' include/freetype/config/ftoption.h && \
@@ -258,6 +258,7 @@ $(DEPDIR)/libungif: bootstrap @DEPENDS_libungif@
 $(DEPDIR)/libgif: bootstrap @DEPENDS_libgif@
 	@PREPARE_libgif@
 	cd @DIR_libgif@ && \
+		export ac_cv_prog_have_xmlto=no && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -1608,25 +1609,6 @@ $(DEPDIR)/gst_plugins_dvbmediasink: bootstrap gstreamer gst_plugins_base gst_plu
 	touch $@
 
 ##############################   EXTERNAL_LCD   ################################
-
-#
-# libusb
-#
-$(DEPDIR)/libusb: @DEPENDS_libusb@
-	@PREPARE_libusb@
-	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_libusb@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix=/usr \
-			--disable-build-docs && \
-		$(MAKE) all && \
-		@INSTALL_libusb@
-	@DISTCLEANUP_libusb@
-	touch $@
-
 #
 # graphlcd
 #
@@ -1646,7 +1628,7 @@ $(DEPDIR)/graphlcd: bootstrap libfreetype libusb @DEPENDS_graphlcd@
 #
 # LCD4LINUX
 #--with-python
-$(DEPDIR)/lcd4_linux.do_prepare: bootstrap libusbcompat libgd2 libusb2 libdpf @DEPENDS_lcd4_linux@
+$(DEPDIR)/lcd4_linux.do_prepare: bootstrap libusbcompat libgd2 libusb libdpf @DEPENDS_lcd4_linux@
 	@PREPARE_lcd4_linux@
 	touch $@
 
@@ -1729,26 +1711,27 @@ $(DEPDIR)/libgd2: bootstrap libpng libjpeg libiconv libfreetype @DEPENDS_libgd2@
 	touch $@
 
 #
-# libusb2
+# libusb
 #
-$(DEPDIR)/libusb2: bootstrap @DEPENDS_libusb2@
-	@PREPARE_libusb2@
+$(DEPDIR)/libusb: bootstrap @DEPENDS_libusb@
+	@PREPARE_libusb@
 	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_libusb2@ && \
+	cd @DIR_libusb@ && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr && \
-		$(MAKE) && \
-		@INSTALL_libusb2@
-	@DISTCLEANUP_libusb2@
+			--prefix=/usr \
+			--disable-build-docs && \
+		$(MAKE) all && \
+		@INSTALL_libusb@
+	@DISTCLEANUP_libusb@
 	touch $@
 
 #
 # libusbcompat
 #
-$(DEPDIR)/libusbcompat: bootstrap libusb2 @DEPENDS_libusbcompat@
+$(DEPDIR)/libusbcompat: bootstrap libusb @DEPENDS_libusbcompat@
 	@PREPARE_libusbcompat@
 	cd @DIR_libusbcompat@ && \
 		$(BUILDENV) \
@@ -2021,6 +2004,7 @@ $(DEPDIR)/libsamplerate: bootstrap @DEPENDS_libsamplerate@
 	@DISTCLEANUP_libsamplerate@
 	touch $@
 
+#
 # libmodplug
 #
 $(DEPDIR)/libmodplug: bootstrap @DEPENDS_libmodplug@
