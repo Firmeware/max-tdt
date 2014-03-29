@@ -1104,7 +1104,7 @@ $(DEPDIR)/libxml2: bootstrap @DEPENDS_libxml2@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
-			--with-python=$(hostprefix)/bin \
+			--with-python=$(hostprefix)/bin/python \
 			--without-c14n \
 			--without-debug \
 			--without-mem-debug && \
@@ -1133,7 +1133,7 @@ $(DEPDIR)/libxslt: bootstrap libxml2 @DEPENDS_libxslt@
 			--with-libxml-prefix="$(crossprefix)" \
 			--with-libxml-include-prefix="$(targetprefix)/usr/include" \
 			--with-libxml-libs-prefix="$(targetprefix)/usr/lib" \
-			--with-python=$(hostprefix)/bin \
+			--with-python=$(hostprefix)/bin/python \
 			--without-crypto \
 			--without-debug \
 			--without-mem-debug && \
