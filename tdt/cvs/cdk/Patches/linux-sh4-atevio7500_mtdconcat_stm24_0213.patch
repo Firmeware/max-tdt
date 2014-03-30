@@ -19,13 +19,13 @@
 +	 },
 +	{
 +	 .name = "APP_BAK",
-+	 .size = 0x00400000,	//4M
++	 .size = 0x006E0000,	//6,875M
 +	 .offset = 0x00B20000,	//B00000 + 20000squasfs
 +	 },
 +	{
 +	 .name = "ROOT FS",
-+	 .size = 0x00EB0000,	//15M + 10000error
-+	 .offset = 0x00F40000,	//1200000 + 20000squasfs
++	 .size = 0x00BD0000,	//11,8125M + 10000error
++	 .offset = 0x01220000,	//1200000 + 20000squasfs
 +	 },
 +	{
 +	 .name = "Device",
@@ -63,13 +63,13 @@
 +	 },
 +	{
 +	 .name = "FW",
-+	 .size = 0x00400000,	//4M
++	 .size = 0x006E0000,	//6,875M
 +	 .offset = 0x00400000,
 +	 },
 +	{
 +	 .name = "ROOT",
-+	 .size = 0x035a0000,	//51M
-+	 .offset =	0x00800000,
++	 .size = 0x032C0000,	//49
++	 .offset =	0x00AE0000,
 +	},
 +	{
 +	 .name = "SWAP",
