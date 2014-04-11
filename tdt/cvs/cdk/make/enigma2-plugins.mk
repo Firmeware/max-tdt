@@ -13,18 +13,11 @@ $(DEPDIR)/enigma2_openwebif: bootstrap python pythoncheetah @DEPENDS_enigma2_ope
 	cd @DIR_enigma2_openwebif@ && \
 		$(BUILDENV) \
 		cp -a plugin $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif && \
-		mkdir -p $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/cs/LC_MESSAGES && \
-		mkdir -p $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/de/LC_MESSAGES && \
-		mkdir -p $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/el/LC_MESSAGES && \
-		mkdir -p $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/nl/LC_MESSAGES && \
-		mkdir -p $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/pl/LC_MESSAGES && \
-		mkdir -p $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/uk/LC_MESSAGES && \
-		msgfmt -cv -o $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/cs/LC_MESSAGES/OpenWebif.mo locale/cs.po && \
-		msgfmt -cv -o $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/de/LC_MESSAGES/OpenWebif.mo locale/de.po && \
-		msgfmt -cv -o $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/el/LC_MESSAGES/OpenWebif.mo locale/el.po && \
-		msgfmt -cv -o $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/nl/LC_MESSAGES/OpenWebif.mo locale/nl.po && \
-		msgfmt -cv -o $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/pl/LC_MESSAGES/OpenWebif.mo locale/pl.po && \
-		msgfmt -cv -o $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/uk/LC_MESSAGES/OpenWebif.mo locale/uk.po
+		for f in $(find ./locale -name *.po ); do
+			l=$(echo ${f%} | sed 's/\.po//' | sed 's/.*locale\///')
+			mkdir -p $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/${l%}/LC_MESSAGES
+			msgfmt -o $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif/locale/${l%}/LC_MESSAGES/${l%}.mo ./locale/$l.po
+		done
 	@DISTCLEANUP_enigma2_openwebif@
 	touch $@ || true
 
