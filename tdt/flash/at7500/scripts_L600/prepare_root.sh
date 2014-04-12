@@ -52,11 +52,12 @@ rm $TMPROOTDIR/usr/lib/enigma2/python/Components/Language.pyo
 # Compile Language.py
 python -O -m py_compile $TMPROOTDIR/usr/lib/enigma2/python/Components/Language.py
 
-if [ -d $TMPROOTDIR/usr/lib/gstreamer-0.10 ]; then
-  rm -f $TMPROOTDIR/usr/lib/libav*
-fi
+
+# we need libav files
+#if [ -d $TMPROOTDIR/usr/lib/gstreamer-0.10 ]; then
+#  rm -f $TMPROOTDIR/usr/lib/libav*
+#fi
 
 #remove all .py-files
-find $TMPROOTDIR/usr/lib/python2.7/ -name "*.py" -exec rm -f {} \;
-find $TMPROOTDIR/usr/lib/enigma2/python/Components/ -name "*.py" -exec rm -f {} \;
-find $TMPROOTDIR/usr/lib/enigma2/python/Screens/ -name "*.py" -exec rm -f {} \;
+find $TMPROOTDIR/usr/lib/ -name '*.pyc' -exec rm {} \;
+find $TMPROOTDIR/usr/lib/ -not -name 'mytest.py' -name '*.py' -exec rm -f {} \;
