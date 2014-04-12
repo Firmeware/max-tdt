@@ -68,7 +68,7 @@ AC_ARG_WITH(boxtype,
 	[  --with-boxtype    valid values: ufs910, ufs912, ufs913, ufs922, ufc960
                              valid values: ipbox55, ipbox99, ipbox9900, cuberevo, cuberevo_mini, cuberevo_mini2, cuberevo_mini_fta, cuberevo_250hd, cuberevo_2000hd, cuberevo_9500hd
                              valid values: tf7700, fortis_hdbox, octagon1008, atevio7500, spark, spark7162, hl101, hs7110, hs7810a, adb_box, atemio520, atemio530, vip, homecast5101
-                             valid values: vitamin_hd5000],
+                             valid values: vitamin_hd5000, sagemcom88],
 	[case "${withval}" in
 dnl		To-Do: extend CPU types and kernel versions when needed
 		ufs910)
@@ -161,6 +161,9 @@ dnl		To-Do: extend CPU types and kernel versions when needed
 		vitamin_hd5000)
 			BOXTYPE="$withval"
 			;;
+		sagemcom88)
+			BOXTYPE="$withval"
+			;;
 		*)
 			AC_MSG_ERROR([bad value $withval for --with-boxtype]) ;;
 	esac], [BOXTYPE="ufs912"])
@@ -198,6 +201,7 @@ AM_CONDITIONAL(BOXTYPE_ATEMIO530, test "$BOXTYPE" = "atemio530")
 AM_CONDITIONAL(BOXTYPE_VIP, test "$BOXTYPE" = "vip")
 AM_CONDITIONAL(BOXTYPE_HOMECAST5101, test "$BOXTYPE" = "homecast5101")
 AM_CONDITIONAL(BOXTYPE_VITAMIN_HD5000, test "$BOXTYPE" = "vitamin_hd5000")
+AM_CONDITIONAL(BOXTYPE_SAGEMCOM88, test "$BOXTYPE" = "sagemcom88")
 
 if test "$BOXTYPE" = "ufs910"; then
 	AC_DEFINE(HAVE_UFS910_HARDWARE, 1, [building for a ufs910])
@@ -259,6 +263,8 @@ elif test "$BOXTYPE" = "homecast5101"; then
 	AC_DEFINE(HAVE_HOMECAST5101_HARDWARE, 1, [building for a homecast5101])
 elif test "$BOXTYPE" = "vitamin_hd5000"; then
 	AC_DEFINE(HAVE_VITAMIN_HD5000_HARDWARE, 1, [building for a vitamin_hd5000])
+elif test "$BOXTYPE" = "sagemcom88"; then
+	AC_DEFINE(HAVE_SAGEMCOM88_HARDWARE, 1, [building for a sagemcom88])
 fi
 
 ])
