@@ -55,11 +55,15 @@
  
  
  static void __init mb680_setup(char** cmdline_p)
-@@ -48,70 +74,17 @@
+@@ -46,72 +74,19 @@
  
- 	stx7105_configure_asc(2, &(struct stx7105_asc_config) {
- 			.routing.asc2 = stx7105_asc2_pio4,
+ 	stx7105_early_device_init();
+ 
+-	stx7105_configure_asc(2, &(struct stx7105_asc_config) {
+-			.routing.asc2 = stx7105_asc2_pio4,
 -			.hw_flow_control = 1,
++	stx7105_configure_asc(1, &(struct stx7105_asc_config) {
++			//.routing.asc2 = stx7105_asc2_pio4,
 +			.hw_flow_control = 0,
  			.is_console = 1, });
 -	stx7105_configure_asc(3, &(struct stx7105_asc_config) {
@@ -131,7 +135,7 @@
  
  	return 0;
  }
-@@ -121,127 +105,52 @@
+@@ -121,135 +105,56 @@
  	.phy_mask = 0,
  };
  
@@ -153,7 +157,7 @@
 +// Nor Flash Configuration SagemCom UHD88/ESI88
 +static struct mtd_partition nor_parts[] = {
 +	{
-+		.name   = "uboot NOR 512KB",
++		.name   = "uboot  NOR 512KB",
 +		.size   = 0x00080000,	//512KB
 +		.offset = 0,
 +	}, {
@@ -161,7 +165,7 @@
 +		.size   = 0x00280000,	//2.5MB
 +		.offset = 0x00080000,
 +	}, {
-+		.name   = "root NOR",
++		.name   = "root         NOR",
 +		.size   = MTDPART_SIZ_FULL,
 +		.offset = MTDPART_OFS_APPEND,
 +	}
@@ -281,16 +285,24 @@
 +			.out0 = stx7105_pwm_out0_pio4_4,
  			.out1 = stx7105_pwm_out1_disabled, });
  
--	/* NIM CD I2C bus*/
--	stx7105_configure_ssc_i2c(1, &(struct stx7105_ssc_config) {
--			.routing.ssc1.sclk = stx7105_ssc1_sclk_pio2_5,
--			.routing.ssc1.mtsr = stx7105_ssc1_mtsr_pio2_6, });
+	/* NIM CD I2C bus*/
 +	stx7105_configure_ssc_i2c(0, &(struct stx7105_ssc_config) {
 +			.routing.ssc1.sclk = stx7105_ssc0_sclk_pio2_2,
 +			.routing.ssc1.mtsr = stx7105_ssc0_mtsr_pio2_3, });
- 	/* NIM AB/STRecord I2C bus*/
- 	stx7105_configure_ssc_i2c(2, &(struct stx7105_ssc_config) {
- 			.routing.ssc2.sclk = stx7105_ssc2_sclk_pio3_4,
+	stx7105_configure_ssc_i2c(1, &(struct stx7105_ssc_config) {
+			.routing.ssc1.sclk = stx7105_ssc1_sclk_pio2_5,
+			.routing.ssc1.mtsr = stx7105_ssc1_mtsr_pio2_6, });
+-	/* NIM AB/STRecord I2C bus*/
+-	stx7105_configure_ssc_i2c(2, &(struct stx7105_ssc_config) {
+-			.routing.ssc2.sclk = stx7105_ssc2_sclk_pio3_4,
+-			.routing.ssc2.mtsr = stx7105_ssc2_mtsr_pio3_5, });
+-	/* HDMI I2C bus */
+-	stx7105_configure_ssc_i2c(3, &(struct stx7105_ssc_config) {
+-			.routing.ssc3.sclk = stx7105_ssc3_sclk_pio3_6,
+-			.routing.ssc3.mtsr = stx7105_ssc3_mtsr_pio3_7, });
+ 
+ 	/*
+ 	 * Note that USB port configuration depends on jumper
 @@ -229,11 +275,14 @@
  	 * norm	|  4[5]	J5B:2-3			 4[7]	J10B:2-3
  	 * alt	| 12[6]	J5B:1-2  J6G:open	14[7]	J10B:1-2  J11H:open
