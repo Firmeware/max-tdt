@@ -620,7 +620,7 @@ release_sagemcom88:
 	cp $(targetprefix)/boot/audio_7105.elf $(prefix)/release/lib/firmware/audio.elf
 
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_sagemcom88.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
-	[ -e $(buildprefix)/root/release/fe_core_sagemcom88_$(KERNELSTMLABEL).ko ] && cp $(buildprefix)/root/release/fe_core_sagemcom88_$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/fe_core.ko || true
+	[ -e $(buildprefix)/root/release/fe_core_sagemcom88$(KERNELSTMLABEL).ko ] && cp $(buildprefix)/root/release/fe_core_sagemcom88$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/fe_core.ko || true
 
 
 	rm -f $(prefix)/release/lib/firmware/dvb-fe-avl2108.fw

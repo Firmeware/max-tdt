@@ -135,7 +135,7 @@
  
  	return 0;
  }
-@@ -121,135 +105,56 @@
+@@ -121,135 +105,60 @@
  	.phy_mask = 0,
  };
  
@@ -296,10 +296,10 @@
 -	stx7105_configure_ssc_i2c(2, &(struct stx7105_ssc_config) {
 -			.routing.ssc2.sclk = stx7105_ssc2_sclk_pio3_4,
 -			.routing.ssc2.mtsr = stx7105_ssc2_mtsr_pio3_5, });
--	/* HDMI I2C bus */
--	stx7105_configure_ssc_i2c(3, &(struct stx7105_ssc_config) {
--			.routing.ssc3.sclk = stx7105_ssc3_sclk_pio3_6,
--			.routing.ssc3.mtsr = stx7105_ssc3_mtsr_pio3_7, });
+	/* HDMI I2C bus */
+	stx7105_configure_ssc_i2c(3, &(struct stx7105_ssc_config) {
+			.routing.ssc3.sclk = stx7105_ssc3_sclk_pio3_6,
+			.routing.ssc3.mtsr = stx7105_ssc3_mtsr_pio3_7, });
  
  	/*
  	 * Note that USB port configuration depends on jumper
