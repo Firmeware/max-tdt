@@ -7,6 +7,10 @@
 /*          GNU General Public License version 2.                         */
 /**************************************************************************/
 /*
+ * Changes in Version 1.8.1:
+ * + Fixed two compiler warnings.
+ * + Squashfs dummy file now padded with 0xFF in stead of 0x00.
+ *
  * Changes in Version 1.8:
  * + If the file dummy.squash.signed.padded does not exist in the
  *   current directory at program start, it is created;
@@ -33,15 +37,15 @@
 #include "crc16.h"
 #include "dummy.h"
 
-#define VERSION "1.8"
-#define DATE "28.03.2014"
+#define VERSION "1.8.1"
+#define DATE "18.04.2014"
 
 //#define USE_ZLIB
 
 uint16_t blockCounter= 0;
 uint16_t blockCounterTotal = 0;
 uint16_t have;
-char* zlib = "no ";
+char zlibt[10];
 uint8_t verbose = 1;
 uint16_t partBlocksize;
 uint16_t totalBlockCount;
@@ -1153,10 +1157,12 @@ int32_t main(int32_t argc, char* argv[])
    else //show usage
    {
 #ifdef USE_ZLIB
-      zlib = "yes";
+      strcpy(zlibt, "yes");
+#else
+      strcpy(zlibt, "no ");
 #endif
       printf("\n");
-      printf("Version: %s Date: %s\nUse ZLIB: %s\n", VERSION, DATE, zlib);
+      printf("Version: %s Date: %s\nUse ZLIB: %s\n", VERSION, DATE, zlibt);
       printf("\n");
       printf("Usage: %s -xcstrnv []\n", argv[0]);
       printf("       -x [update.ird]            Extract IRD\n");
@@ -1164,17 +1170,17 @@ int32_t main(int32_t argc, char* argv[])
       printf("       -c [update.ird] Options    Create Fortis IRD\n");
       printf("         Options for -c:\n");
       printf("          -ll [file.part]          Append Loader   (0) -> mtd0\n");
-      printf("          -k  [file.part]          Append Kernel   (6) -> mtd6\n");
-      //printf(" *        -ao [file.part]          Append App low  (*)\n");
-      printf(" s        -a  [file.part]          Append App      (1) -> mtd1\n");
-      printf(" s        -r  [file.part]          Append Root     (8) -> mtd8\n");
+      printf("          -k  [file.part]          Append Kernel   (6) -> mtd1\n");
+      //printf(" *        -ao [file.part]          Append App low  (*) -> mtd7\n");
+      printf(" s        -a  [file.part]          Append App      (1) -> mtd2\n");
+      printf(" s        -r  [file.part]          Append Root     (8) -> mtd3\n");
       printf(" s        -d  [file.part]          Append Dev      (7) -> mdt4\n");
       printf("          -c0 [file.part]          Append Config0  (2) -> mtd5, offset 0\n");
       printf("          -c4 [file.part]          Append Config4  (3) -> mtd5, offset 0x40000\n");
       printf("          -c8 [file.part]          Append Config8  (4) -> mtd5, offset 0x80000\n");
       printf("          -ca [file.part]          Append ConfigA  (5) -> mtd5, offset 0xA0000\n");
       //printf(" *        -cc [file.part]         Append ConfigC  (*)\n");
-      printf("          -u  [file.part]          Append User     (9) -> mtd9\n");
+      printf("          -u  [file.part]          Append User     (9) -> mtd6\n");
       printf("          -00 [file.part]          Append Type 0   (0) (alias for -ll)\n");
       printf("          -1  [file.part]          Append Type 1   (1) (alias for -a)\n");
       printf("          ...\n");
@@ -1197,8 +1203,8 @@ int32_t main(int32_t argc, char* argv[])
       printf("       -nv [update.ird] versionnr As -n, verbose\n");
       printf("       -v                         Display program version\n");
       printf("\n");
-      printf("Note: For creating squashfs part, use mksquashfs v3.3:\n");
-      printf("      ./mksquashfs squashfs-root flash.rootfs.own.mtd8 -nopad -le\n");
+      printf("Note: To create squashfs part, use mksquashfs v3.3:\n");
+      printf("      ./mksquashfs3.3 squashfs-root flash.rootfs.own.mtd8 -nopad -le\n");
       printf("\n");
       printf("Examples:\n");
       printf("  Creating a new Fortis IRD file with rootfs and kernel:\n");
