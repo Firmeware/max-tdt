@@ -6,7 +6,7 @@ echo "loader 6.00. Default reseller ID is for the Octagon SF1028P Noblence."
 echo "Other versions of the HS8200 are supported by supplying their 4 byte"
 echo "reseller ID in hex on the command line (requires fup 1.8 or later)."
 echo "Author: Schischu, Audioniek"
-echo "Date: 01-31-2011 - 07-04-2014"
+echo "Date: 01-31-2011 - 19-04-2014"
 echo ""
 echo "Usage: $0 [Reseller ID]"
 echo "-----------------------------------------------------------------------"
@@ -155,7 +155,7 @@ case "$REPLY" in
 	1)  echo "Creating KERNEL with ROOT and FW..."
 		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR $TMPDUMDIR $RESELLERID;;
 	2)  echo "Creating KERNEL..."
-		$SCRIPTDIR/flash_part_kernel.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPDUMDIR $RESELLERID;;
+		$SCRIPTDIR/flash_part_kernel.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $RESELLERID;;
 	*)  "Invalid Input! Exiting..."
 		exit 3;;
 esac
